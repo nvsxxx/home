@@ -80,13 +80,15 @@
     "region": "ASIA",
     "cat": "temp",
     "tier": "Unranked",
-    "discord_id": "1131512536735416360"
+    "discord_id": "1131512536735416360",
+    "tester": true
   },
   {
     "name": "qxpow",
     "region": "ASIA",
     "cat": "sword",
     "tier": "LT5",
-    "discord_id": "1131512536735416360"
+    "discord_id": "1131512536735416360",
+    "tester": true
   }
 ]
