@@ -42,21 +42,24 @@
     "region": "ASIA",
     "cat": "temp",
     "tier": "Unranked",
-    "discord_id": "1039080698511888514"
+    "discord_id": "1039080698511888514",
+    "tester": true
   },
   {
     "name": "forkAndExec",
     "region": "ASIA",
     "cat": "smp",
     "tier": "HT5",
-    "discord_id": "1039080698511888514"
+    "discord_id": "1039080698511888514",
+    "tester": true
   },
   {
     "name": "forkAndExec",
     "region": "ASIA",
     "cat": "sword",
     "tier": "LT5",
-    "discord_id": "1039080698511888514"
+    "discord_id": "1039080698511888514",
+    "tester": true
   },
   {
     "name": "Purpleed",
