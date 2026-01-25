@@ -67,5 +67,12 @@
     "cat": "nethpot",
     "tier": "LT4",
     "discord_id": "1336049595138179144"
+  },
+  {
+    "name": "Purpleed",
+    "region": "ASIA",
+    "cat": "smp",
+    "tier": "HT1",
+    "discord_id": "1336049595138179144"
   }
 ]
