@@ -1,7 +1,7 @@
 [
   {
     "name": "Purpleed",
-    "region": "NA",
+    "region": "ASIA",
     "cat": "temp",
     "tier": "Unranked",
     "discord_id": "1336049595138179144",
@@ -9,7 +9,7 @@
   },
   {
     "name": "Purpleed",
-    "region": "NA",
+    "region": "ASIA",
     "cat": "sword",
     "tier": "HT1",
     "discord_id": "1336049595138179144",
@@ -17,7 +17,7 @@
   },
   {
     "name": "Purpleed",
-    "region": "NA",
+    "region": "ASIA",
     "cat": "axe",
     "tier": "HT2",
     "discord_id": "1336049595138179144",
@@ -25,7 +25,7 @@
   },
   {
     "name": "Purpleed",
-    "region": "NA",
+    "region": "ASIA",
     "cat": "crystal",
     "tier": "HT4",
     "discord_id": "1336049595138179144"
@@ -63,7 +63,7 @@
   },
   {
     "name": "Purpleed",
-    "region": "NA",
+    "region": "ASIA",
     "cat": "nethpot",
     "tier": "LT4",
     "discord_id": "1336049595138179144"
