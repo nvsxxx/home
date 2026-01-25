@@ -74,5 +74,12 @@
     "cat": "smp",
     "tier": "HT1",
     "discord_id": "1336049595138179144"
+  },
+  {
+    "name": "qxpow",
+    "region": "ASIA",
+    "cat": "temp",
+    "tier": "Unranked",
+    "discord_id": "1131512536735416360"
   }
 ]
