@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>INVIS X | Clan Info</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Fonts: Inter for UI, Orbitron for Headers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #141414;
+      --bg-card-hover: #1a1a1a;
+      --accent: #fff;
+      --text-main: #f0f0f0;
+      --text-muted: #888;
+      --border: #222;
+      --border-hover: #333;
+      
+      --font-ui: 'Inter', sans-serif;
+      --font-display: 'Orbitron', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-ui);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    a { text-decoration: none; color: inherit; transition: 0.2s; }
+    button { font-family: inherit; cursor: pointer; }
+
+    /* Canvas Background */
+    canvas#stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    
+    .bg-gradient {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60vh;
+      background: radial-gradient(circle at 50% -20%, rgba(255,255,255,0.08), transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* --- Headers --- */
+    .page-header {
+      padding: 60px 20px 40px;
+      text-align: center;
+      animation: fadeUp 1.2s ease both;
+    }
+
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      margin-bottom: 8px;
+      background: linear-gradient(180deg, #fff, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .page-title::after {
+      content: "";
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #fff, transparent);
+      display: block;
+      margin: 12px auto 0;
+      border-radius: 2px;
+    }
+
+    .page-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-top: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 10px 24px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: #ccc;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: #555;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* --- Content Grid --- */
+    .info-grid {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 24px 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      animation: fadeUp 1.5s ease both;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transform: translateY(-4px);
+    }
+
+    .card h2 {
+      font-family: var(--font-display);
+      color: #fff;
+      font-size: 1.2rem;
+      margin-bottom: 24px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    /* Lists */
+    .card ul { list-style: none; width: 100%; }
+    
+    .card li {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid transparent;
+      margin-bottom: 8px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    
+    .card li:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: #333;
+    }
+    
+    .card li.stat-item {
+      cursor: default;
+    }
+    .card li.stat-item:hover {
+      background: rgba(255,255,255,0.03);
+      border-color: transparent;
+    }
+    
+    .stat-text {
+      font-size: 0.9rem;
+      color: #ccc;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+    .stat-text strong { color: #fff; }
+
+    /* Members List Scroll */
+    .members-list {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: #333 transparent;
+    }
+
+    .member-count {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: auto;
+      padding-top: 20px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* Roles */
+    .role {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: #111;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      min-width: 70px;
+      text-align: center;
+    }
+    
+    .founder  { color: #ffffff; box-shadow: 0 0 10px rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); }
+    .owner    { color: #ff55aa; box-shadow: 0 0 10px rgba(255,85,170,0.15); border: 1px solid rgba(255,85,170,0.2); }
+    .coowner  { color: #aa55ff; border: 1px solid rgba(170,85,255,0.2); }
+    .manager  { color: #55ffff; border: 1px solid rgba(85,255,255,0.2); }
+    .elite    { color: #ffaa00; border: 1px solid rgba(255,170,0,0.2); }
+    .veteran  { color: #00ff88; border: 1px solid rgba(0,255,136,0.2); }
+    .member   { color: #888888; border: 1px solid #333; }
+
+    .member-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #e5e5e5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px;
+      text-align: center;
+      color: #444;
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+    
+    footer em {
+      display: block;
+      margin-top: 8px;
+      font-style: italic;
+      color: #666;
+      font-size: 0.8rem;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.show { display: flex; animation: fadeIn 0.2s ease-out; }
+    
+    .modal {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 16px;
+      width: 100%; max-width: 400px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-header {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid #222;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .m-close { 
+      background: transparent; border: none; color: #666; font-size: 1.5rem; 
+      line-height: 1; padding: 4px; transition: 0.2s;
+    }
+    .m-close:hover { color: #fff; }
+
+    .m-user-info { display: flex; gap: 16px; align-items: center; }
+    .m-head { width: 64px; height: 64px; border-radius: 12px; background: #222; border: 1px solid #333; }
+    .m-name { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .m-meta { margin-top: 4px; display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #888; }
+
+    .modal-body { padding: 24px; }
+    
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .m-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #ccc;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .m-btn:hover {
+      background: #222;
+      border-color: #555;
+      color: #fff;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  </style>
+</head>
+
+<body>
+  <canvas id="stars"></canvas>
+  <div class="bg-gradient"></div>
+
+  <header class="page-header">
+    <h1 class="page-title">INVIS X</h1>
+    <p class="page-subtitle">Clan Information</p>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+  </header>
+  
+  <section class="info-grid">
+    <!-- Leadership Card -->
+    <div class="card">
+      <h2>Leadership</h2>
+      <ul id="leadershipList"></ul>
+      <div class="member-count" id="leadershipCount">Leadership: —</div>
+    </div>
+
+    <!-- Members Card -->
+    <div class="card">
+      <h2>Members</h2>
+      <ul class="members-list" id="membersList"></ul>
+      <div class="member-count" id="membersCount">Total Members: —</div>
+    </div>
+
+    <!-- About Card -->
+    <div class="card">
+      <h2>About INVIS X</h2>
+      <p>
+        INVIS X is a competitive Minecraft clan built on precision,
+        discipline, and domination from the shadows.
+        <br><br>
+        We move silently, strike intelligently, and never reveal our limits.
+      </p>
+    </div>
+
+    <!-- Stats Card -->
+    <div class="card">
+      <h2>Clan Stats</h2>
+      <ul>
+        <li class="stat-item"><div class="stat-text"><span>🏆 Wins</span> <strong>???</strong></div></li>
+        <li class="stat-item"><div class="stat-text"><span>⚔️ Total Battles</span> <strong>???</strong></div></li>
+        <li class="stat-item"><div class="stat-text"><span>👥 Total Roster</span> <strong id="rosterCount">—</strong></div></li>
+        <li class="stat-item"><div class="stat-text"><span>📅 Founded</span> <strong>2025</strong></div></li>
+        <li class="stat-item"><div class="stat-text"><span>🌍 Region</span> <strong>Global</strong></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 INVIS X Clan
+    <em>"You never see us coming."</em>
+  </footer>
+
+  <!-- Member Modal -->
+  <div id="modalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="m-user-info">
+          <img id="mHead" src="" class="m-head" alt="">
+          <div>
+            <div id="mName" class="m-name">Player</div>
+            <div class="m-meta">
+              <span id="mBadge" class="role member">MEMBER</span>
+              <span id="mGroup">Members</span>
+            </div>
+          </div>
+        </div>
+        <button id="mClose" class="m-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; color: #888; font-size: 0.9rem;">Player Actions:</p>
+        <div class="modal-actions">
+          <button id="copyBtn" class="m-btn" type="button">Copy Name</button>
+          <button id="minotarBtn" class="m-btn" type="button">View Skin</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Stars Background ---
+    const starCanvas = document.getElementById("stars");
+    const starCtx = starCanvas.getContext("2d");
+    
+    function resizeStars() {
+      starCanvas.width = window.innerWidth;
+      starCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeStars);
+    resizeStars();
+
+    const stars = Array(150).fill().map(() => ({
+      x: Math.random() * starCanvas.width,
+      y: Math.random() * starCanvas.height,
+      r: Math.random() * 1.2,
+      a: Math.random() * 0.5 + 0.1,
+      s: Math.random() * 0.2 + 0.1
+    }));
+
+    function animateStars() {
+      starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+      stars.forEach(st => {
+        starCtx.beginPath();
+        starCtx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+        starCtx.fillStyle = `rgba(255, 255, 255, ${st.a})`;
+        starCtx.fill();
+        st.y -= st.s;
+        if (st.y < 0) { st.y = starCanvas.height; st.x = Math.random() * starCanvas.width; }
+      });
+      requestAnimationFrame(animateStars);
+    }
+    animateStars();
+
+    // --- Members Logic ---
+    const roleOrderLeadership = { founder: 0, owner: 1, coowner: 2, manager: 3 };
+    const roleOrderMembers = { elite: 0, veteran: 1, member: 2 };
+
+    function normRole(r){ return String(r || "").trim().toLowerCase(); }
+    function normName(n){ return String(n || "").trim(); }
+
+    function headUrl(name){ return `https://minotar.net/helm/${encodeURIComponent(name)}/128.png`; }
+    function skinUrl(name){ return `https://minotar.net/skin/${encodeURIComponent(name)}`; }
+
+    // Modal Elements
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const mClose = document.getElementById("mClose");
+    const mHead = document.getElementById("mHead");
+    const mName = document.getElementById("mName");
+    const mBadge = document.getElementById("mBadge");
+    const mGroup = document.getElementById("mGroup");
+    const copyBtn = document.getElementById("copyBtn");
+    const minotarBtn = document.getElementById("minotarBtn");
+
+    let currentModalName = "";
+
+    function openModal({ name, role, groupLabel }){
+      currentModalName = name;
+      mHead.src = headUrl(name);
+      mHead.onerror = () => { mHead.style.display = "none"; };
+      mHead.style.display = "";
+
+      mName.textContent = name;
+      mBadge.className = `role ${role}`;
+      mBadge.textContent = role.toUpperCase().replace("COOWNER","CO-OWNER");
+      mGroup.textContent = groupLabel;
+
+      modalBackdrop.classList.add("show");
+    }
+
+    function closeModal(){ modalBackdrop.classList.remove("show"); }
+    
+    modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
+    mClose.addEventListener("click", closeModal);
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(currentModalName);
+        const original = copyBtn.textContent;
+        copyBtn.textContent = "Copied!";
+        setTimeout(() => copyBtn.textContent = original, 1500);
+      } catch {
+        alert("Could not copy name.");
+      }
+    });
+
+    minotarBtn.addEventListener("click", () => {
+      if (!currentModalName) return;
+      window.open(skinUrl(currentModalName), "_blank", "noopener,noreferrer");
+    });
+
+    function makeLi(role, name, groupLabel){
+      const li = document.createElement("li");
+      li.title = "Click to view";
+
+      const badge = document.createElement("span");
+      badge.className = `role ${role}`;
+      badge.textContent = role.toUpperCase().replace("COOWNER","CO-OWNER");
+
+      const nameSpan = document.createElement("span");
+      nameSpan.className = "member-name";
+      nameSpan.textContent = name;
+
+      li.appendChild(badge);
+      li.appendChild(nameSpan);
+
+      const payload = { name, role, groupLabel };
+      li.addEventListener("click", () => openModal(payload));
+
+      return li;
+    }
+
+    async function loadMembers(){
+      // Using fallback data if file fails
+      const fallbackData = {
+        leadership: [
+          { name: "NyiYuji", role: "Founder" },
+          { name: "Fluxuzs", role: "CoOwner" }
+        ],
+        members: [
+          { name: "TestMember", role: "Member" }
+        ]
+      };
+
+      try {
+        const res = await fetch(`./members.json?ts=${Date.now()}`);
+        if (!res.ok) throw new Error("Failed");
+        return await res.json();
+      } catch (e) {
+        return fallbackData;
+      }
+    }
+
+    function renderSection(ul, arr, orderMap, groupLabel){
+      ul.innerHTML = "";
+      const clean = arr
+        .map(x => ({ role: normRole(x.role), name: normName(x.name) }))
+        .filter(x => x.name && x.role);
+
+      clean.sort((a,b) => {
+        const oa = orderMap[a.role] ?? 999;
+        const ob = orderMap[b.role] ?? 999;
+        if (oa !== ob) return oa - ob;
+        return a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
+      });
+
+      if (clean.length === 0){
+        ul.innerHTML = `<li style="cursor:default; color:#666;">No members found</li>`;
+        return 0;
+      }
+
+      for (const x of clean){
+        ul.appendChild(makeLi(x.role, x.name, groupLabel));
+      }
+      return clean.length;
+    }
+
+    (async () => {
+      const leadershipList = document.getElementById("leadershipList");
+      const membersList = document.getElementById("membersList");
+      const leadershipCount = document.getElementById("leadershipCount");
+      const membersCount = document.getElementById("membersCount");
+      const rosterCount = document.getElementById("rosterCount");
+
+      const { leadership, members } = await loadMembers();
+      
+      const lCount = renderSection(leadershipList, leadership, roleOrderLeadership, "Leadership");
+      const mCount = renderSection(membersList, members, roleOrderMembers, "Members");
+
+      leadershipCount.textContent = `Leadership: ${lCount}`;
+      membersCount.textContent = `Total Members: ${mCount}`;
+      rosterCount.textContent = String(lCount + mCount);
+    })();
+  </script>
+</body>
+</html>

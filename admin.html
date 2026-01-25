@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INVIS X | Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bgTop:#111; --bgBottom:#000;
+      --text:#e5e5e5; --muted:#aaa;
+      --border:#222; --border2:#333; --border3:#444;
+      --shadow: 0 18px 60px rgba(0,0,0,0.70);
+      --soft: 0 0 12px rgba(255,255,255,0.05);
+      --glow:#888;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Orbitron',sans-serif;
+      color:var(--text);
+      background: radial-gradient(circle at top, var(--bgTop), var(--bgBottom));
+      min-height:100vh;
+    }
+    header{padding:34px 18px 16px;text-align:center;border-bottom:1px solid var(--border)}
+    h1{font-weight:800;letter-spacing:6px}
+    header p{margin-top:10px;color:var(--muted);font-size:.9rem;letter-spacing:1px;line-height:1.5}
+    main{max-width:1100px;margin:0 auto;padding:18px}
+
+    .card{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,17,17,0.55), rgba(0,0,0,0.55));
+      box-shadow: var(--shadow);
+      border-radius:16px;
+      padding:14px;
+      margin-top:14px;
+    }
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}
+    label{display:block;font-size:.72rem;letter-spacing:2px;color:rgba(255,255,255,.6);margin-bottom:6px;text-transform:uppercase}
+    input, select{
+      width: min(360px, 100%);
+      padding:12px 12px;
+      border-radius:12px;
+      border:2px solid var(--border2);
+      background: rgba(0,0,0,0.35);
+      color:#fff;
+      outline:none;
+      font-family:'Orbitron',sans-serif;
+      letter-spacing:1px;
+    }
+    input:focus, select:focus{border-color:var(--border3);box-shadow:0 0 22px rgba(255,255,255,0.08)}
+    .btn{
+      padding:12px 16px;
+      border-radius:12px;
+      border:2px solid var(--border2);
+      background: linear-gradient(135deg, #111, #2c2c2c);
+      color:#fff;
+      cursor:pointer;
+      letter-spacing:1px;
+      transition:.2s ease;
+      box-shadow: var(--soft);
+    }
+    .btn:hover{transform:translateY(-1px);border-color:var(--border3);box-shadow:0 0 25px var(--glow)}
+    .btn:disabled{
+      cursor:not-allowed;
+      opacity:0.55;
+      transform:none;
+      box-shadow:none;
+    }
+    .btn.danger{border-color:#552222}
+    .btn.danger:hover{box-shadow:0 0 25px rgba(255,80,80,.25)}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .status{color:rgba(255,255,255,.70);font-size:.85rem;letter-spacing:1px}
+    .pill{
+      display:inline-block;padding:6px 10px;border-radius:999px;
+      border:1px solid var(--border2);background: rgba(255,255,255,0.06);
+      font-size:.75rem;letter-spacing:1px;white-space:nowrap;
+    }
+    .table{width:100%;border-collapse:separate;border-spacing:0 10px;margin-top:10px}
+    .tr{background: rgba(0,0,0,0.45);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow: var(--soft)}
+    .tr td{padding:12px 10px;vertical-align:middle}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .muted{color:rgba(255,255,255,.55)}
+    .hidden{display:none !important}
+
+    /* Login overlay */
+    .backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.70);
+      backdrop-filter: blur(8px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index: 999;
+    }
+    .login-box{
+      width:min(520px, 96vw);
+      border-radius:18px;
+      border:1px solid var(--border2);
+      background: linear-gradient(180deg, rgba(17,17,17,0.65), rgba(0,0,0,0.75));
+      box-shadow: 0 30px 120px rgba(0,0,0,0.75);
+      overflow:hidden;
+    }
+    .login-top{
+      padding:16px 16px 12px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .login-title{
+      font-weight:800;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      font-size:1rem;
+    }
+    .login-body{padding:14px 16px 16px}
+    .login-hint{margin-top:10px;color:rgba(255,255,255,0.60);font-size:.85rem;line-height:1.5}
+    .top-actions{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    @media (max-width: 760px){
+      .table thead{display:none}
+      .tr{display:block}
+      .tr td{display:block}
+      .actions{justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>INVIS X</h1>
+  <p>
+    Admin Panel — commits <span class="pill">players.json</span> to
+    <span class="pill">nyiyuji016-rgb/invis-x</span> (branch <span class="pill">main</span>).
+  </p>
+  <div class="top-actions">
+    <button class="btn danger hidden" id="logoutBtn" type="button">Logout</button>
+  </div>
+  <p class="muted">Never paste tokens in public. Revoke leaked tokens immediately.</p>
+</header>
+
+<!-- LOGIN OVERLAY -->
+<div id="loginBackdrop" class="backdrop">
+  <div class="login-box" role="dialog" aria-modal="true" aria-label="Admin login">
+    <div class="login-top">
+      <div class="login-title">Admin Login</div>
+      <div class="muted" style="font-size:.8rem;">UI lock (static site)</div>
+    </div>
+    <div class="login-body">
+      <div class="row">
+        <div>
+          <label>Username</label>
+          <input id="loginUser" autocomplete="username" placeholder="admin" />
+        </div>
+        <div>
+          <label>Password</label>
+          <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••" />
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="loginBtn" type="button">Login</button>
+      </div>
+
+      <div class="login-hint">
+        This only hides the UI. Real protection is your GitHub token + repo permissions.
+      </div>
+      <div class="status" id="loginStatus" style="margin-top:10px;">Enter password to continue.</div>
+    </div>
+  </div>
+</div>
+
+<main id="app" class="hidden">
+  <div class="card">
+    <div class="toolbar">
+      <div class="row" style="align-items:center">
+        <div>
+          <label>GitHub token (auto-loads when pasted)</label>
+          <input id="token" placeholder="Fine-grained PAT with Contents: Read & write" />
+        </div>
+      </div>
+      <div class="status" id="status">Paste token to auto-load. Editing is locked until token loads.</div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="saveBtn" type="button" disabled>Save to GitHub (Commit)</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>Player name</label>
+        <input id="name" placeholder="e.g. Fluxuzs" disabled />
+      </div>
+
+      <div>
+        <label>Region</label>
+        <select id="region" disabled>
+          <option value="ASIA">ASIA</option>
+          <option value="EU">EU</option>
+          <option value="NA">NA</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Category</label>
+        <select id="cat" disabled>
+          <option value="sword">Sword</option>
+          <option value="axe">Axe</option>
+          <option value="crystal">Crystal</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Tier</label>
+        <select id="tier" disabled>
+          <option>HT1</option><option>LT1</option>
+          <option>HT2</option><option>LT2</option>
+          <option>HT3</option><option>LT3</option>
+          <option>HT4</option><option>LT4</option>
+          <option>HT5</option><option>LT5</option>
+        </select>
+      </div>
+
+      <!-- TESTER: new field -->
+      <div>
+        <label>Tester</label>
+        <select id="tester" disabled>
+          <option value="false">No</option>
+          <option value="true">Yes</option>
+        </select>
+      </div>
+
+      <button class="btn" id="upsertBtn" type="button" disabled>Add / Update (local)</button>
+      <button class="btn danger" id="clearBtn" type="button" disabled>Clear form</button>
+    </div>
+
+    <p class="muted" style="margin-top:12px; line-height:1.6">
+      Data model is one row per <span class="pill">name + category</span>.
+      Click <span class="pill">Save to GitHub</span> to commit changes.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <div class="row" style="align-items:center">
+        <div>
+          <label>Search</label>
+          <input id="search" placeholder="Search name..." disabled />
+        </div>
+      </div>
+      <div class="muted" id="countLabel">0 entries</div>
+    </div>
+
+    <table class="table" aria-label="Players">
+      <thead class="muted">
+        <tr>
+          <th style="text-align:left;padding:8px 10px;">Name</th>
+          <th style="text-align:left;padding:8px 10px;">Region</th>
+          <th style="text-align:left;padding:8px 10px;">Category</th>
+          <th style="text-align:left;padding:8px 10px;">Tier</th>
+          <th style="text-align:left;padding:8px 10px;">Tester</th> <!-- TESTER -->
+          <th style="text-align:right;padding:8px 10px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+  // ---------------- LOGIN CONFIG ----------------
+  const ADMIN_PASSWORD_SHA256 = "bef7449126292e452132597f2132c7c8eb1bb3b5c9e60722dd43f28409f5dd2a";
+
+  const loginEls = {
+    backdrop: document.getElementById('loginBackdrop'),
+    user: document.getElementById('loginUser'),
+    pass: document.getElementById('loginPass'),
+    btn: document.getElementById('loginBtn'),
+    status: document.getElementById('loginStatus'),
+    app: document.getElementById('app'),
+    logoutBtn: document.getElementById('logoutBtn'),
+  };
+
+  function setLoginStatus(msg){ loginEls.status.textContent = msg; }
+
+  async function sha256Hex(str){
+    const bytes = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest('SHA-256', bytes);
+    return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // Safe sessionStorage (fixes sandbox error)
+  function safeGetSession(key){
+    try { return window.sessionStorage.getItem(key); }
+    catch { return null; }
+  }
+  function safeSetSession(key, val){
+    try { window.sessionStorage.setItem(key, val); }
+    catch { /* storage blocked */ }
+  }
+
+  function setAuthed(v){
+    safeSetSession('invisx_admin_authed', v ? '1' : '0');
+    loginEls.backdrop.classList.toggle('hidden', !!v);
+    loginEls.app.classList.toggle('hidden', !v);
+    loginEls.logoutBtn.classList.toggle('hidden', !v);
+  }
+
+  async function tryLogin(){
+    const pass = loginEls.pass.value;
+    if (!pass) { setLoginStatus("Password required."); return; }
+
+    setLoginStatus("Checking...");
+    try{
+      const h = await sha256Hex(pass);
+      if (h === ADMIN_PASSWORD_SHA256){
+        setLoginStatus("Logged in.");
+        setAuthed(true);
+      } else {
+        setLoginStatus("Wrong password.");
+      }
+    }catch(e){
+      setLoginStatus(String(e?.message || e));
+    }
+  }
+
+  loginEls.btn.addEventListener('click', tryLogin);
+  loginEls.pass.addEventListener('keydown', (e) => { if (e.key === "Enter") tryLogin(); });
+
+  loginEls.logoutBtn.addEventListener('click', () => {
+    setAuthed(false);
+    loginEls.pass.value = '';
+    setLoginStatus("Logged out.");
+  });
+
+  // Auto-show app if already authed (if storage allowed)
+  setAuthed(safeGetSession('invisx_admin_authed') === '1');
+
+  // ---------------- ADMIN APP ----------------
+  const TARGET = {
+    owner: "nyiyuji016-rgb",
+    repo: "invis-x",
+    branch: "main",
+    path: "players.json"
+  };
+
+  const els = {
+    token: document.getElementById('token'),
+    status: document.getElementById('status'),
+    saveBtn: document.getElementById('saveBtn'),
+
+    name: document.getElementById('name'),
+    region: document.getElementById('region'),
+    cat: document.getElementById('cat'),
+    tier: document.getElementById('tier'),
+    tester: document.getElementById('tester'), // TESTER
+    upsertBtn: document.getElementById('upsertBtn'),
+    clearBtn: document.getElementById('clearBtn'),
+
+    search: document.getElementById('search'),
+    countLabel: document.getElementById('countLabel'),
+    tbody: document.getElementById('tbody'),
+  };
+
+  const ALLOWED_REGIONS = new Set(["ASIA","EU","NA"]);
+  function normalizeRegion(r){
+    const v = String(r || "").trim().toUpperCase();
+    return ALLOWED_REGIONS.has(v) ? v : "ASIA";
+  }
+
+  let players = [];
+  let currentSha = null;
+  let editingKey = null;
+
+  let isLoading = false;
+  let loadedOnce = false;
+  let lastTokenLoaded = "";
+  let tokenDebounceTimer = null;
+
+  function setStatus(msg){ els.status.textContent = msg; }
+  function normalize(s){ return String(s||'').trim().toLowerCase(); }
+  function keyOf(p){ return `${normalize(p.name)}|${normalize(p.cat)}`; }
+
+  function canEdit(){
+    return !!(els.token.value.trim() && loadedOnce && currentSha);
+  }
+
+  function setEditEnabled(enabled){
+    // Token input stays enabled so user can paste it
+    els.name.disabled = !enabled;
+    els.region.disabled = !enabled;
+    els.cat.disabled = !enabled;
+    els.tier.disabled = !enabled;
+    els.tester.disabled = !enabled; // TESTER
+
+    els.upsertBtn.disabled = !enabled;
+    els.clearBtn.disabled = !enabled;
+
+    els.search.disabled = !enabled;
+    els.saveBtn.disabled = !enabled;
+  }
+
+  function base64DecodeUtf8(b64){
+    const bin = atob(String(b64||'').replace(/\n/g,''));
+    const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+  function base64EncodeUtf8(str){
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    for (const b of bytes) bin += String.fromCharCode(b);
+    return btoa(bin);
+  }
+
+  function ghHeaders(){
+    const token = els.token.value.trim();
+    if (!token) throw new Error('Token required.');
+    return {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json'
+    };
+  }
+
+  async function ghGetFile(){
+    const { owner, repo, branch, path } = TARGET;
+    const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path}?ref=${encodeURIComponent(branch)}`;
+    const res = await fetch(url, { headers: ghHeaders() });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.message || `GitHub GET failed (HTTP ${res.status})`);
+    if (!body.content || !body.sha) throw new Error('Unexpected GitHub response (missing content/sha).');
+    return body;
+  }
+
+  async function ghPutFile(newText){
+    const { owner, repo, branch, path } = TARGET;
+    const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path}`;
+
+    const payload = {
+      message: `Update ${path} via admin panel`,
+      content: base64EncodeUtf8(newText),
+      branch,
+      sha: currentSha
+    };
+
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.message || `GitHub PUT failed (HTTP ${res.status})`);
+    currentSha = body?.content?.sha || currentSha;
+    return body;
+  }
+
+  function validateEntry(){
+    const name = els.name.value.trim();
+    const region = normalizeRegion(els.region.value);
+    const cat = els.cat.value.trim().toLowerCase();
+    const tier = els.tier.value.trim().toUpperCase();
+    const tester = els.tester.value === 'true'; // TESTER
+
+    if (!name) throw new Error('Name is required.');
+    if (!['sword','axe','crystal'].includes(cat)) throw new Error('Invalid category.');
+    if (!/^([HL]T)[1-5]$/.test(tier)) throw new Error('Invalid tier.');
+
+    return { name, region, cat, tier, tester };
+  }
+
+  function render(){
+    if (!canEdit()){
+      els.countLabel.textContent = `0 entries`;
+      els.tbody.innerHTML = '';
+      return;
+    }
+
+    const term = normalize(els.search.value);
+    const list = term ? players.filter(p => normalize(p.name).includes(term)) : players.slice();
+
+    list.sort((a,b) => {
+      const dn = String(a.name || "").localeCompare(String(b.name || ""), undefined, { sensitivity:'base' });
+      if (dn !== 0) return dn;
+      return String(a.cat || "").localeCompare(String(b.cat || ""), undefined, { sensitivity:'base' });
+    });
+
+    els.countLabel.textContent = `${list.length} entries`;
+    els.tbody.innerHTML = '';
+
+    for (const p of list){
+      const tr = document.createElement('tr');
+      tr.className = 'tr';
+      tr.innerHTML = `
+        <td>${p.name}</td>
+        <td>${p.region ? p.region : '—'}</td>
+        <td>${p.cat}</td>
+        <td>${p.tier}</td>
+        <td>${p.tester ? 'Yes' : 'No'}</td> <!-- TESTER column -->
+        <td style="text-align:right"><div class="actions"></div></td>
+      `;
+
+      const actions = tr.querySelector('.actions');
+
+      const editBtn = document.createElement('button');
+      editBtn.className = 'btn';
+      editBtn.type = 'button';
+      editBtn.textContent = 'Edit';
+      editBtn.disabled = !canEdit();
+      editBtn.addEventListener('click', () => {
+        if (!canEdit()) return;
+        editingKey = keyOf(p);
+        els.name.value = p.name;
+        els.region.value = normalizeRegion(p.region);
+        els.cat.value = p.cat;
+        els.tier.value = p.tier;
+        els.tester.value = p.tester ? 'true' : 'false'; // TESTER
+        setStatus(`Editing ${p.name} (${p.cat})`);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'btn danger';
+      delBtn.type = 'button';
+      delBtn.textContent = 'Delete (local)';
+      delBtn.disabled = !canEdit();
+      delBtn.addEventListener('click', () => {
+        if (!canEdit()) return;
+        players = players.filter(x => keyOf(x) !== keyOf(p));
+        if (editingKey === keyOf(p)) editingKey = null;
+        setStatus('Deleted locally. Click “Save to GitHub (Commit)”.');
+        render();
+      });
+
+      actions.appendChild(editBtn);
+      actions.appendChild(delBtn);
+      els.tbody.appendChild(tr);
+    }
+  }
+
+  async function loadFromGitHubAuto(){
+    const token = els.token.value.trim();
+
+    if (!token) {
+      loadedOnce = false;
+      lastTokenLoaded = "";
+      currentSha = null;
+      players = [];
+      setEditEnabled(false);
+      setStatus("Paste token to auto-load. Editing is locked until token loads.");
+      render();
+      return;
+    }
+
+    if (isLoading) return;
+    if (loadedOnce && token === lastTokenLoaded) return;
+
+    isLoading = true;
+    setEditEnabled(false);
+    setStatus("Loading from GitHub...");
+
+    try{
+      const file = await ghGetFile();
+      const text = base64DecodeUtf8(file.content);
+      const data = JSON.parse(text);
+      if (!Array.isArray(data)) throw new Error('players.json must be a JSON array.');
+
+      players = data.map(p => ({
+        ...p,
+        region: normalizeRegion(p.region),
+        tester: !!p.tester  // TESTER: ensure boolean
+      }));
+
+      currentSha = file.sha;
+      loadedOnce = true;
+      lastTokenLoaded = token;
+
+      setEditEnabled(true);
+      setStatus(`Loaded ${players.length} entries. Editing unlocked.`);
+      render();
+    }catch(e){
+      loadedOnce = false;
+      lastTokenLoaded = "";
+      currentSha = null;
+      players = [];
+      setEditEnabled(false);
+      setStatus(String(e?.message || e));
+      render();
+    }finally{
+      isLoading = false;
+    }
+  }
+
+  async function saveToGitHub(){
+    if (!canEdit()) {
+      setStatus("Editing locked. Paste a valid token and wait for auto-load.");
+      return;
+    }
+
+    // Refresh sha first
+    setStatus('Refreshing file sha...');
+    const file = await ghGetFile();
+    currentSha = file.sha;
+
+    const cleaned = players
+      .filter(p => p && typeof p === 'object')
+      .map(p => {
+        const obj = {
+          name: String(p.name || '').trim(),
+          cat: String(p.cat || '').trim().toLowerCase(),
+          tier: String(p.tier || '').trim().toUpperCase(),
+          region: normalizeRegion(p.region)
+        };
+        if (p.tester) obj.tester = true; // TESTER: only save when true
+        return obj;
+      })
+      .filter(p =>
+        p.name &&
+        ['sword','axe','crystal'].includes(p.cat) &&
+        /^([HL]T)[1-5]$/.test(p.tier) &&
+        ALLOWED_REGIONS.has(p.region)
+      );
+
+    const jsonText = JSON.stringify(cleaned, null, 2) + '\n';
+
+    try{
+      setStatus('Committing to GitHub...');
+      await ghPutFile(jsonText);
+      players = cleaned;
+      setStatus('Saved (committed). Refresh tierlist to see updates.');
+      render();
+    }catch(err){
+      const msg = String(err?.message || err);
+      if (msg.includes('does not match')){
+        setStatus('File changed on GitHub. Retrying...');
+        const f2 = await ghGetFile();
+        currentSha = f2.sha;
+        await ghPutFile(jsonText);
+        players = cleaned;
+        setStatus('Saved after retry.');
+        render();
+        return;
+      }
+      setStatus(msg);
+    }
+  }
+
+  function upsertLocal(){
+    if (!canEdit()){
+      setStatus("You must paste a valid token and let it load before adding tiers.");
+      return;
+    }
+
+    const entry = validateEntry();
+
+    if (editingKey){
+      players = players.filter(p => keyOf(p) !== editingKey);
+      editingKey = null;
+    }
+
+    const k = keyOf(entry);
+    const idx = players.findIndex(p => keyOf(p) === k);
+    if (idx >= 0) players[idx] = entry;
+    else players.push(entry);
+
+    setStatus('Updated locally. Click “Save to GitHub (Commit)”.');
+    render();
+  }
+
+  function clearForm(){
+    els.name.value = '';
+    els.region.value = 'ASIA';
+    els.cat.value = 'sword';
+    els.tier.value = 'HT5';
+    els.tester.value = 'false'; // TESTER default
+  }
+
+  function scheduleAutoLoad(){
+    clearTimeout(tokenDebounceTimer);
+    tokenDebounceTimer = setTimeout(loadFromGitHubAuto, 350);
+  }
+  els.token.addEventListener('input', scheduleAutoLoad);
+  els.token.addEventListener('paste', scheduleAutoLoad);
+
+  els.saveBtn.addEventListener('click', saveToGitHub);
+
+  els.upsertBtn.addEventListener('click', () => {
+    try { upsertLocal(); }
+    catch(e){ setStatus(String(e?.message || e)); }
+  });
+
+  els.clearBtn.addEventListener('click', () => {
+    if (!canEdit()){
+      setStatus("Editing locked. Paste a valid token and wait for auto-load.");
+      return;
+    }
+    clearForm();
+    setStatus("Ready.");
+  });
+
+  els.search.addEventListener('input', () => {
+    if (!canEdit()) return;
+    render();
+  });
+
+  // Init locked
+  setEditEnabled(false);
+  clearForm();
+  render();
+</script>
+</body>
+</html>

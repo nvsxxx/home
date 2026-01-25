@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Purpleed",
+    "region": "ASIA",
+    "cat": "temp",
+    "tier": "Unranked",
+    "discord_id": "1336049595138179144",
+    "tester": true
+  },
+  {
+    "name": "Purpleed",
+    "region": "ASIA",
+    "cat": "sword",
+    "tier": "HT4",
+    "discord_id": "1336049595138179144",
+    "tester": true
+  },
+  {
+    "name": "Purpleed",
+    "region": "ASIA",
+    "cat": "axe",
+    "tier": "HT5",
+    "discord_id": "1336049595138179144",
+    "tester": true
+  },
+  {
+    "name": "Purpleed",
+    "region": "ASIA",
+    "cat": "crystal",
+    "tier": "HT5",
+    "discord_id": "1336049595138179144"
+  },
+  {
+    "name": "zSahill",
+    "region": "ASIA",
+    "cat": "temp",
+    "tier": "Unranked",
+    "discord_id": "1094636322708279316"
+  },
+  {
+    "name": "forkAndExec",
+    "region": "ASIA",
+    "cat": "temp",
+    "tier": "Unranked",
+    "discord_id": "1039080698511888514"
+  },
+  {
+    "name": "forkAndExec",
+    "region": "ASIA",
+    "cat": "smp",
+    "tier": "HT5",
+    "discord_id": "1039080698511888514"
+  },
+  {
+    "name": "forkAndExec",
+    "region": "ASIA",
+    "cat": "sword",
+    "tier": "LT5",
+    "discord_id": "1039080698511888514"
+  }
+]

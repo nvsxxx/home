@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>INVIS X</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Fonts: Inter for UI, Orbitron for Headers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #141414;
+      --bg-card-hover: #1a1a1a;
+      --accent: #fff;
+      --text-main: #f0f0f0;
+      --text-muted: #888;
+      --border: #222;
+      --border-hover: #333;
+      
+      --font-ui: 'Inter', sans-serif;
+      --font-display: 'Orbitron', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-ui);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    a { text-decoration: none; color: inherit; transition: 0.2s; }
+    button { font-family: inherit; cursor: pointer; }
+
+    /* Canvas Background */
+    canvas#stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    
+    .bg-gradient {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60vh;
+      background: radial-gradient(circle at 50% -20%, rgba(255,255,255,0.08), transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* --- Navigation --- */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: 70px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-item {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      position: relative;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      color: #fff;
+    }
+
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: -24px;
+      left: 0; right: 0;
+      height: 2px;
+      background: #fff;
+    }
+
+    /* --- Hero Section --- */
+    .hero-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+      animation: fadeUp 1.5s ease;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      margin-bottom: 8px;
+      background: linear-gradient(180deg, #fff, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+    }
+
+    .hero-title::after {
+      content: "";
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #fff, transparent);
+      display: block;
+      margin: 12px auto 0;
+      border-radius: 2px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 20px auto 40px;
+      letter-spacing: 0.5px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: #fff;
+      color: #000;
+      border: 1px solid #fff;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 40px rgba(255,255,255,0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: #666;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px;
+      text-align: center;
+      color: #444;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Mobile Nav */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-title { font-size: 2.5rem; }
+      .btn { padding: 12px 24px; font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="stars"></canvas>
+  <div class="bg-gradient"></div>
+
+
+
+  <!-- HERO CONTENT -->
+  <main class="hero-container">
+    <h1 class="hero-title">INVIS X</h1>
+    <p class="hero-subtitle">Silent. Precise. Unseen until it’s too late.</p>
+    <div class="buttons">
+      <a href="https://discord.gg/EBZNpdhpu5" target="_blank" class="btn btn-primary">Join Discord</a>
+      <a href="tierlist.html" class="btn btn-secondary">Tier List</a>
+      <a href="clan-info.html" class="btn btn-secondary">Clan Info</a>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 INVIS X | Made with precision ⚔️
+  </footer>
+
+  <script>
+    // --- Stars Background ---
+    const starCanvas = document.getElementById("stars");
+    const starCtx = starCanvas.getContext("2d");
+    
+    function resizeStars() {
+      starCanvas.width = window.innerWidth;
+      starCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeStars);
+    resizeStars();
+
+    const stars = Array(150).fill().map(() => ({
+      x: Math.random() * starCanvas.width,
+      y: Math.random() * starCanvas.height,
+      r: Math.random() * 1.2,
+      a: Math.random() * 0.5 + 0.1,
+      s: Math.random() * 0.2 + 0.1
+    }));
+
+    function animateStars() {
+      starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+      stars.forEach(st => {
+        starCtx.beginPath();
+        starCtx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+        starCtx.fillStyle = `rgba(255, 255, 255, ${st.a})`;
+        starCtx.fill();
+        st.y -= st.s;
+        if (st.y < 0) { st.y = starCanvas.height; st.x = Math.random() * starCanvas.width; }
+      });
+      requestAnimationFrame(animateStars);
+    }
+    animateStars();
+  </script>
+</body>
+</html>

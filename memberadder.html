@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INVIS X | Members Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bgTop:#111; --bgBottom:#000;
+      --text:#e5e5e5; --muted:#aaa;
+      --border:#222; --border2:#333; --border3:#444;
+      --shadow: 0 18px 60px rgba(0,0,0,0.70);
+      --soft: 0 0 12px rgba(255,255,255,0.05);
+      --glow:#888;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Orbitron',sans-serif;
+      color:var(--text);
+      background: radial-gradient(circle at top, var(--bgTop), var(--bgBottom));
+      min-height:100vh;
+    }
+    header{padding:34px 18px 16px;text-align:center;border-bottom:1px solid var(--border)}
+    h1{font-weight:800;letter-spacing:6px}
+    header p{margin-top:10px;color:var(--muted);font-size:.9rem;letter-spacing:1px;line-height:1.5}
+    main{max-width:1100px;margin:0 auto;padding:18px}
+    .card{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,17,17,0.55), rgba(0,0,0,0.55));
+      box-shadow: var(--shadow);
+      border-radius:16px;
+      padding:14px;
+      margin-top:14px;
+    }
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}
+    label{display:block;font-size:.72rem;letter-spacing:2px;color:rgba(255,255,255,.6);margin-bottom:6px;text-transform:uppercase}
+    input, select{
+      width: min(360px, 100%);
+      padding:12px 12px;
+      border-radius:12px;
+      border:2px solid var(--border2);
+      background: rgba(0,0,0,0.35);
+      color:#fff;
+      outline:none;
+      font-family:'Orbitron',sans-serif;
+      letter-spacing:1px;
+    }
+    .btn{
+      padding:12px 16px;
+      border-radius:12px;
+      border:2px solid var(--border2);
+      background: linear-gradient(135deg, #111, #2c2c2c);
+      color:#fff;
+      cursor:pointer;
+      letter-spacing:1px;
+      transition:.2s ease;
+      box-shadow: var(--soft);
+    }
+    .btn:hover{transform:translateY(-1px);border-color:var(--border3);box-shadow:0 0 25px var(--glow)}
+    .btn:disabled{cursor:not-allowed;opacity:.55;transform:none;box-shadow:none}
+    .btn.danger{border-color:#552222}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .status{color:rgba(255,255,255,.70);font-size:.85rem;letter-spacing:1px}
+    .pill{
+      display:inline-block;padding:6px 10px;border-radius:999px;
+      border:1px solid var(--border2);background: rgba(255,255,255,0.06);
+      font-size:.75rem;letter-spacing:1px;white-space:nowrap;
+    }
+    .table{width:100%;border-collapse:separate;border-spacing:0 10px;margin-top:10px}
+    .tr{background: rgba(0,0,0,0.45);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow: var(--soft)}
+    .tr td{padding:12px 10px;vertical-align:middle}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .muted{color:rgba(255,255,255,.55)}
+    .hidden{display:none !important}
+
+    .backdrop{
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.70);
+      backdrop-filter: blur(8px);
+      display:flex; align-items:center; justify-content:center;
+      padding:18px; z-index: 999;
+    }
+    .login-box{
+      width:min(520px, 96vw);
+      border-radius:18px;
+      border:1px solid var(--border2);
+      background: linear-gradient(180deg, rgba(17,17,17,0.65), rgba(0,0,0,0.75));
+      box-shadow: 0 30px 120px rgba(0,0,0,0.75);
+      overflow:hidden;
+    }
+    .login-top{
+      padding:16px 16px 12px;
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .login-title{font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:1rem}
+    .login-body{padding:14px 16px 16px}
+    .login-hint{margin-top:10px;color:rgba(255,255,255,0.60);font-size:.85rem;line-height:1.5}
+
+    @media (max-width: 760px){
+      .table thead{display:none}
+      .tr{display:block}
+      .tr td{display:block}
+      .actions{justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>INVIS X</h1>
+  <p>
+    Members Admin — edits <span class="pill">members.json</span> in
+    <span class="pill">nyiyuji016-rgb/invis-x</span> (branch <span class="pill">main</span>).
+  </p>
+  <p class="muted">Token is required. Editing is locked until token loads.</p>
+</header>
+
+<div id="loginBackdrop" class="backdrop">
+  <div class="login-box" role="dialog" aria-modal="true" aria-label="Admin login">
+    <div class="login-top">
+      <div class="login-title">Admin Login</div>
+      <div class="muted" style="font-size:.8rem;">UI lock</div>
+    </div>
+    <div class="login-body">
+      <div class="row">
+        <div>
+          <label>Username</label>
+          <input id="loginUser" autocomplete="username" placeholder="admin" />
+        </div>
+        <div>
+          <label>Password</label>
+          <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="loginBtn" type="button">Login</button>
+      </div>
+      <div class="login-hint">Client-side lock only. Keep your GitHub token private.</div>
+      <div class="status" id="loginStatus" style="margin-top:10px;">Enter password to continue.</div>
+    </div>
+  </div>
+</div>
+
+<main id="app" class="hidden">
+  <div class="card">
+    <div class="toolbar">
+      <div class="row" style="align-items:center">
+        <div>
+          <label>GitHub token (auto-loads)</label>
+          <input id="token" placeholder="Fine-grained PAT with Contents: Read & write" />
+        </div>
+      </div>
+      <div class="status" id="status">Paste token to load members.json.</div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="saveBtn" type="button" disabled>Save to GitHub (Commit)</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>Name</label>
+        <input id="name" placeholder="Minecraft username" disabled />
+      </div>
+
+      <div>
+        <label>Group</label>
+        <select id="group" disabled>
+          <option value="leadership">Leadership</option>
+          <option value="members">Members</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Role</label>
+        <select id="role" disabled></select>
+      </div>
+
+      <button class="btn" id="upsertBtn" type="button" disabled>Add / Update (local)</button>
+      <button class="btn danger" id="clearBtn" type="button" disabled>Clear</button>
+    </div>
+
+    <p class="muted" style="margin-top:12px; line-height:1.6">
+      One row per <span class="pill">group + name</span>. Saving commits <span class="pill">members.json</span>.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <div class="row" style="align-items:center">
+        <div>
+          <label>Search</label>
+          <input id="search" placeholder="Search name..." disabled />
+        </div>
+      </div>
+      <div class="muted" id="countLabel">0 entries</div>
+    </div>
+
+    <table class="table" aria-label="Members table">
+      <thead class="muted">
+        <tr>
+          <th style="text-align:left;padding:8px 10px;">Name</th>
+          <th style="text-align:left;padding:8px 10px;">Group</th>
+          <th style="text-align:left;padding:8px 10px;">Role</th>
+          <th style="text-align:right;padding:8px 10px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+  // ---- LOGIN ----
+  const ADMIN_PASSWORD_SHA256 = "bef7449126292e452132597f2132c7c8eb1bb3b5c9e60722dd43f28409f5dd2a";
+
+  const loginEls = {
+    backdrop: document.getElementById('loginBackdrop'),
+    pass: document.getElementById('loginPass'),
+    btn: document.getElementById('loginBtn'),
+    status: document.getElementById('loginStatus'),
+    app: document.getElementById('app'),
+  };
+
+  function safeGetSession(key){ try { return sessionStorage.getItem(key); } catch { return null; } }
+  function safeSetSession(key,val){ try { sessionStorage.setItem(key,val); } catch {} }
+
+  async function sha256Hex(str){
+    const bytes = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest('SHA-256', bytes);
+    return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function setAuthed(v){
+    safeSetSession('invisx_members_admin_authed', v ? '1' : '0');
+    loginEls.backdrop.classList.toggle('hidden', !!v);
+    loginEls.app.classList.toggle('hidden', !v);
+  }
+
+  async function tryLogin(){
+    const pass = loginEls.pass.value;
+    if (!pass) { loginEls.status.textContent = "Password required."; return; }
+    loginEls.status.textContent = "Checking...";
+    const h = await sha256Hex(pass);
+    if (h === ADMIN_PASSWORD_SHA256){
+      loginEls.status.textContent = "Logged in.";
+      setAuthed(true);
+    } else {
+      loginEls.status.textContent = "Wrong password.";
+    }
+  }
+
+  loginEls.btn.addEventListener('click', tryLogin);
+  loginEls.pass.addEventListener('keydown', (e) => { if (e.key === "Enter") tryLogin(); });
+  setAuthed(safeGetSession('invisx_members_admin_authed') === '1');
+
+  // ---- APP ----
+  const TARGET = {
+    owner: "nyiyuji016-rgb",
+    repo: "invis-x",
+    branch: "main",
+    path: "members.json"
+  };
+
+  const els = {
+    token: document.getElementById('token'),
+    status: document.getElementById('status'),
+    saveBtn: document.getElementById('saveBtn'),
+    name: document.getElementById('name'),
+    group: document.getElementById('group'),
+    role: document.getElementById('role'),
+    upsertBtn: document.getElementById('upsertBtn'),
+    clearBtn: document.getElementById('clearBtn'),
+    search: document.getElementById('search'),
+    countLabel: document.getElementById('countLabel'),
+    tbody: document.getElementById('tbody'),
+  };
+
+  const ROLE_OPTIONS = {
+    leadership: ["founder","owner","coowner","manager"],
+    members: ["elite","veteran","member"]
+  };
+
+  function setRoleOptions(){
+    const g = els.group.value;
+    const opts = ROLE_OPTIONS[g] || [];
+    els.role.innerHTML = "";
+    for (const r of opts){
+      const o = document.createElement("option");
+      o.value = r;
+      o.textContent = r.toUpperCase().replace("COOWNER","CO-OWNER");
+      els.role.appendChild(o);
+    }
+  }
+
+  els.group.addEventListener("change", setRoleOptions);
+
+  let data = { leadership: [], members: [] };
+  let currentSha = null;
+  let loadedOnce = false;
+  let lastTokenLoaded = "";
+  let isLoading = false;
+  let editingKey = null;
+  let tokenDebounceTimer = null;
+
+  function setStatus(msg){ els.status.textContent = msg; }
+  function normalize(s){ return String(s || "").trim().toLowerCase(); }
+  function normName(s){ return String(s || "").trim(); }
+
+  function canEdit(){
+    return !!(els.token.value.trim() && loadedOnce && currentSha);
+  }
+
+  function setEditEnabled(enabled){
+    els.saveBtn.disabled = !enabled;
+    els.name.disabled = !enabled;
+    els.group.disabled = !enabled;
+    els.role.disabled = !enabled;
+    els.upsertBtn.disabled = !enabled;
+    els.clearBtn.disabled = !enabled;
+    els.search.disabled = !enabled;
+  }
+
+  function base64DecodeUtf8(b64){
+    const bin = atob(String(b64||'').replace(/\n/g,''));
+    const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+  function base64EncodeUtf8(str){
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    for (const b of bytes) bin += String.fromCharCode(b);
+    return btoa(bin);
+  }
+
+  function ghHeaders(){
+    const token = els.token.value.trim();
+    if (!token) throw new Error("Token required.");
+    return { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' };
+  }
+
+  async function ghGetFile(){
+    const { owner, repo, branch, path } = TARGET;
+    const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path}?ref=${encodeURIComponent(branch)}`;
+    const res = await fetch(url, { headers: ghHeaders() });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.message || `GitHub GET failed (HTTP ${res.status})`);
+    if (!body.content || !body.sha) throw new Error("Unexpected GitHub response (missing content/sha).");
+    return body;
+  }
+
+  async function ghPutFile(newText){
+    const { owner, repo, branch, path } = TARGET;
+    const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path}`;
+    const payload = {
+      message: `Update ${path} via members admin`,
+      content: base64EncodeUtf8(newText),
+      branch,
+      sha: currentSha
+    };
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: { ...ghHeaders(), "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.message || `GitHub PUT failed (HTTP ${res.status})`);
+    currentSha = body?.content?.sha || currentSha;
+    return body;
+  }
+
+  function flatten(){
+    const out = [];
+    for (const m of (Array.isArray(data.leadership) ? data.leadership : [])){
+      out.push({ group: "leadership", role: normalize(m.role), name: normName(m.name) });
+    }
+    for (const m of (Array.isArray(data.members) ? data.members : [])){
+      out.push({ group: "members", role: normalize(m.role), name: normName(m.name) });
+    }
+    return out.filter(x => x.name && x.role);
+  }
+
+  function keyOf(x){
+    return `${x.group}|${normalize(x.name)}`;
+  }
+
+  function render(){
+    if (!canEdit()){
+      els.countLabel.textContent = "0 entries";
+      els.tbody.innerHTML = "";
+      return;
+    }
+
+    const term = normalize(els.search.value);
+    let list = flatten();
+    if (term) list = list.filter(x => normalize(x.name).includes(term));
+
+    list.sort((a,b) => {
+      const dn = a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
+      if (dn !== 0) return dn;
+      const dg = a.group.localeCompare(b.group);
+      if (dg !== 0) return dg;
+      return a.role.localeCompare(b.role);
+    });
+
+    els.countLabel.textContent = `${list.length} entries`;
+    els.tbody.innerHTML = "";
+
+    for (const x of list){
+      const tr = document.createElement("tr");
+      tr.className = "tr";
+      tr.innerHTML = `
+        <td>${x.name}</td>
+        <td>${x.group}</td>
+        <td>${x.role.toUpperCase().replace("COOWNER","CO-OWNER")}</td>
+        <td style="text-align:right"><div class="actions"></div></td>
+      `;
+
+      const actions = tr.querySelector(".actions");
+
+      const editBtn = document.createElement("button");
+      editBtn.className = "btn";
+      editBtn.type = "button";
+      editBtn.textContent = "Edit";
+      editBtn.addEventListener("click", () => {
+        editingKey = keyOf(x);
+        els.name.value = x.name;
+        els.group.value = x.group;
+        setRoleOptions();
+        els.role.value = x.role;
+        setStatus(`Editing ${x.name} (${x.group})`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "btn danger";
+      delBtn.type = "button";
+      delBtn.textContent = "Delete (local)";
+      delBtn.addEventListener("click", () => {
+        const k = keyOf(x);
+        data.leadership = (data.leadership || []).filter(m => `leadership|${normalize(m.name)}` !== k);
+        data.members = (data.members || []).filter(m => `members|${normalize(m.name)}` !== k);
+        setStatus("Deleted locally. Click Save.");
+        render();
+      });
+
+      actions.appendChild(editBtn);
+      actions.appendChild(delBtn);
+      els.tbody.appendChild(tr);
+    }
+  }
+
+  function validateEntry(){
+    const name = normName(els.name.value);
+    const group = els.group.value;
+    const role = normalize(els.role.value);
+
+    if (!name) throw new Error("Name is required.");
+    if (!["leadership","members"].includes(group)) throw new Error("Invalid group.");
+    if (!(ROLE_OPTIONS[group] || []).includes(role)) throw new Error("Invalid role for group.");
+
+    return { name, group, role };
+  }
+
+  function upsertLocal(){
+    if (!canEdit()){
+      setStatus("Paste token and wait for load first.");
+      return;
+    }
+
+    const entry = validateEntry();
+
+    if (editingKey){
+      data.leadership = (data.leadership || []).filter(m => `leadership|${normalize(m.name)}` !== editingKey);
+      data.members = (data.members || []).filter(m => `members|${normalize(m.name)}` !== editingKey);
+      editingKey = null;
+    }
+
+    const k = `${entry.group}|${normalize(entry.name)}`;
+    data.leadership = (data.leadership || []).filter(m => `leadership|${normalize(m.name)}` !== k);
+    data.members = (data.members || []).filter(m => `members|${normalize(m.name)}` !== k);
+
+    if (entry.group === "leadership") data.leadership.push({ name: entry.name, role: entry.role });
+    else data.members.push({ name: entry.name, role: entry.role });
+
+    setStatus("Updated locally. Click Save.");
+    render();
+  }
+
+  function clearForm(){
+    editingKey = null;
+    els.name.value = "";
+    els.group.value = "leadership";
+    setRoleOptions();
+    els.role.value = "founder";
+    setStatus(loadedOnce ? "Ready." : "Paste token to load members.json.");
+  }
+
+  async function loadAuto(){
+    const token = els.token.value.trim();
+    if (!token){
+      loadedOnce = false;
+      lastTokenLoaded = "";
+      currentSha = null;
+      data = { leadership: [], members: [] };
+      setEditEnabled(false);
+      setStatus("Paste token to load members.json.");
+      render();
+      return;
+    }
+
+    if (isLoading) return;
+    if (loadedOnce && token === lastTokenLoaded) return;
+
+    isLoading = true;
+    setEditEnabled(false);
+    setStatus("Loading from GitHub...");
+
+    try{
+      const file = await ghGetFile();
+      const text = base64DecodeUtf8(file.content);
+      const parsed = JSON.parse(text);
+
+      data = {
+        leadership: Array.isArray(parsed.leadership) ? parsed.leadership : [],
+        members: Array.isArray(parsed.members) ? parsed.members : []
+      };
+
+      currentSha = file.sha;
+      loadedOnce = true;
+      lastTokenLoaded = token;
+
+      setRoleOptions();
+      setEditEnabled(true);
+      setStatus("Loaded. Editing unlocked.");
+      clearForm();
+      render();
+    }catch(e){
+      loadedOnce = false;
+      lastTokenLoaded = "";
+      currentSha = null;
+      data = { leadership: [], members: [] };
+      setEditEnabled(false);
+      setStatus(String(e?.message || e));
+      render();
+    }finally{
+      isLoading = false;
+    }
+  }
+
+  async function saveToGitHub(){
+    if (!canEdit()){
+      setStatus("Locked. Paste token and wait for load.");
+      return;
+    }
+
+    setStatus("Refreshing file sha...");
+    const file = await ghGetFile();
+    currentSha = file.sha;
+
+    // Clean + sort
+    const cleanArr = (arr) => (arr || [])
+      .map(m => ({ name: normName(m.name), role: normalize(m.role) }))
+      .filter(m => m.name && m.role);
+
+    const out = {
+      leadership: cleanArr(data.leadership),
+      members: cleanArr(data.members)
+    };
+
+    const jsonText = JSON.stringify(out, null, 2) + "\n";
+
+    try{
+      setStatus("Committing to GitHub...");
+      await ghPutFile(jsonText);
+      data = out;
+      setStatus("Saved (committed). Refresh clan.html to see updates.");
+      render();
+    }catch(err){
+      const msg = String(err?.message || err);
+      if (msg.includes("does not match")){
+        setStatus("File changed on GitHub. Retrying...");
+        const f2 = await ghGetFile();
+        currentSha = f2.sha;
+        await ghPutFile(jsonText);
+        data = out;
+        setStatus("Saved after retry.");
+        render();
+        return;
+      }
+      setStatus(msg);
+    }
+  }
+
+  function scheduleLoad(){
+    clearTimeout(tokenDebounceTimer);
+    tokenDebounceTimer = setTimeout(loadAuto, 350);
+  }
+
+  els.token.addEventListener("input", scheduleLoad);
+  els.token.addEventListener("paste", scheduleLoad);
+  els.upsertBtn.addEventListener("click", () => { try { upsertLocal(); } catch(e){ setStatus(String(e.message || e)); } });
+  els.clearBtn.addEventListener("click", clearForm);
+  els.search.addEventListener("input", render);
+  els.saveBtn.addEventListener("click", saveToGitHub);
+
+  setEditEnabled(false);
+  setRoleOptions();
+  clearForm();
+  render();
+</script>
+</body>
+</html>
