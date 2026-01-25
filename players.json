@@ -43,7 +43,7 @@
     "cat": "temp",
     "tier": "Unranked",
     "discord_id": "1039080698511888514",
-    "tester": true
+    "tester": false
   },
   {
     "name": "forkAndExec",
@@ -51,7 +51,7 @@
     "cat": "smp",
     "tier": "HT5",
     "discord_id": "1039080698511888514",
-    "tester": true
+    "tester": false
   },
   {
     "name": "forkAndExec",
@@ -59,7 +59,7 @@
     "cat": "sword",
     "tier": "LT5",
     "discord_id": "1039080698511888514",
-    "tester": true
+    "tester": false
   },
   {
     "name": "Purpleed",
