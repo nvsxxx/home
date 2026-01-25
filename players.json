@@ -90,5 +90,12 @@
     "tier": "LT5",
     "discord_id": "1131512536735416360",
     "tester": true
+  },
+  {
+    "name": "qxpow",
+    "region": "ASIA",
+    "cat": "axe",
+    "tier": "HT4",
+    "discord_id": "1131512536735416360"
   }
 ]
