@@ -26,16 +26,12 @@
       --text-sub: #9ca3af;
 
       /* RANK COLORS */
-      --rank-1: #fbbf24; 
-      --rank-2: #9ca3af; 
-      --rank-3: #b45309; 
+      --rank-1: #fbbf24; /* Gold */
+      --rank-2: #e2e8f0; /* Silver */
+      --rank-3: #d97706; /* Bronze */
       --rank-n: #27272a; 
 
-      /* BADGE COLORS */
-      --c-1: #fbbf24; /* Gold */
-      --c-2: #94a3b8; /* Blue/Grey */
-      --c-3: #f97316; /* Orange */
-      
+      /* FONT */
       --font-display: 'Poppins', sans-serif;
       --font-body: 'Inter', sans-serif;
     }
@@ -145,11 +141,11 @@
     .meta { display: flex; flex-direction: column; justify-content: center; }
     .p-name { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: #fff; margin-bottom: 2px; }
     
-    /* NEW TITLE STYLE MATCHING SCREENSHOT */
+    /* Dynamic Title Row */
     .p-title-row { display: flex; align-items: center; font-size: 0.85rem; }
     .p-rank-icon { width: 14px; height: 14px; fill: currentColor; margin-right: 6px; }
-    .p-title-text { color: #60a5fa; font-weight: 600; } /* Light Blue Title */
-    .p-points { color: #475569; margin-left: 6px; font-weight: 500; font-size: 0.8rem; } /* Muted Grey Points */
+    .p-title-text { font-weight: 600; } 
+    .p-points { color: #475569; margin-left: 6px; font-weight: 500; font-size: 0.8rem; }
 
     .c-region { display: flex; align-items: center; justify-content: center; z-index: 2; }
     .badge-reg { font-weight: 800; font-size: 0.9rem; padding: 4px 8px; border-radius: 4px; background: #333; color: #888; }
@@ -253,19 +249,15 @@
     .m-skin { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .m-name { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 4px; }
     
-    /* Title Pill */
+    /* Title Pill in Modal */
     .m-title-pill {
       font-size: 0.8rem; font-weight: 700;
       padding: 4px 12px; border-radius: 50px;
       display: flex; align-items: center; gap: 6px;
       border: 1px solid transparent;
+      background: rgba(255,255,255,0.05);
     }
     .m-title-icon { width: 14px; height: 14px; fill: currentColor; }
-
-    .pill-1 { background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.4); color: #fbbf24; }
-    .pill-2 { background: rgba(226, 232, 240, 0.15); border-color: rgba(226, 232, 240, 0.4); color: #cbd5e1; }
-    .pill-3 { background: rgba(217, 119, 6, 0.15); border-color: rgba(217, 119, 6, 0.4); color: #f59e0b; }
-    .pill-n { background: #27272a; border-color: #444; color: #9ca3af; }
 
     .m-label { font-size: 0.9rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
 
@@ -335,7 +327,7 @@
 </head>
 <body>
 
-  <!-- SVG Icons for Trophy/Diamond -->
+  <!-- SVG Icons -->
   <svg style="display:none;">
     <defs>
       <symbol id="icon-trophy" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM7 8V7h2v3.82c-1.21-.48-2-1.44-2-2.82zm10 0c0 1.38-.79 2.34-2 2.82V7h2v1z"/></symbol>
@@ -479,6 +471,16 @@
       return "Rookie";
     }
 
+    // Helper to determine color based on Rank String
+    function getRankColor(title) {
+        if(title.includes("Grandmaster") || title.includes("Master")) return "#fbbf24"; // Gold
+        if(title.includes("Ace")) return "#f472b6"; // Pink
+        if(title.includes("Specialist")) return "#c084fc"; // Purple
+        if(title.includes("Cadet")) return "#818cf8"; // Indigo
+        if(title.includes("Novice")) return "#60a5fa"; // Light Blue
+        return "#9ca3af"; // Grey
+    }
+
     function getLevelClass(tier) {
       if(!tier) return "lvl-n";
       if(tier.includes('1')) return "lvl-1"; 
@@ -577,13 +579,8 @@
           `;
         }).join('');
 
-        // Icon color based on rank text
-        let iconColor = "#fbbf24";
-        if(p.title.includes("Ace")) iconColor = "#f472b6";
-        else if(p.title.includes("Specialist")) iconColor = "#c084fc";
-        else if(p.title.includes("Cadet")) iconColor = "#818cf8";
-        else if(p.title.includes("Novice")) iconColor = "#60a5fa";
-        else if(p.title.includes("Rookie")) iconColor = "#9ca3af";
+        // Calculate dynamic color for Title
+        const rankColor = getRankColor(p.title);
 
         const el = document.createElement("div");
         el.className = `card ${rankClass}`;
@@ -597,8 +594,8 @@
             <div class="meta">
               <div class="p-name">${p.name}</div>
               <div class="p-title-row">
-                 <svg class="p-rank-icon" style="color:${iconColor}"><use href="#icon-diamond"></use></svg> 
-                 <span class="p-title-text">${p.title}</span> 
+                 <svg class="p-rank-icon" style="color:${rankColor}"><use href="#icon-diamond"></use></svg> 
+                 <span class="p-title-text" style="color:${rankColor}">${p.title}</span> 
                  <span class="p-points">(${p.total} points)</span>
               </div>
             </div>
@@ -668,32 +665,30 @@
       const img = document.getElementById('mHead');
       const container = document.getElementById('mSkinContainer');
       const pill = document.getElementById('mTitlePill');
+      const pillText = document.getElementById('mTitleText');
       
       img.src = `https://vzge.me/bust/${p.name}`;
       img.onerror = function() { this.src = FALLBACK_BUST; };
       
       document.getElementById('mName').textContent = p.name;
-      document.getElementById('mTitleText').textContent = p.title;
+      pillText.textContent = p.title;
 
       const rank = processedList.indexOf(p) + 1;
+      const rankColor = getRankColor(p.title); // Get color based on title
       
       // Reset classes
       container.className = 'm-skin-container';
-      pill.className = 'm-title-pill';
       
-      if(rank === 1) { 
-          container.classList.add('frame-1'); 
-          pill.classList.add('pill-1');
-      } else if(rank === 2) { 
-          container.classList.add('frame-2'); 
-          pill.classList.add('pill-2');
-      } else if(rank === 3) { 
-          container.classList.add('frame-3'); 
-          pill.classList.add('pill-3');
-      } else { 
-          container.classList.add('frame-n'); 
-          pill.classList.add('pill-n');
-      }
+      // Update Pill Color to match Rank Title
+      pill.style.color = rankColor;
+      pill.style.borderColor = rankColor;
+      pill.style.backgroundColor = `${rankColor}20`; // 20 = low opacity hex
+
+      // Top 3 Frame Glow Logic
+      if(rank === 1) container.classList.add('frame-1'); 
+      else if(rank === 2) container.classList.add('frame-2'); 
+      else if(rank === 3) container.classList.add('frame-3'); 
+      else container.classList.add('frame-n');
 
       document.getElementById('mRankNum').textContent = rank + ".";
       document.getElementById('mPoints').textContent = `(${p.total} points)`;
