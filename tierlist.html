@@ -24,7 +24,7 @@
       --border-main: #222;
       --border-highlight: #444;
 
-      /* TIER COLORS (Standard Gaming Palette) */
+      /* TIER COLORS */
       --t1: #ef4444; /* Red */
       --t2: #f97316; /* Orange */
       --t3: #eab308; /* Yellow */
@@ -173,10 +173,7 @@
       font-size: 0.6rem; font-weight: 700; color: #444;
     }
     
-    /* Dynamic Color for Pills (Using Data Attribute logic via JS injection or specific classes) */
-    /* Since we inject text directly, we use CSS matching */
     .mini-pill:not(:empty) { color: #fff; background: #222; border-color: #444; }
-    /* We will handle color via JS inline style or complex selectors below for the main tier board */
 
     /* --- TIER BOARD (COLUMNS) --- */
     .tier-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; align-items: start; }
@@ -274,6 +271,12 @@
     }
     .stat-lbl { font-size: 0.65rem; color: #666; font-weight: 700; margin-bottom: 2px; text-transform: uppercase; }
     .stat-val { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #fff; }
+    
+    /* MODAL RANK GLOW EFFECT */
+    .stat-val.glow {
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+      color: #fff;
+    }
 
     .breakdown-box { background: #0a0a0a; border-radius: 12px; padding: 16px; border: 1px solid #222; }
     .bb-title { text-align: center; color: #555; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; text-transform: uppercase; }
@@ -567,7 +570,7 @@
             <div class="player-details">
               <div class="player-name">${p.name}</div>
               <div class="player-meta">
-                ${p.tester ? '<span class="role-badge tester">Dev</span>' : ''}
+                ${p.tester ? '<span class="role-badge tester">TESTER</span>' : ''}
                 <span class="role-badge">${p.region}</span>
                 <span>${p.title}</span>
               </div>
@@ -647,7 +650,16 @@
       document.getElementById("mName").textContent = data.name;
       document.getElementById("mTesterRow").classList.toggle("hidden", !data.tester);
       document.getElementById("mTitle").textContent = data.title;
-      document.getElementById("mRank").textContent = rank ? `#${rank}` : '-';
+      
+      // Update Rank with Glow Logic
+      const rankEl = document.getElementById("mRank");
+      rankEl.textContent = rank ? `#${rank}` : '-';
+      if (rank && rank <= 3) {
+        rankEl.classList.add("glow");
+      } else {
+        rankEl.classList.remove("glow");
+      }
+
       document.getElementById("mPoints").textContent = data.points;
       document.getElementById("mRegion").textContent = data.region || '-';
       
