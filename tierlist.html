@@ -51,12 +51,6 @@
       overflow-x: hidden;
     }
 
-    /* --- ICONS (SVG Styling) --- */
-    .icon-svg {
-      width: 20px; height: 20px;
-      fill: currentColor;
-    }
-
     /* --- NAVBAR --- */
     .navbar {
       background: var(--bg-nav);
@@ -73,15 +67,24 @@
       height: 100%; padding: 0 16px; min-width: 80px;
       color: #6b7280; font-weight: 600; font-size: 0.8rem;
       border-bottom: 3px solid transparent; transition: 0.2s; cursor: pointer; background: transparent; border: none;
-      gap: 4px;
+      gap: 6px;
     }
     
+    /* Icon Styling for Navbar */
+    .nav-icon {
+      width: 24px; height: 24px;
+      filter: grayscale(100%) opacity(0.5); /* Dimmed by default */
+      transition: 0.2s;
+      object-fit: contain;
+    }
+
     .nav-tab:hover, .nav-tab.active { color: #fff; }
     .nav-tab.active { border-bottom-color: #fff; }
     
-    /* SVG Color transition in Nav */
-    .nav-tab svg { fill: #6b7280; transition: 0.2s; width: 22px; height: 22px; }
-    .nav-tab:hover svg, .nav-tab.active svg { fill: #fff; }
+    /* Active state: Full Color */
+    .nav-tab:hover .nav-icon, .nav-tab.active .nav-icon {
+      filter: grayscale(0%) opacity(1);
+    }
 
     /* --- MAIN LAYOUT --- */
     .container { max-width: 1300px; margin: 0 auto; padding: 30px 20px; width: 100%; }
@@ -131,7 +134,6 @@
       font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; font-style: italic;
       padding-right: 20px; color: #fff;
     }
-    /* Rank Colors */
     .r1 .rank-bg { background: var(--rank-1); } .r1 .rank-val { color: #000; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
     .r2 .rank-bg { background: var(--rank-2); } .r2 .rank-val { color: #000; }
     .r3 .rank-bg { background: var(--rank-3); } .r3 .rank-val { color: #000; }
@@ -155,23 +157,20 @@
     .c-tiers { display: flex; align-items: center; justify-content: flex-end; padding-right: 20px; gap: 14px; z-index: 2; }
     .t-col { display: flex; flex-direction: column; align-items: center; gap: 3px; }
     
-    /* SVGs in list */
-    .t-svg-icon { width: 18px; height: 18px; fill: #444; }
-    .t-active .t-svg-icon { fill: #fff; } /* Icon turns white if active */
-    
-    /* Specific Icon Colors for visual flair in list */
-    .t-active[data-cat="sword"] .t-svg-icon { fill: #60a5fa; }
-    .t-active[data-cat="axe"] .t-svg-icon { fill: #60a5fa; }
-    .t-active[data-cat="crystal"] .t-svg-icon { fill: #c084fc; }
-    .t-active[data-cat="nethpot"] .t-svg-icon { fill: #f472b6; }
-    .t-active[data-cat="uhc"] .t-svg-icon { fill: #f87171; }
-    .t-active[data-cat="smp"] .t-svg-icon { fill: #4ade80; }
-    .t-active[data-cat="mace"] .t-svg-icon { fill: #94a3b8; }
+    /* Icons in List - PNG */
+    .t-png-icon {
+      width: 20px; height: 20px;
+      opacity: 0.3; filter: grayscale(100%);
+      object-fit: contain;
+    }
+    .t-active .t-png-icon {
+      opacity: 1; filter: grayscale(0%);
+    }
 
     .t-badge { font-size: 0.6rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #27272a; color: #555; min-width: 30px; text-align: center; }
-    .tb-active { color: #fff; } /* Just makes text white, background handled via modal classes usually, keeping minimal here */
+    .tb-active { color: #fff; }
 
-    /* --- MODAL (Exact match) --- */
+    /* --- MODAL --- */
     .modal-wrap {
       position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200;
       display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
@@ -208,7 +207,7 @@
     }
     .m-pos-rank { font-family: var(--font-display); font-size: 2rem; font-weight: 900; font-style: italic; color: #fff; margin-right: 12px; }
     
-    .m-trophy { width: 24px; height: 24px; fill: #fbbf24; margin-right: 8px; }
+    .m-trophy-icon { width: 24px; height: 24px; margin-right: 8px; object-fit: contain; }
     
     .m-pos-text { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #fff; margin-right: 8px; }
     .m-pos-pts { font-size: 1rem; color: #6b7280; font-weight: 500; }
@@ -227,29 +226,30 @@
       background: #0b0d12; display: grid; place-items: center;
       border: 2px solid #27272a; position: relative;
     }
-    .mt-svg { width: 20px; height: 20px; fill: #444; }
+    .mt-icon-img { 
+      width: 22px; height: 22px; 
+      object-fit: contain;
+    }
 
     /* Text Badge below circle */
     .mt-badge { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: #444; }
 
-    /* -- Modal Colors (Matches Screenshot) -- */
-    /* Level 1 (HT1/LT1) -> Gold/Yellow */
+    /* -- Modal Colors -- */
+    /* Level 1 (HT1/LT1) -> Gold */
     .lvl-1 .mt-circle { border-color: #713f12; background: rgba(234, 179, 8, 0.05); }
-    .lvl-1 .mt-svg { fill: #facc15; }
     .lvl-1 .mt-badge { color: #facc15; }
 
     /* Level 2 (HT2/LT2) -> Blue/Grey */
     .lvl-2 .mt-circle { border-color: #1e293b; background: rgba(148, 163, 184, 0.05); }
-    .lvl-2 .mt-svg { fill: #94a3b8; }
     .lvl-2 .mt-badge { color: #94a3b8; }
 
-    /* Level 3 (HT3/LT3) -> Orange/Brown */
+    /* Level 3 (HT3/LT3) -> Orange */
     .lvl-3 .mt-circle { border-color: #431407; background: rgba(249, 115, 22, 0.05); }
-    .lvl-3 .mt-svg { fill: #fb923c; }
     .lvl-3 .mt-badge { color: #fb923c; }
 
     /* Empty */
     .lvl-n .mt-circle { opacity: 0.4; }
+    .lvl-n .mt-icon-img { opacity: 0.3; filter: grayscale(100%); }
     .lvl-n .mt-badge { display: none; }
 
     /* Responsive */
@@ -263,52 +263,38 @@
 </head>
 <body>
 
-  <!-- SVG DEFINITIONS (Hidden) -->
-  <svg style="display:none;">
-    <defs>
-      <symbol id="icon-overall" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v2a6 6 0 0 1-6 6H9a6 6 0 0 1-6-6v-2H2a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3zm14 2H5v3h14V5zm-8 10a4 4 0 0 0 4-4v-2H9v2a4 4 0 0 0 4 4z"/></symbol>
-      <symbol id="icon-sword" viewBox="0 0 24 24"><path d="M14.5 4l-5 5 2.5 2.5 5-5-2.5-2.5zM3 17.5L6.5 21l6.5-6.5-3.5-3.5L3 17.5zM17 2l2 2-2 2 1 1-2 2-1-1-2 2 3.5 3.5-1.5 1.5-3.5-3.5L8 16l-4 4-2-2 4-4-4.5-4.5 3.5-3.5 1.5-1.5 3.5 3.5-2 2 1 1 2-2-1-1 2-2z"/></symbol> <!-- Stylized Sword -->
-      <symbol id="icon-axe" viewBox="0 0 24 24"><path d="M3 3h8v8H3zM3 13h8v8H3z"/></symbol> <!-- Abstract Axe/Block -->
-      <symbol id="icon-crystal" viewBox="0 0 24 24"><path d="M12 2l6 4v7l-6 4-6-4V6l6-4z"/></symbol> <!-- Hexagon -->
-      <symbol id="icon-nethpot" viewBox="0 0 24 24"><path d="M12 2l-2 4H7v4h10V6h-3l-2-4zM7 11h10v9a5 5 0 0 1-10 0v-9z"/></symbol> <!-- Potion -->
-      <symbol id="icon-uhc" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol> <!-- Heart -->
-      <symbol id="icon-smp" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></symbol> <!-- Pearl/Eye -->
-      <symbol id="icon-mace" viewBox="0 0 24 24"><path d="M4 20l5-5 5 5-5 5-5-5zM15 4l5 5-5 5-5-5 5-5z"/></symbol> <!-- Abstract Hammer/Mace -->
-    </defs>
-  </svg>
-
   <nav class="navbar">
     <div class="nav-tabs" id="navTabs">
       <button class="nav-tab active" data-filter="overall">
-        <svg class="icon-svg"><use href="#icon-overall"></use></svg>
+        <img src="overall.png" class="nav-icon" onerror="this.style.display='none'">
         <span>Overall</span>
       </button>
       <button class="nav-tab" data-filter="sword">
-        <svg class="icon-svg"><use href="#icon-sword"></use></svg>
+        <img src="sword.png" class="nav-icon" onerror="this.style.display='none'">
         <span>Sword</span>
       </button>
       <button class="nav-tab" data-filter="axe">
-        <svg class="icon-svg"><use href="#icon-axe"></use></svg>
+        <img src="axe.png" class="nav-icon" onerror="this.style.display='none'">
         <span>Axe</span>
       </button>
       <button class="nav-tab" data-filter="crystal">
-        <svg class="icon-svg"><use href="#icon-crystal"></use></svg>
+        <img src="crystal.png" class="nav-icon" onerror="this.style.display='none'">
         <span>Crystal</span>
       </button>
       <button class="nav-tab" data-filter="nethpot">
-        <svg class="icon-svg"><use href="#icon-nethpot"></use></svg>
+        <img src="nethpot.png" class="nav-icon" onerror="this.style.display='none'">
         <span>Pot</span>
       </button>
       <button class="nav-tab" data-filter="uhc">
-        <svg class="icon-svg"><use href="#icon-uhc"></use></svg>
+        <img src="uhc.png" class="nav-icon" onerror="this.style.display='none'">
         <span>UHC</span>
       </button>
       <button class="nav-tab" data-filter="smp">
-        <svg class="icon-svg"><use href="#icon-smp"></use></svg>
+        <img src="smp.png" class="nav-icon" onerror="this.style.display='none'">
         <span>SMP</span>
       </button>
       <button class="nav-tab" data-filter="mace">
-        <svg class="icon-svg"><use href="#icon-mace"></use></svg>
+        <img src="mace.png" class="nav-icon" onerror="this.style.display='none'">
         <span>Mace</span>
       </button>
     </div>
@@ -347,7 +333,7 @@
       <div class="m-label">POSITION</div>
       <div class="m-pos-box">
         <div id="mRankNum" class="m-pos-rank">1.</div>
-        <svg class="m-trophy"><use href="#icon-overall"></use></svg>
+        <img src="overall.png" class="m-trophy-icon">
         <div class="m-pos-text">OVERALL</div>
         <div id="mPoints" class="m-pos-pts">(0 points)</div>
       </div>
@@ -363,8 +349,19 @@
   <script>
     // --- Config ---
     const CATEGORIES = ["sword","axe","crystal","nethpot","uhc","smp","mace"];
-    const POINTS = { "HT1": 60, "LT1": 30, "HT2": 30, "LT2": 15, "HT3": 15, "LT3": 14, "HT4": 8, "LT4": 6, "HT5": 4, "LT5": 1 };
+    // MAPPING DIRECTLY TO YOUR UPLOADED FILES
+    const ICONS = {
+      sword: "sword.png",
+      axe: "axe.png",
+      crystal: "crystal.png",
+      nethpot: "nethpot.png",
+      uhc: "uhc.png",
+      smp: "smp.png",
+      mace: "mace.png"
+    };
+    
     const FALLBACK_SKIN = "https://vzge.me/bust/X-Steve";
+    const POINTS = { "HT1": 60, "LT1": 30, "HT2": 30, "LT2": 15, "HT3": 15, "LT3": 14, "HT4": 8, "LT4": 6, "HT5": 4, "LT5": 1 };
 
     let players = [];
     let processedList = [];
@@ -407,18 +404,6 @@
         }
       } catch(e) {}
 
-      if(!players.length) {
-        players = [
-          {name:"Marlowww", cat:"uhc", tier:"HT1", region:"NA"},
-          {name:"Marlowww", cat:"sword", tier:"LT1", region:"NA"},
-          {name:"Marlowww", cat:"nethpot", tier:"HT1", region:"NA"},
-          {name:"ItzRealMe", cat:"sword", tier:"HT3", region:"NA"},
-          {name:"ItzRealMe", cat:"crystal", tier:"HT1", region:"NA"},
-          {name:"coldified", cat:"uhc", tier:"LT1", region:"EU"},
-          {name:"BlvckWlf", cat:"axe", tier:"HT2", region:"ASIA"}
-        ];
-      }
-
       // 2. Group
       const map = new Map();
       players.forEach(p => {
@@ -441,7 +426,6 @@
       }
 
       processedList = Array.from(map.values()).sort((a,b) => b.total - a.total);
-      
       render();
     }
 
@@ -476,8 +460,8 @@
           const t = p.tiers[cat];
           const hasTier = !!t;
           return `
-            <div class="t-col ${hasTier?'t-active':''}" data-cat="${cat}">
-              <svg class="t-svg-icon"><use href="#icon-${cat}"></use></svg>
+            <div class="t-col ${hasTier?'t-active':''}">
+              <img src="${ICONS[cat]}" class="t-png-icon">
               <div class="t-badge ${hasTier?'tb-active':''}">${t || '-'}</div>
             </div>
           `;
@@ -538,7 +522,7 @@
         div.className = `mt-item ${lvlClass}`;
         div.innerHTML = `
           <div class="mt-circle">
-            <svg class="mt-svg"><use href="#icon-${cat}"></use></svg>
+            <img src="${ICONS[cat]}" class="mt-icon-img">
           </div>
           <div class="mt-badge">${t || ''}</div>
         `;
