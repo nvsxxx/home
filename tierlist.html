@@ -70,10 +70,9 @@
       gap: 6px;
     }
     
-    /* Icon Styling for Navbar */
     .nav-icon {
       width: 24px; height: 24px;
-      filter: grayscale(100%) opacity(0.5); /* Dimmed by default */
+      filter: grayscale(100%) opacity(0.5); 
       transition: 0.2s;
       object-fit: contain;
     }
@@ -81,13 +80,18 @@
     .nav-tab:hover, .nav-tab.active { color: #fff; }
     .nav-tab.active { border-bottom-color: #fff; }
     
-    /* Active state: Full Color */
     .nav-tab:hover .nav-icon, .nav-tab.active .nav-icon {
       filter: grayscale(0%) opacity(1);
     }
+    
+    .info-btn {
+      background: #1f232e; color: #fff; padding: 8px 16px; border-radius: 6px; font-weight: 600; 
+      display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
+    }
+    .info-btn:hover { background: #2a3040; }
 
     /* --- MAIN LAYOUT --- */
-    .container { max-width: 1300px; margin: 0 auto; padding: 30px 20px; width: 100%; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; width: 100%; }
 
     .controls { display: flex; justify-content: flex-end; margin-bottom: 20px; }
     .search-input {
@@ -97,7 +101,7 @@
     }
     .search-input:focus { border-color: #555; background: #000; }
 
-    /* --- TABLE HEADER --- */
+    /* --- VIEW: OVERALL LIST --- */
     .thead {
       display: grid; 
       grid-template-columns: 80px 280px 100px 1fr; 
@@ -107,7 +111,6 @@
     .th-center { text-align: center; }
     .th-right { text-align: right; padding-right: 20px; }
 
-    /* --- PLAYER CARD --- */
     .card {
       display: grid;
       grid-template-columns: 80px 280px 100px 1fr;
@@ -121,7 +124,6 @@
     }
     .card:hover { transform: translateY(-2px); background: var(--bg-card-hover); z-index: 10; }
 
-    /* Rank Slant */
     .c-rank { position: relative; height: 100%; width: 100%; }
     .rank-bg {
       position: absolute; top: 0; left: 0; bottom: 0; width: 120%;
@@ -138,7 +140,6 @@
     .r2 .rank-bg { background: var(--rank-2); } .r2 .rank-val { color: #000; }
     .r3 .rank-bg { background: var(--rank-3); } .r3 .rank-val { color: #000; }
 
-    /* Player Info */
     .c-info { position: relative; z-index: 5; display: flex; align-items: center; margin-left: -15px; }
     .skin-bust { width: 56px; height: 56px; object-fit: contain; filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.6)); margin-right: 12px; }
     .meta { display: flex; flex-direction: column; justify-content: center; }
@@ -146,31 +147,66 @@
     .p-title { font-size: 0.75rem; color: #9ca3af; display: flex; align-items: center; gap: 5px; }
     .diamond { color: #fbbf24; font-size: 0.7rem; }
 
-    /* Region */
     .c-region { display: flex; align-items: center; justify-content: center; z-index: 2; }
     .badge-reg { font-weight: 800; font-size: 0.9rem; padding: 4px 8px; border-radius: 4px; background: #333; color: #888; }
     .reg-NA { background: #7f1d1d; color: #fca5a5; }
     .reg-EU { background: #14532d; color: #86efac; }
     .reg-ASIA { background: #1e3a8a; color: #93c5fd; }
 
-    /* Tiers (Main List) */
     .c-tiers { display: flex; align-items: center; justify-content: flex-end; padding-right: 20px; gap: 14px; z-index: 2; }
     .t-col { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-    
-    /* Icons in List - PNG */
-    .t-png-icon {
-      width: 20px; height: 20px;
-      opacity: 0.3; filter: grayscale(100%);
-      object-fit: contain;
-    }
-    .t-active .t-png-icon {
-      opacity: 1; filter: grayscale(0%);
-    }
-
+    .t-png-icon { width: 20px; height: 20px; opacity: 0.3; filter: grayscale(100%); object-fit: contain; }
+    .t-active .t-png-icon { opacity: 1; filter: grayscale(0%); }
     .t-badge { font-size: 0.6rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #27272a; color: #555; min-width: 30px; text-align: center; }
     .tb-active { color: #fff; }
 
-    /* --- MODAL --- */
+    /* --- VIEW: TIER COLUMNS (Gamemode View) --- */
+    .tier-board {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    
+    .tier-col-wrapper {
+      background: var(--bg-card);
+      border-radius: 8px;
+      overflow: hidden;
+      min-height: 400px;
+    }
+
+    .t-header {
+      padding: 12px;
+      text-align: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; justify-content: center; align-items: center; gap: 8px;
+    }
+    .t-header svg { width: 18px; height: 18px; fill: currentColor; }
+    
+    /* Header Colors per Tier */
+    .th-1 { background: rgba(234, 179, 8, 0.15); color: #fbbf24; border-top: 3px solid #fbbf24; }
+    .th-2 { background: rgba(156, 163, 175, 0.15); color: #d1d5db; border-top: 3px solid #d1d5db; }
+    .th-3 { background: rgba(180, 83, 9, 0.15); color: #d97706; border-top: 3px solid #d97706; }
+    .th-4 { background: rgba(30, 41, 59, 0.5); color: #94a3b8; border-top: 3px solid #475569; }
+    .th-5 { background: rgba(30, 41, 59, 0.5); color: #64748b; border-top: 3px solid #334155; }
+
+    .t-list { padding: 8px; }
+
+    .t-player {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      cursor: pointer;
+      transition: 0.1s;
+    }
+    .t-player:hover { background: rgba(255,255,255,0.05); border-radius: 4px; }
+    .t-player img { width: 24px; height: 24px; border-radius: 4px; }
+    .t-player span { font-size: 0.85rem; font-weight: 600; color: #ddd; }
+    .t-player:hover span { color: #fff; }
+
+    /* --- MODAL (Titles & Player) --- */
     .modal-wrap {
       position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200;
       display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
@@ -179,89 +215,65 @@
     
     .modal-box {
       background: var(--bg-modal); 
-      padding: 30px; 
+      padding: 24px; 
       border-radius: 12px; 
       border: 1px solid #1f222b;
-      width: 100%; max-width: 500px;
+      width: 100%; max-width: 450px;
       position: relative;
       box-shadow: 0 10px 40px rgba(0,0,0,0.8);
     }
-
     .m-close-btn { position: absolute; top: 12px; right: 12px; color: #555; font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
     .m-close-btn:hover { color: #fff; }
 
-    /* Header */
-    .m-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 24px; }
-    .m-skin { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
-    .m-name { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #fff; }
-    .m-tester { font-size: 0.7rem; font-weight: 700; background: #7f1d1d; color: #fca5a5; padding: 2px 8px; border-radius: 4px; margin-top: 4px; letter-spacing: 1px; }
-
-    /* Section Label */
-    .m-label { font-size: 0.9rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
-
-    /* Position Box */
-    .m-pos-box {
-      background: #13151c; border: 1px solid #27272a; border-radius: 8px;
-      padding: 12px 20px; display: flex; align-items: center; margin-bottom: 24px;
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+    /* INFO MODAL SPECIFIC */
+    .info-header { 
+      font-family: var(--font-display); font-size: 1.1rem; color: #fff; font-weight: 600; 
+      border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 12px;
+      display: flex; justify-content: space-between;
     }
-    .m-pos-rank { font-family: var(--font-display); font-size: 2rem; font-weight: 900; font-style: italic; color: #fff; margin-right: 12px; }
+    .info-sub { font-size: 0.8rem; color: #fff; margin-bottom: 16px; }
+    .title-row {
+      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;
+    }
+    .rank-icon { width: 18px; height: 18px; margin-top: 2px; }
+    .rank-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; }
+    .rank-desc { font-size: 0.8rem; color: #888; }
     
-    .m-trophy-icon { width: 24px; height: 24px; margin-right: 8px; object-fit: contain; }
+    /* Text Colors for Titles */
+    .tc-gm { color: #fbbf24; }
+    .tc-m { color: #fbbf24; }
+    .tc-ace { color: #f472b6; }
+    .tc-spec { color: #c084fc; }
+    .tc-cadet { color: #818cf8; }
+    .tc-novice { color: #60a5fa; }
+    .tc-rookie { color: #9ca3af; }
+
+    /* --- HELPER CLASSES --- */
+    .hidden { display: none !important; }
     
-    .m-pos-text { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #fff; margin-right: 8px; }
-    .m-pos-pts { font-size: 1rem; color: #6b7280; font-weight: 500; }
-
-    /* Tiers Box */
-    .m-tiers-box {
-      background: #13151c; border: 1px solid #27272a; border-radius: 8px;
-      padding: 16px; display: flex; flex-wrap: wrap; gap: 14px;
-    }
-
-    .mt-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    
-    /* Circle Icon Container */
-    .mt-circle {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: #0b0d12; display: grid; place-items: center;
-      border: 2px solid #27272a; position: relative;
-    }
-    .mt-icon-img { 
-      width: 22px; height: 22px; 
-      object-fit: contain;
-    }
-
-    /* Text Badge below circle */
-    .mt-badge { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: #444; }
-
-    /* -- Modal Colors -- */
-    /* Level 1 (HT1/LT1) -> Gold */
-    .lvl-1 .mt-circle { border-color: #713f12; background: rgba(234, 179, 8, 0.05); }
-    .lvl-1 .mt-badge { color: #facc15; }
-
-    /* Level 2 (HT2/LT2) -> Blue/Grey */
-    .lvl-2 .mt-circle { border-color: #1e293b; background: rgba(148, 163, 184, 0.05); }
-    .lvl-2 .mt-badge { color: #94a3b8; }
-
-    /* Level 3 (HT3/LT3) -> Orange */
-    .lvl-3 .mt-circle { border-color: #431407; background: rgba(249, 115, 22, 0.05); }
-    .lvl-3 .mt-badge { color: #fb923c; }
-
-    /* Empty */
-    .lvl-n .mt-circle { opacity: 0.4; }
-    .lvl-n .mt-icon-img { opacity: 0.3; filter: grayscale(100%); }
-    .lvl-n .mt-badge { display: none; }
-
     /* Responsive */
     @media (max-width: 1024px) {
       .thead, .c-region, .c-tiers { display: none; }
       .card { grid-template-columns: 60px 1fr; height: auto; padding-right: 15px; }
       .rank-bg { width: 100%; clip-path: none; border-radius: 8px 0 0 8px; }
-      .c-info { margin-left: 10px; padding: 10px 0; }
+      .tier-board { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .tier-board { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
+  <!-- SVG Icons for Trophy/Rank -->
+  <svg style="display:none;">
+    <defs>
+      <symbol id="icon-trophy" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM7 8V7h2v3.82c-1.21-.48-2-1.44-2-2.82zm10 0c0 1.38-.79 2.34-2 2.82V7h2v1z"/></symbol>
+      <symbol id="icon-diamond" viewBox="0 0 24 24"><path d="M12 2L2 12l10 10 10-10L12 2z"/></symbol>
+      <symbol id="icon-star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
+      <symbol id="icon-circle-dot" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></symbol>
+    </defs>
+  </svg>
 
   <nav class="navbar">
     <div class="nav-tabs" id="navTabs">
@@ -298,6 +310,10 @@
         <span>Mace</span>
       </button>
     </div>
+
+    <button class="info-btn" onclick="document.getElementById('infoModal').classList.add('show')">
+      <span>ℹ Information</span>
+    </button>
   </nav>
 
   <div class="container">
@@ -305,43 +321,94 @@
       <input type="text" id="searchInput" class="search-input" placeholder="Search player..." spellcheck="false">
     </div>
 
-    <div class="thead">
-      <div class="th-center">#</div>
-      <div>PLAYER</div>
-      <div class="th-center">REGION</div>
-      <div class="th-right">TIERS</div>
+    <!-- Overall List View -->
+    <div id="overallView">
+      <div class="thead">
+        <div class="th-center">#</div>
+        <div>PLAYER</div>
+        <div class="th-center">REGION</div>
+        <div class="th-right">TIERS</div>
+      </div>
+      <div id="listContainer"></div>
     </div>
 
-    <div id="listContainer">
-      <!-- Generated via JS -->
+    <!-- Tier Board View (Hidden by default) -->
+    <div id="tierBoardView" class="hidden">
+      <div class="tier-board" id="tierBoard"></div>
     </div>
   </div>
 
-  <!-- PLAYER MODAL -->
-  <div id="playerModal" class="modal-wrap">
+  <!-- INFO MODAL (Titles) -->
+  <div id="infoModal" class="modal-wrap">
     <div class="modal-box">
-      <button class="m-close-btn" onclick="document.getElementById('playerModal').classList.remove('show')">&times;</button>
+      <button class="m-close-btn" onclick="document.getElementById('infoModal').classList.remove('show')">&times;</button>
       
-      <!-- 1. Header -->
-      <div class="m-header">
-        <img id="mHead" src="" class="m-skin">
-        <div id="mName" class="m-name">Player</div>
-        <div id="mTester" class="m-tester hidden">TESTER</div>
+      <div class="info-header">
+        <span>Titles</span>
+      </div>
+      <div class="info-sub">How to obtain <span style="text-decoration:underline;">Achievement Titles</span></div>
+
+      <!-- Grandmaster -->
+      <div class="title-row">
+        <svg class="rank-icon tc-gm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg> <!-- Diamond -->
+        <div>
+          <div class="rank-name tc-gm">Combat Grandmaster</div>
+          <div class="rank-desc">Obtained 400+ total points.</div>
+        </div>
       </div>
 
-      <!-- 2. Position Section -->
-      <div class="m-label">POSITION</div>
-      <div class="m-pos-box">
-        <div id="mRankNum" class="m-pos-rank">1.</div>
-        <img src="overall.png" class="m-trophy-icon">
-        <div class="m-pos-text">OVERALL</div>
-        <div id="mPoints" class="m-pos-pts">(0 points)</div>
+      <!-- Master -->
+      <div class="title-row">
+        <svg class="rank-icon tc-m" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
+        <div>
+          <div class="rank-name tc-m">Combat Master</div>
+          <div class="rank-desc">Obtained 250+ total points.</div>
+        </div>
       </div>
 
-      <!-- 3. Tiers Section -->
-      <div class="m-label">TIERS</div>
-      <div id="mTiersGrid" class="m-tiers-box">
-        <!-- JS Injects Icons Here -->
+      <!-- Ace -->
+      <div class="title-row">
+        <svg class="rank-icon tc-ace" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
+        <div>
+          <div class="rank-name tc-ace">Combat Ace</div>
+          <div class="rank-desc">Obtained 100+ total points.</div>
+        </div>
+      </div>
+
+      <!-- Specialist -->
+      <div class="title-row">
+        <svg class="rank-icon tc-spec" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
+        <div>
+          <div class="rank-name tc-spec">Combat Specialist</div>
+          <div class="rank-desc">Obtained 50+ total points.</div>
+        </div>
+      </div>
+
+      <!-- Cadet -->
+      <div class="title-row">
+        <svg class="rank-icon tc-cadet" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        <div>
+          <div class="rank-name tc-cadet">Combat Cadet</div>
+          <div class="rank-desc">Obtained 20+ total points.</div>
+        </div>
+      </div>
+
+       <!-- Novice -->
+       <div class="title-row">
+        <svg class="rank-icon tc-novice" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        <div>
+          <div class="rank-name tc-novice">Combat Novice</div>
+          <div class="rank-desc">Obtained 10+ total points.</div>
+        </div>
+      </div>
+
+       <!-- Rookie -->
+       <div class="title-row">
+        <svg class="rank-icon tc-rookie" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        <div>
+          <div class="rank-name tc-rookie">Rookie</div>
+          <div class="rank-desc">Starting rank for players.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -373,16 +440,10 @@
       if(pts >= 400) return "Combat Grandmaster";
       if(pts >= 250) return "Combat Master";
       if(pts >= 100) return "Combat Ace";
-      return "Novice";
-    }
-
-    // Modal Styling Logic
-    function getLevelClass(tier) {
-      if(!tier) return "lvl-n";
-      if(tier.includes('1')) return "lvl-1"; 
-      if(tier.includes('2')) return "lvl-2"; 
-      if(tier.includes('3')) return "lvl-3"; 
-      return "lvl-1"; 
+      if(pts >= 50) return "Combat Specialist";
+      if(pts >= 20) return "Combat Cadet";
+      if(pts >= 10) return "Combat Novice";
+      return "Rookie";
     }
 
     async function init() {
@@ -430,15 +491,29 @@
     }
 
     function render() {
+      const overallView = document.getElementById("overallView");
+      const tierBoardView = document.getElementById("tierBoardView");
+      const searchInput = document.getElementById("searchInput");
+      
+      // Toggle Views based on Filter
+      if(currentFilter === "overall") {
+        overallView.classList.remove("hidden");
+        tierBoardView.classList.add("hidden");
+        renderOverallList();
+      } else {
+        overallView.classList.add("hidden");
+        tierBoardView.classList.remove("hidden");
+        renderTierBoard();
+      }
+    }
+
+    function renderOverallList() {
       const listContainer = document.getElementById("listContainer");
       const filterTerm = document.getElementById("searchInput").value.toLowerCase();
       listContainer.innerHTML = "";
 
-      let displayData = processedList;
-      if(currentFilter !== "overall") {
-        displayData = processedList.filter(p => p.tiers[currentFilter]);
-      }
-      displayData = displayData.filter(p => p.name.toLowerCase().includes(filterTerm));
+      // Only search filter applies here since logic handles view
+      const displayData = processedList.filter(p => p.name.toLowerCase().includes(filterTerm));
 
       if(!displayData.length) {
         listContainer.innerHTML = `<div style="text-align:center; padding:40px; color:#555;">No players found</div>`;
@@ -493,43 +568,67 @@
             ${tiersHtml}
           </div>
         `;
-        el.onclick = () => openPlayerModal(p);
         listContainer.appendChild(el);
       });
     }
 
-    function openPlayerModal(p) {
-      const img = document.getElementById('mHead');
-      img.src = `https://vzge.me/bust/${p.name}`;
-      img.onerror = function() { this.src = FALLBACK_SKIN; };
-      
-      document.getElementById('mName').textContent = p.name;
-      const testerBadge = document.getElementById('mTester');
-      if(p.tester) testerBadge.classList.remove('hidden'); else testerBadge.classList.add('hidden');
+    function renderTierBoard() {
+      const board = document.getElementById("tierBoard");
+      const filterTerm = document.getElementById("searchInput").value.toLowerCase();
+      board.innerHTML = "";
 
-      const rank = processedList.indexOf(p) + 1;
-      document.getElementById('mRankNum').textContent = rank + ".";
-      document.getElementById('mPoints').textContent = `(${p.total} points)`;
+      const cols = [1,2,3,4,5];
+      const tierData = {1:[], 2:[], 3:[], 4:[], 5:[]};
 
-      const grid = document.getElementById('mTiersGrid');
-      grid.innerHTML = "";
+      // Get all raw entries for this category
+      const rawEntries = players.filter(p => p.cat === currentFilter);
       
-      CATEGORIES.forEach(cat => {
-        const t = p.tiers[cat];
-        const lvlClass = getLevelClass(t);
-        
-        const div = document.createElement("div");
-        div.className = `mt-item ${lvlClass}`;
-        div.innerHTML = `
-          <div class="mt-circle">
-            <img src="${ICONS[cat]}" class="mt-icon-img">
-          </div>
-          <div class="mt-badge">${t || ''}</div>
-        `;
-        grid.appendChild(div);
+      // Sort into buckets
+      rawEntries.forEach(p => {
+        if(!p.name.toLowerCase().includes(filterTerm)) return;
+        const tierNum = p.tier.replace(/[^0-9]/g, ''); // Extract '1' from 'HT1'
+        if(tierData[tierNum]) {
+            tierData[tierNum].push(p);
+        }
       });
 
-      document.getElementById('playerModal').classList.add('show');
+      // Sort within buckets (HT first, then alphabetic)
+      Object.keys(tierData).forEach(k => {
+        tierData[k].sort((a,b) => {
+            const aHT = a.tier.startsWith('HT');
+            const bHT = b.tier.startsWith('HT');
+            if(aHT && !bHT) return -1;
+            if(!aHT && bHT) return 1;
+            return a.name.localeCompare(b.name);
+        });
+      });
+
+      cols.forEach(num => {
+        const colDiv = document.createElement("div");
+        colDiv.className = "tier-col-wrapper";
+        
+        let headerIcon = "";
+        if(num === 2 || num === 3) {
+            headerIcon = `<svg><use href="#icon-trophy"></use></svg>`;
+        }
+        
+        const listHtml = tierData[num].map(p => `
+            <div class="t-player">
+                <img src="https://vzge.me/face/${p.name}" onerror="this.src='${FALLBACK_SKIN}'">
+                <span>${p.name}</span>
+            </div>
+        `).join('');
+
+        colDiv.innerHTML = `
+            <div class="t-header th-${num}">
+                ${headerIcon} Tier ${num}
+            </div>
+            <div class="t-list">
+                ${listHtml || '<div style="padding:10px; font-size:0.8rem; color:#444; text-align:center;">-</div>'}
+            </div>
+        `;
+        board.appendChild(colDiv);
+      });
     }
 
     document.querySelectorAll('.nav-tab').forEach(btn => {
