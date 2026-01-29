@@ -5,38 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>INVIS X | Leaderboards</title>
 
-  <!-- Tailwind CSS (Utility) -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-  <!-- Fonts: Poppins (Display) & Inter (Body) -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:ital,wght@0,500;0,600;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      /* --- THEME PALETTE --- */
-      --bg-body: #0e1015;       /* Very dark background */
-      --bg-header: #13151b;     /* Navbar bg */
-      --bg-row: #161921;        /* Card bg */
-      --bg-row-hover: #1c2029;
+      /* --- THEME --- */
+      --bg-body: #0b0d12;
+      --bg-nav: #13151b;
+      --bg-card: #161921;
+      --bg-card-hover: #1c2029;
       
       --text-main: #ffffff;
-      --text-muted: #6b7280;
-      --text-blue: #5865f2;     /* Discord-ish blue */
+      --text-sub: #9ca3af;
 
       /* RANK COLORS */
       --rank-1: #fbbf24; /* Gold */
       --rank-2: #9ca3af; /* Silver */
       --rank-3: #b45309; /* Bronze */
-      --rank-n: #252830; /* Dark Grey for 4+ */
+      --rank-n: #27272a; /* Dark Grey */
 
-      /* TIER COLORS (Badges) */
-      --c-t1: #eab308; /* Gold/Yellow */
-      --c-t2: #f97316; /* Orange */
-      --c-t3: #a855f7; /* Purple (Common for T3) */
-      --c-t4: #22c55e; /* Green */
-      --c-t5: #3b82f6; /* Blue */
+      /* BADGE COLORS */
+      --c-t1: #eab308; 
+      --c-t2: #f97316; 
+      --c-t3: #a855f7; 
+      --c-t4: #22c55e; 
+      --c-t5: #3b82f6;
 
       --font-display: 'Poppins', sans-serif;
       --font-body: 'Inter', sans-serif;
@@ -50,580 +49,473 @@
       color: var(--text-main);
       min-height: 100vh;
       display: flex; flex-direction: column;
+      overflow-x: hidden;
     }
 
-    a { text-decoration: none; color: inherit; }
-    button { font-family: inherit; cursor: pointer; border: none; background: none; }
-
-    /* --- NAVIGATION BAR --- */
+    /* --- NAVBAR --- */
     .navbar {
-      background: var(--bg-header);
+      background: var(--bg-nav);
       border-bottom: 1px solid #1f222b;
-      padding: 0 40px;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky; top: 0; z-index: 50;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; position: sticky; top: 0; z-index: 100;
     }
 
-    .nav-tabs {
-      display: flex;
-      height: 100%;
-      gap: 10px;
-    }
-
+    .nav-tabs { display: flex; height: 100%; gap: 4px; overflow-x: auto; }
+    
     .nav-tab {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      height: 100%;
-      padding: 0 20px;
-      color: #6b7280;
-      font-weight: 600;
-      font-size: 0.85rem;
-      border-bottom: 3px solid transparent;
-      transition: 0.2s;
-      gap: 4px;
+      height: 100%; padding: 0 16px; min-width: 80px;
+      color: #6b7280; font-weight: 600; font-size: 0.8rem;
+      border-bottom: 3px solid transparent; transition: 0.2s; cursor: pointer; background: transparent; border: none;
     }
-    .nav-tab img { width: 20px; height: 20px; filter: grayscale(100%) opacity(0.5); transition: 0.2s; }
+    .nav-tab img { width: 22px; height: 22px; filter: grayscale(100%) opacity(0.5); margin-bottom: 4px; transition: 0.2s; }
     
-    .nav-tab:hover { color: #ccc; }
-    .nav-tab:hover img { filter: grayscale(0) opacity(0.8); }
+    .nav-tab:hover, .nav-tab.active { color: #fff; }
+    .nav-tab:hover img, .nav-tab.active img { filter: grayscale(0) opacity(1); }
+    .nav-tab.active { border-bottom-color: #fff; }
 
-    .nav-tab.active {
-      color: #fff;
-      border-bottom-color: #fff;
-    }
-    .nav-tab.active img { filter: grayscale(0) opacity(1); }
+    .nav-right { display: flex; gap: 15px; align-items: center; }
+    .info-pill { background: #1f232e; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; color: #fff; display: flex; gap: 8px; align-items: center; cursor: pointer; transition: 0.2s; }
+    .info-pill:hover { background: #2a3040; }
 
-    .nav-actions {
-      display: flex; align-items: center; gap: 16px;
-    }
+    /* --- LAYOUT --- */
+    .container { max-width: 1300px; margin: 0 auto; padding: 30px 20px; width: 100%; }
 
-    .info-btn {
-      background: #1f232e; color: #fff; font-weight: 600; font-size: 0.8rem;
-      padding: 8px 16px; border-radius: 6px; display: flex; align-items: center; gap: 8px;
-      transition: 0.2s;
-    }
-    .info-btn:hover { background: #2a3040; }
-
-    .server-ip {
-      background: #000; color: #fff; padding: 8px 12px; border-radius: 6px;
-      font-family: monospace; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
-    }
-
-    /* --- MAIN CONTENT --- */
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 40px 20px;
-      width: 100%;
-    }
-
-    .search-bar-container {
-      margin-bottom: 20px;
-      display: flex; justify-content: flex-end;
-    }
+    .controls { display: flex; justify-content: flex-end; margin-bottom: 20px; }
     .search-input {
       background: #13151b; border: 1px solid #252830; color: #fff;
-      padding: 10px 16px; border-radius: 8px; width: 300px;
-      font-family: var(--font-body);
+      padding: 10px 15px; border-radius: 8px; width: 100%; max-width: 300px;
+      outline: none; transition: 0.2s;
     }
-    .search-input:focus { border-color: #444; outline: none; }
+    .search-input:focus { border-color: #555; background: #000; }
 
-    /* --- TABLE HEADERS --- */
-    .table-header {
-      display: grid;
-      grid-template-columns: 80px 300px 100px 1fr; /* Matches row layout */
-      padding: 0 10px 10px 10px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #3b4050;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    /* --- TABLE HEADER --- */
+    .thead {
+      display: grid; 
+      grid-template-columns: 80px 280px 100px 1fr; 
+      padding: 0 10px 10px; 
+      color: #4b5563; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase;
     }
     .th-center { text-align: center; }
-    .th-right { text-align: right; }
+    .th-right { text-align: right; padding-right: 20px; }
 
-    /* --- PLAYER ROW (CARD) --- */
-    .player-row {
+    /* --- PLAYER CARD --- */
+    .card {
       display: grid;
-      grid-template-columns: 80px 300px 100px 1fr;
-      background: var(--bg-row);
+      grid-template-columns: 80px 280px 100px 1fr;
+      background: var(--bg-card);
       border-radius: 8px;
+      height: 84px;
       margin-bottom: 8px;
-      height: 80px;
-      align-items: center;
-      overflow: hidden; /* For rank shape */
       position: relative;
       transition: transform 0.2s, background 0.2s;
       cursor: pointer;
+      /* overflow: hidden; Removed to allow skin pop-out, handled via clip-path on bg */
     }
-    .player-row:hover {
-      background: var(--bg-row-hover);
-      transform: translateY(-2px);
-    }
+    .card:hover { transform: translateY(-2px); background: var(--bg-card-hover); z-index: 10; }
 
-    /* 1. Rank Column (Left) */
-    .rank-box {
-      height: 100%;
-      width: 110%; /* Slightly wider for slant */
-      background: var(--rank-n);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 800;
-      font-style: italic;
-      color: #fff;
-      clip-path: polygon(0 0, 75% 0, 100% 100%, 0% 100%);
-      padding-right: 15px;
-      z-index: 1;
-    }
-    .rank-1 .rank-box { background: var(--rank-1); color: #000; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
-    .rank-2 .rank-box { background: var(--rank-2); color: #000; }
-    .rank-3 .rank-box { background: var(--rank-3); color: #000; }
-
-    /* 2. Player Info Column */
-    .player-cell {
-      display: flex;
-      align-items: center;
+    /* Rank Section (Slanted) */
+    .c-rank {
       position: relative;
-      padding-left: 10px;
+      height: 100%;
+      width: 100%;
     }
-    .player-bust {
-      width: 50px;
-      height: 50px;
+    .rank-bg {
+      position: absolute; top: 0; left: 0; bottom: 0; width: 120%; /* wider for slant */
+      background: var(--rank-n);
+      clip-path: polygon(0 0, 75% 0, 100% 100%, 0% 100%);
+      z-index: 1;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+    .rank-val {
+      position: relative; z-index: 2;
+      height: 100%; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; font-style: italic;
+      padding-right: 20px; color: #fff;
+    }
+    
+    /* Rank Colors */
+    .r1 .rank-bg { background: var(--rank-1); } .r1 .rank-val { color: #000; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
+    .r2 .rank-bg { background: var(--rank-2); } .r2 .rank-val { color: #000; }
+    .r3 .rank-bg { background: var(--rank-3); } .r3 .rank-val { color: #000; }
+
+    /* Player Info Section */
+    .c-info {
+      position: relative; z-index: 5;
+      display: flex; align-items: center;
+      margin-left: -15px; /* Pull closer to rank */
+    }
+    .skin-bust {
+      width: 56px; height: 56px;
       object-fit: contain;
-      margin-right: 15px;
-      z-index: 2; /* Sit above rank slant */
-      filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.5));
+      filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.6));
+      margin-right: 12px;
+      transition: transform 0.2s;
     }
-    .player-text {
-      display: flex; flex-direction: column;
-      z-index: 2;
-    }
-    .p-name {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: #fff;
-      line-height: 1.2;
-    }
-    .p-sub {
-      font-size: 0.75rem;
-      color: #6b7280;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .diamond-icon { color: #fbbf24; font-size: 0.8rem; }
+    .card:hover .skin-bust { transform: scale(1.1) rotate(-5deg); }
 
-    /* 3. Region Column */
-    .region-cell {
-      display: flex; justify-content: center;
-    }
-    .region-badge {
-      background: #991b1b; /* Dark Red for NA default */
-      color: #fca5a5;
-      font-weight: 800;
-      font-size: 0.9rem;
-      padding: 4px 10px;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-    /* Dynamic region colors */
-    .reg-EU { background: #14532d; color: #86efac; } /* Green */
-    .reg-ASIA { background: #1e3a8a; color: #93c5fd; } /* Blue */
+    .meta { display: flex; flex-direction: column; justify-content: center; }
+    .p-name { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: #fff; line-height: 1.2; }
+    .p-title { font-size: 0.75rem; color: #9ca3af; display: flex; align-items: center; gap: 5px; }
+    .diamond { color: #fbbf24; font-size: 0.7rem; }
 
-    /* 4. Tiers Column (Grid of Icons) */
-    .tiers-cell {
-      display: flex;
-      gap: 16px;
-      justify-content: flex-end;
-      padding-right: 24px;
-      align-items: center;
+    /* Region Section */
+    .c-region { display: flex; align-items: center; justify-content: center; z-index: 2; }
+    .badge-reg {
+      font-weight: 800; font-size: 0.9rem; padding: 4px 8px; border-radius: 4px;
+      background: #333; color: #888;
     }
+    .reg-NA { background: #7f1d1d; color: #fca5a5; }
+    .reg-EU { background: #14532d; color: #86efac; }
+    .reg-ASIA { background: #1e3a8a; color: #93c5fd; }
 
-    .tier-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
+    /* Tiers Section */
+    .c-tiers {
+      display: flex; align-items: center; justify-content: flex-end;
+      padding-right: 20px; gap: 14px; z-index: 2;
     }
+    .t-col { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .t-icon { width: 18px; height: 18px; opacity: 0.4; filter: grayscale(1); }
+    .t-icon.active { opacity: 1; filter: grayscale(0); }
     
-    .tg-icon {
-      width: 20px; height: 20px;
-      opacity: 0.5; /* Dim if not relevant, handled via JS usually, but here we show all */
+    .t-badge {
+      font-size: 0.6rem; font-weight: 800; padding: 1px 6px; border-radius: 4px;
+      background: #27272a; color: #555; min-width: 30px; text-align: center;
     }
-    .tg-icon.active { opacity: 1; }
+    .tb-1 { background: var(--c-t1); color: #000; box-shadow: 0 0 10px rgba(234,179,8,0.2); }
+    .tb-2 { background: var(--c-t2); color: #000; }
+    .tb-3 { background: var(--c-t3); color: #fff; }
+    .tb-4 { background: var(--c-t4); color: #000; }
+    .tb-5 { background: var(--c-t5); color: #fff; }
 
-    .tg-badge {
-      font-size: 0.6rem;
-      font-weight: 800;
-      padding: 1px 6px;
-      border-radius: 4px;
-      background: #333;
-      color: #bbb;
-      min-width: 32px;
-      text-align: center;
+    /* Modal */
+    .modal-wrap {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200;
+      display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);
     }
+    .modal-wrap.show { display: flex; }
+    .modal-box {
+      background: #111; padding: 30px; border-radius: 12px; border: 1px solid #333;
+      width: 100%; max-width: 380px; text-align: center; position: relative;
+    }
+    .m-close-btn { position: absolute; top: 10px; right: 10px; color: #555; font-size: 1.5rem; }
+    .m-close-btn:hover { color: #fff; }
 
-    /* Tier Colors applied to Badge */
-    .tg-badge.t1 { background: var(--c-t1); color: #000; }
-    .tg-badge.t2 { background: var(--c-t2); color: #000; }
-    .tg-badge.t3 { background: var(--c-t3); color: #fff; }
-    .tg-badge.t4 { background: var(--c-t4); color: #000; }
-    .tg-badge.t5 { background: var(--c-t5); color: #fff; }
-    .tg-badge.tn { background: #27272a; color: #555; } /* None/Empty */
-
-    /* --- RESPONSIVE --- */
+    /* Responsive */
     @media (max-width: 1024px) {
-      .player-row, .table-header { grid-template-columns: 60px 1fr; height: auto; padding: 10px; }
-      .rank-box { clip-path: none; width: 100%; border-radius: 4px; height: 40px; margin-bottom: 10px; }
-      .region-cell, .tiers-cell { display: none; } /* Hide complex cols on mobile */
-      .player-row { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
-      .nav-tabs { overflow-x: auto; }
-      .nav-tab span { display: none; } /* Icons only on mobile nav */
+      .thead, .c-region, .c-tiers { display: none; }
+      .card { grid-template-columns: 60px 1fr; height: auto; padding-right: 15px; }
+      .rank-bg { width: 100%; clip-path: none; border-radius: 8px 0 0 8px; }
+      .rank-val { padding-right: 0; font-size: 1.4rem; }
+      .c-info { margin-left: 10px; padding: 10px 0; }
+      .nav-tabs { padding: 0 10px; }
     }
-    
-    .hidden { display: none !important; }
-
-    /* Modal Styling (Simple Overlay) */
-    .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100;
-      display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
-    }
-    .modal-backdrop.show { display: flex; }
-    .modal-content {
-      background: #161921; padding: 30px; border-radius: 12px;
-      border: 1px solid #333; max-width: 400px; width: 90%; text-align: center;
-    }
-    .m-pfp { width: 80px; height: 80px; border-radius: 8px; margin-bottom: 15px; }
-    .m-title { font-size: 1.5rem; font-weight: 700; color: #fff; }
-    .m-sub { color: #888; font-size: 0.9rem; margin-bottom: 20px; }
-    .m-close { margin-top: 20px; padding: 8px 20px; background: #333; color: #fff; border-radius: 4px; }
   </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-tabs" id="navTabs">
+      <!-- Nav items generated or static -->
       <button class="nav-tab active" data-filter="overall">
-        <img src="overall.png" alt="Overall" onerror="this.src='https://cdn-icons-png.flaticon.com/512/10697/10697368.png'">
+        <img src="https://cdn-icons-png.flaticon.com/512/10697/10697368.png" alt="Overall">
         <span>Overall</span>
       </button>
       <button class="nav-tab" data-filter="sword">
-        <img src="sword.png" alt="Sword" onerror="this.src='https://cdn-icons-png.flaticon.com/512/9637/9637213.png'">
+        <img src="https://cdn-icons-png.flaticon.com/512/9637/9637213.png" alt="Sword">
         <span>Sword</span>
       </button>
       <button class="nav-tab" data-filter="axe">
-        <img src="axe.png" alt="Axe" onerror="this.src='https://cdn-icons-png.flaticon.com/512/8144/8144456.png'">
+        <img src="https://cdn-icons-png.flaticon.com/512/8144/8144456.png" alt="Axe">
         <span>Axe</span>
       </button>
       <button class="nav-tab" data-filter="crystal">
-        <img src="crystal.png" alt="Crystal" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2622/2622557.png'">
+        <img src="https://cdn-icons-png.flaticon.com/512/2622/2622557.png" alt="Crystal">
         <span>Crystal</span>
       </button>
       <button class="nav-tab" data-filter="nethpot">
-        <img src="nethpot.png" alt="Pot" onerror="this.src='https://cdn-icons-png.flaticon.com/512/867/867909.png'">
+        <img src="https://cdn-icons-png.flaticon.com/512/867/867909.png" alt="Pot">
         <span>Pot</span>
       </button>
       <button class="nav-tab" data-filter="uhc">
-        <img src="uhc.png" alt="UHC" onerror="this.src='https://cdn-icons-png.flaticon.com/512/833/833475.png'">
+        <img src="https://cdn-icons-png.flaticon.com/512/833/833475.png" alt="UHC">
         <span>UHC</span>
       </button>
       <button class="nav-tab" data-filter="smp">
-        <img src="smp.png" alt="SMP" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3033/3033143.png'">
+        <img src="https://cdn-icons-png.flaticon.com/512/3033/3033143.png" alt="SMP">
         <span>SMP</span>
       </button>
       <button class="nav-tab" data-filter="mace">
-        <img src="mace.png" alt="Mace" onerror="this.src='https://cdn-icons-png.flaticon.com/512/9349/9349884.png'">
+        <img src="https://cdn-icons-png.flaticon.com/512/9349/9349884.png" alt="Mace">
         <span>Mace</span>
       </button>
     </div>
 
-    <div class="nav-actions">
-      <button class="info-btn">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
-        Information
-      </button>
-      <div class="server-ip">
-        <span style="color:#d1d5db; font-size:0.75rem;">SERVER IP</span>
-        <strong>invis.x</strong>
+    <div class="nav-right">
+      <div class="info-pill" onclick="document.getElementById('infoModal').classList.add('show')">
+        <span>ℹ Information</span>
       </div>
     </div>
   </nav>
 
-  <!-- CONTENT -->
   <div class="container">
-    <div class="search-bar-container">
-      <input type="text" id="searchInput" class="search-input" placeholder="Search player...">
+    <div class="controls">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search player..." spellcheck="false">
     </div>
 
-    <!-- HEADERS -->
-    <div class="table-header">
+    <div class="thead">
       <div class="th-center">#</div>
       <div>PLAYER</div>
       <div class="th-center">REGION</div>
       <div class="th-right">TIERS</div>
     </div>
 
-    <!-- ROWS CONTAINER -->
-    <div id="rankingsList">
-      <!-- Generated via JS -->
+    <div id="listContainer">
+      <!-- JS injects rows here -->
     </div>
   </div>
 
-  <!-- BASIC MODAL -->
-  <div id="modalBackdrop" class="modal-backdrop">
-    <div class="modal-content">
-      <img id="mHead" src="" class="m-pfp">
-      <div id="mName" class="m-title">Player</div>
-      <div id="mTitle" class="m-sub">Title</div>
-      <div id="mStats" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
+  <!-- Player Modal -->
+  <div id="playerModal" class="modal-wrap">
+    <div class="modal-box">
+      <button class="m-close-btn" onclick="document.getElementById('playerModal').classList.remove('show')">&times;</button>
+      <img id="mHead" src="" style="width:100px; height:100px; border-radius:10px; border:2px solid #333; margin-bottom:15px; background:#000;">
+      <div id="mName" style="font-size:1.8rem; font-weight:800; color:#fff;">Player</div>
+      <div id="mTitle" style="color:#888; margin-bottom:20px;">Title</div>
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
         <div style="background:#222; padding:10px; border-radius:6px;">
-          <div style="font-size:0.7rem; color:#888;">POINTS</div>
-          <div id="mPoints" style="font-size:1.2rem; font-weight:700; color:#fff;">0</div>
+           <div style="font-size:0.7rem; color:#666; font-weight:700;">POINTS</div>
+           <div id="mPoints" style="font-size:1.4rem; font-weight:700; color:#fff;">0</div>
         </div>
         <div style="background:#222; padding:10px; border-radius:6px;">
-          <div style="font-size:0.7rem; color:#888;">REGION</div>
-          <div id="mRegion" style="font-size:1.2rem; font-weight:700; color:#fff;">NA</div>
+           <div style="font-size:0.7rem; color:#666; font-weight:700;">REGION</div>
+           <div id="mRegion" style="font-size:1.4rem; font-weight:700; color:#fff;">NA</div>
         </div>
       </div>
-      <button class="m-close" onclick="document.getElementById('modalBackdrop').classList.remove('show')">Close</button>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <div id="infoModal" class="modal-wrap">
+    <div class="modal-box" style="text-align:left;">
+      <button class="m-close-btn" onclick="document.getElementById('infoModal').classList.remove('show')">&times;</button>
+      <h2 style="font-family:var(--font-display); font-weight:800; color:#fff; margin-bottom:20px; text-align:center;">Point System</h2>
+      <div style="display:grid; gap:8px; font-size:0.9rem;">
+         <div style="display:flex; justify-content:space-between; padding:10px; background:#1a1a1a; border-radius:6px;"><span>HT1</span> <span style="color:var(--c-t1); font-weight:700;">60 pts</span></div>
+         <div style="display:flex; justify-content:space-between; padding:10px; background:#1a1a1a; border-radius:6px;"><span>LT1</span> <span style="color:var(--c-t1); font-weight:700;">30 pts</span></div>
+         <div style="display:flex; justify-content:space-between; padding:10px; background:#1a1a1a; border-radius:6px;"><span>HT2</span> <span style="color:var(--c-t2); font-weight:700;">30 pts</span></div>
+         <div style="display:flex; justify-content:space-between; padding:10px; background:#1a1a1a; border-radius:6px;"><span>LT2</span> <span style="color:var(--c-t2); font-weight:700;">15 pts</span></div>
+         <div style="display:flex; justify-content:space-between; padding:10px; background:#1a1a1a; border-radius:6px;"><span>HT3</span> <span style="color:var(--c-t3); font-weight:700;">15 pts</span></div>
+      </div>
     </div>
   </div>
 
   <script>
-    // --- CONFIG & DATA ---
+    // --- Configuration ---
     const CATEGORIES = ["sword","axe","crystal","nethpot","uhc","smp","mace"];
-    // Icon mapping (using fallback generic icons for demo if local pngs fail)
-    const CAT_ICONS = {
-      sword: "sword.png", 
-      axe: "axe.png", 
-      crystal: "crystal.png",
-      nethpot: "nethpot.png", 
-      uhc: "uhc.png", 
-      smp: "smp.png", 
-      mace: "mace.png"
+    // Using reliable CDN icons for the table columns
+    const ICONS = {
+      sword: "https://cdn-icons-png.flaticon.com/512/9637/9637213.png",
+      axe: "https://cdn-icons-png.flaticon.com/512/8144/8144456.png",
+      crystal: "https://cdn-icons-png.flaticon.com/512/2622/2622557.png",
+      nethpot: "https://cdn-icons-png.flaticon.com/512/867/867909.png",
+      uhc: "https://cdn-icons-png.flaticon.com/512/833/833475.png",
+      smp: "https://cdn-icons-png.flaticon.com/512/3033/3033143.png",
+      mace: "https://cdn-icons-png.flaticon.com/512/9349/9349884.png"
     };
     
-    // Fallback images for demo purposes
-    const FALLBACK_ICON = "https://cdn-icons-png.flaticon.com/512/10697/10697368.png";
+    // The specific fallback requested
+    const FALLBACK_SKIN = "https://vzge.me/bust/X-Steve";
 
-    const POINTS_MAP = {
-      "HT1": 60, "LT1": 30,
-      "HT2": 30, "LT2": 15,
-      "HT3": 15, "LT3": 14,
-      "HT4": 8,  "LT4": 6,
-      "HT5": 4,  "LT5": 1
-    };
-
-    const TITLES = [
-      { min: 400, t: "Combat Grandmaster" },
-      { min: 250, t: "Combat Master" },
-      { min: 100, t: "Combat Ace" },
-      { min: 50,  t: "Combat Specialist" },
-      { min: 20,  t: "Combat Cadet" },
-      { min: 10,  t: "Combat Novice" },
-      { min: 0,   t: "Beginner" }
-    ];
-
+    const POINTS = { "HT1": 60, "LT1": 30, "HT2": 30, "LT2": 15, "HT3": 15, "LT3": 14, "HT4": 8, "LT4": 6, "HT5": 4, "LT5": 1 };
+    
     let players = [];
     let processedList = [];
+    let currentFilter = "overall";
 
-    // --- LOGIC ---
-    function getPoints(tier) { return POINTS_MAP[tier] || 0; }
-    function getTitle(pts) { return TITLES.find(x => pts >= x.min).t; }
+    // --- Core Logic ---
+    function getPoints(t) { return POINTS[t] || 0; }
+    
+    function getTitle(pts) {
+      if(pts >= 400) return "Combat Grandmaster";
+      if(pts >= 250) return "Combat Master";
+      if(pts >= 100) return "Combat Ace";
+      if(pts >= 50) return "Combat Specialist";
+      if(pts >= 20) return "Combat Cadet";
+      return "Novice";
+    }
 
-    async function loadData() {
-      // Simulating data loading
+    // Helper to get styling class for badges
+    function getBadgeClass(tier) {
+      if(!tier) return "";
+      if(tier.includes('1')) return "tb-1";
+      if(tier.includes('2')) return "tb-2";
+      if(tier.includes('3')) return "tb-3";
+      if(tier.includes('4')) return "tb-4";
+      return "tb-5";
+    }
+
+    async function init() {
+      // 1. Load Data
       try {
-        const res = await fetch('./players.json'); // Replace with real URL
-        if(res.ok) {
-           const json = await res.json();
-           // Handle various JSON structures
+        const req = await fetch('./players.json'); // Replace if needed
+        if(req.ok) {
+           const json = await req.json();
            if(Array.isArray(json)) players = json;
            else if(json.players) players = json.players;
            else {
-             // Object format
-             players = [];
+             // Object format converter
              for(let [k,v] of Object.entries(json)) {
                if(typeof v !== 'object') continue;
                CATEGORIES.forEach(c => {
-                 if(v[c]) players.push({ name: k, cat: c, tier: v[c], region: v.region, tester: v.tester });
+                 if(v[c]) players.push({ name: k, cat: c, tier: v[c], region: v.region });
                });
              }
            }
         }
-      } catch(e) { console.log("Using default/empty data"); }
-      
-      // If empty (for preview), add dummy data matching the screenshot style
-      if(players.length === 0) {
+      } catch(e) {}
+
+      // 2. Dummy Data if empty (For preview/testing)
+      if(!players.length) {
         players = [
-          { name: "Marlowww", cat: "uhc", tier: "HT1", region: "NA" },
-          { name: "Marlowww", cat: "sword", tier: "LT1", region: "NA" },
-          { name: "Marlowww", cat: "axe", tier: "LT1", region: "NA" },
-          { name: "Marlowww", cat: "crystal", tier: "HT1", region: "NA" },
-          { name: "Marlowww", cat: "nethpot", tier: "HT1", region: "NA" },
-          { name: "ItzRealMe", cat: "sword", tier: "HT3", region: "NA" },
-          { name: "ItzRealMe", cat: "crystal", tier: "HT1", region: "NA" },
-          { name: "ItzRealMe", cat: "nethpot", tier: "HT1", region: "NA" },
-          { name: "Swight", cat: "axe", tier: "HT1", region: "NA" },
-          { name: "Swight", cat: "uhc", tier: "HT1", region: "NA" },
-          { name: "coldified", cat: "uhc", tier: "LT1", region: "EU" },
-          { name: "coldified", cat: "axe", tier: "LT1", region: "EU" },
-          { name: "coldified", cat: "sword", tier: "HT2", region: "EU" }
+          {name:"Marlowww", cat:"uhc", tier:"HT1", region:"NA"},
+          {name:"Marlowww", cat:"sword", tier:"LT1", region:"NA"},
+          {name:"Marlowww", cat:"nethpot", tier:"HT1", region:"NA"},
+          {name:"ItzRealMe", cat:"sword", tier:"HT3", region:"NA"},
+          {name:"ItzRealMe", cat:"crystal", tier:"HT1", region:"NA"},
+          {name:"coldified", cat:"uhc", tier:"LT1", region:"EU"},
+          {name:"BlvckWlf", cat:"axe", tier:"HT2", region:"ASIA"}
         ];
       }
-    }
 
-    function processData() {
+      // 3. Process Data (Grouping)
       const map = new Map();
       players.forEach(p => {
-        if (!CATEGORIES.includes(p.cat)) return;
-        if (!map.has(p.name)) {
-          map.set(p.name, { name: p.name, region: p.region || 'NA', tester: !!p.tester, tiers: {}, points: 0 });
+        if(!CATEGORIES.includes(p.cat)) return;
+        if(!map.has(p.name)) {
+          map.set(p.name, { name: p.name, region: p.region||"NA", tiers: {}, total: 0 });
         }
         const entry = map.get(p.name);
-        // Take highest tier if duplicates
-        const curTier = entry.tiers[p.cat];
-        if (!curTier || getPoints(p.tier) > getPoints(curTier)) {
+        const cur = entry.tiers[p.cat];
+        // Keep highest tier if duplicate
+        if(!cur || getPoints(p.tier) > getPoints(cur)) {
           entry.tiers[p.cat] = p.tier;
         }
       });
 
-      for (let p of map.values()) {
-        let pts = 0;
-        Object.values(p.tiers).forEach(t => pts += getPoints(t));
-        p.points = pts;
-        p.title = getTitle(pts);
+      // Calc Totals
+      for(let p of map.values()) {
+        let t = 0;
+        Object.values(p.tiers).forEach(tier => t += getPoints(tier));
+        p.total = t;
+        p.title = getTitle(t);
       }
-      processedList = Array.from(map.values()).sort((a,b) => b.points - a.points);
-    }
 
-    // --- RENDERING ---
-    const rankingsList = document.getElementById("rankingsList");
-    const searchInput = document.getElementById("searchInput");
-    let currentFilter = "overall";
-
-    function getTierClass(tierString) {
-      if(!tierString) return "tn";
-      if(tierString.includes("1")) return "t1";
-      if(tierString.includes("2")) return "t2";
-      if(tierString.includes("3")) return "t3";
-      if(tierString.includes("4")) return "t4";
-      return "t5";
+      processedList = Array.from(map.values()).sort((a,b) => b.total - a.total);
+      
+      render();
     }
 
     function render() {
-      const term = searchInput.value.toLowerCase();
-      rankingsList.innerHTML = "";
+      const listContainer = document.getElementById("listContainer");
+      const filterTerm = document.getElementById("searchInput").value.toLowerCase();
+      listContainer.innerHTML = "";
 
-      let displayList = [];
-      
-      if(currentFilter === "overall") {
-        displayList = processedList;
-      } else {
-        // Filter logic for specific tabs if you want a separate view
-        // For now, let's keep the main list but filter by who has the tier
-        displayList = processedList.filter(p => p.tiers[currentFilter]);
+      // Filter list
+      let displayData = processedList;
+      if(currentFilter !== "overall") {
+        displayData = processedList.filter(p => p.tiers[currentFilter]);
+      }
+      displayData = displayData.filter(p => p.name.toLowerCase().includes(filterTerm));
+
+      if(!displayData.length) {
+        listContainer.innerHTML = `<div style="text-align:center; padding:40px; color:#555;">No players found</div>`;
+        return;
       }
 
-      displayList = displayList.filter(p => p.name.toLowerCase().includes(term));
-
-      displayList.forEach((p, index) => {
+      displayData.forEach((p, index) => {
         const rank = index + 1;
-        
-        // Determine Rank Class
-        let rankClass = "rank-n";
-        if(rank === 1) rankClass = "rank-1";
-        if(rank === 2) rankClass = "rank-2";
-        if(rank === 3) rankClass = "rank-3";
+        let rankClass = "rn";
+        if(rank === 1) rankClass = "r1";
+        if(rank === 2) rankClass = "r2";
+        if(rank === 3) rankClass = "r3";
 
-        // Determine Region Class
-        const regClass = (p.region === "EU") ? "reg-EU" : (p.region === "ASIA" ? "reg-ASIA" : "reg-NA");
+        const regClass = `reg-${p.region}`;
 
-        // Generate Tiers HTML
-        // We iterate through ALL categories to create the grid seen in screenshot
+        // Build Tier Icons HTML
         const tiersHtml = CATEGORIES.map(cat => {
           const t = p.tiers[cat];
           const hasTier = !!t;
-          const badgeClass = getTierClass(t);
-          
+          const badgeCls = getBadgeClass(t);
           return `
-            <div class="tier-group" title="${cat}">
-              <img src="${CAT_ICONS[cat]}" class="tg-icon ${hasTier?'active':''}" onerror="this.src='${FALLBACK_ICON}'">
-              <div class="tg-badge ${badgeClass}">${t || '-'}</div>
+            <div class="t-col">
+              <img src="${ICONS[cat]}" class="t-icon ${hasTier?'active':''}">
+              <div class="t-badge ${badgeCls}">${t || '-'}</div>
             </div>
           `;
         }).join('');
 
-        const row = document.createElement("div");
-        row.className = `player-row ${rankClass}`;
-        row.innerHTML = `
-          <!-- 1. Rank -->
-          <div class="rank-box">
-            ${rank}.
+        // Create Card
+        const el = document.createElement("div");
+        el.className = `card ${rankClass}`;
+        el.innerHTML = `
+          <div class="c-rank">
+            <div class="rank-bg"></div>
+            <div class="rank-val">${rank}.</div>
           </div>
-
-          <!-- 2. Player -->
-          <div class="player-cell">
-            <img src="https://vzge.me/bust/${p.name}" class="player-bust" loading="lazy" onerror="this.src='https://minotar.net/bust/MHF_Steve/100.png'">
-            <div class="player-text">
+          <div class="c-info">
+            <img src="https://vzge.me/bust/${p.name}" class="skin-bust" 
+                 onerror="this.onerror=null; this.src='${FALLBACK_SKIN}';" 
+                 loading="lazy">
+            <div class="meta">
               <div class="p-name">${p.name}</div>
-              <div class="p-sub">
-                <span class="diamond-icon">❖</span> 
-                ${p.title} <span style="color:#4b5563; margin-left:4px;">(${p.points} points)</span>
+              <div class="p-title">
+                 <span class="diamond">❖</span> ${p.title} 
+                 <span style="color:#555; margin-left:5px;">(${p.total})</span>
               </div>
             </div>
           </div>
-
-          <!-- 3. Region -->
-          <div class="region-cell">
-            <div class="region-badge ${regClass}">${p.region}</div>
+          <div class="c-region">
+            <div class="badge-reg ${regClass}">${p.region}</div>
           </div>
-
-          <!-- 4. Tiers -->
-          <div class="tiers-cell">
+          <div class="c-tiers">
             ${tiersHtml}
           </div>
         `;
-        
-        row.onclick = () => openModal(p);
-        rankingsList.appendChild(row);
+        el.onclick = () => openPlayerModal(p);
+        listContainer.appendChild(el);
       });
     }
 
-    // --- MODAL ---
-    function openModal(p) {
-      document.getElementById('mHead').src = `https://vzge.me/bust/${p.name}`;
+    function openPlayerModal(p) {
+      const img = document.getElementById('mHead');
+      img.src = `https://vzge.me/bust/${p.name}`;
+      img.onerror = function() { this.src = FALLBACK_SKIN; };
+      
       document.getElementById('mName').textContent = p.name;
       document.getElementById('mTitle').textContent = p.title;
-      document.getElementById('mPoints').textContent = p.points;
+      document.getElementById('mPoints').textContent = p.total;
       document.getElementById('mRegion').textContent = p.region;
-      document.getElementById('modalBackdrop').classList.add('show');
+      document.getElementById('playerModal').classList.add('show');
     }
 
-    // --- EVENTS ---
+    // --- Events ---
     document.querySelectorAll('.nav-tab').forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentFilter = btn.dataset.filter;
         render();
-      };
+      }
     });
 
-    searchInput.oninput = render;
+    document.getElementById("searchInput").oninput = render;
 
-    // --- INIT ---
-    (async () => {
-      await loadData();
-      processData();
-      render();
-    })();
+    // Start
+    init();
 
   </script>
 </body>
