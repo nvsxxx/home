@@ -3,31 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>INVIS X | Tier List</title>
+  <title>INVIS X | Monochrome</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-  <!-- Fonts: Poppins for a cleaner, modern look (MCTiers style) -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      /* MCTiers-like Dark Theme Palette */
-      --bg-dark: #0f0f0f;
-      --bg-sidebar: #131313;
-      --bg-card: #1a1a1a;
-      --bg-card-hover: #222;
-      --accent: #fff;
-      --text-main: #e5e5e5;
-      --text-muted: #999;
-      --border: #2a2a2a;
-      --border-hover: #444;
+      /* --- THEME: VOID & LIGHT --- */
+      --bg-deep: #000000;
+      --bg-panel: #050505;
+      --bg-card: #0a0a0a;
       
-      --lt: #2ecc71;
-      --ht: #9b59b6;
+      --border-dim: rgba(255, 255, 255, 0.1);
+      --border-bright: rgba(255, 255, 255, 0.3);
+      --border-glow: rgba(255, 255, 255, 0.6);
+
+      --text-main: #ffffff;
+      --text-muted: #888888;
+      
+      /* Glow Effects */
+      --glow-text: 0 0 10px rgba(255, 255, 255, 0.5);
+      --glow-text-intense: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4);
+      --glow-box: 0 0 15px rgba(255, 255, 255, 0.05);
+      --glow-box-hover: 0 0 25px rgba(255, 255, 255, 0.15);
       
       --font-main: 'Poppins', sans-serif;
     }
@@ -36,41 +40,45 @@
 
     body {
       font-family: var(--font-main);
-      background-color: var(--bg-dark);
+      background-color: var(--bg-deep);
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
-      /* Subtle noise pattern could go here, but keeping it clean solid dark */
     }
 
-    a { text-decoration: none; color: inherit; transition: 0.2s; }
+    /* Force all images/icons to be Grayscale/White */
+    img:not(.player-head):not(.pfp-img):not(.tp-head) {
+      filter: grayscale(100%) brightness(200%);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+    a { text-decoration: none; color: inherit; transition: 0.3s; }
     button { font-family: inherit; cursor: pointer; }
 
-    /* Canvas Background */
+    /* Stars Canvas */
     canvas#stars {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
       z-index: -1;
-      opacity: 0.3; /* Dimmer for cleaner look */
+      opacity: 0.6; /* Brighter stars */
       pointer-events: none;
     }
-    
-    .bg-gradient {
-      display: none; /* Removed for flatter MCTiers look */
-    }
 
-    /* --- App Layout --- */
-    .app-layout {
-      display: flex;
-      min-height: 100vh;
-    }
+    /* --- Layout --- */
+    .app-layout { display: flex; min-height: 100vh; }
 
     /* Sidebar */
     .sidebar {
       width: 260px;
-      background: var(--bg-sidebar);
-      border-right: 1px solid var(--border);
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid var(--border-dim);
       display: flex;
       flex-direction: column;
       position: sticky;
@@ -81,76 +89,68 @@
     }
 
     .sidebar-header {
-      padding: 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      padding: 30px 24px;
+      border-bottom: 1px solid var(--border-dim);
     }
     
     .brand {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 800;
-      letter-spacing: -0.5px;
       color: #fff;
+      text-shadow: var(--glow-text);
+      letter-spacing: -1px;
     }
     .brand-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 500;
-      letter-spacing: 2px;
-      margin-top: 2px;
+      font-size: 0.7rem;
+      color: #aaa;
+      letter-spacing: 4px;
+      margin-top: 4px;
+      text-transform: uppercase;
     }
 
     .nav-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 16px 12px;
+      padding: 20px 16px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      scrollbar-width: thin;
-      scrollbar-color: #333 transparent;
+      gap: 4px;
     }
 
     .nav-btn {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: 6px;
-      color: var(--text-muted);
+      gap: 14px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      color: #666;
       font-weight: 500;
       font-size: 0.9rem;
-      transition: all 0.2s;
-      border: 1px solid transparent;
+      transition: all 0.3s ease;
       background: transparent;
+      border: 1px solid transparent;
       width: 100%;
-      text-align: left;
     }
     .nav-btn:hover {
-      background: rgba(255,255,255,0.03);
-      color: #ccc;
+      color: #fff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.5);
     }
     .nav-btn[aria-pressed="true"] {
-      background: #222;
+      background: #000;
+      border-color: var(--border-bright);
       color: #fff;
-      border-color: #333;
-      font-weight: 600;
+      box-shadow: inset 0 0 15px rgba(255,255,255,0.05);
+      text-shadow: 0 0 10px rgba(255,255,255,0.6);
     }
-    .nav-btn img {
-      width: 20px; height: 20px; object-fit: contain; opacity: 0.6;
-      transition: 0.2s;
-    }
-    .nav-btn[aria-pressed="true"] img { filter: brightness(1.2); opacity: 1; }
-    
+    .nav-btn img { width: 18px; height: 18px; object-fit: contain; opacity: 0.5; transition: 0.3s; }
+    .nav-btn[aria-pressed="true"] img { opacity: 1; filter: drop-shadow(0 0 5px white); }
+
     .sidebar-footer {
       padding: 20px;
-      border-top: 1px solid var(--border);
-      font-size: 0.75rem;
-      color: #444;
+      border-top: 1px solid var(--border-dim);
+      font-size: 0.7rem;
+      color: #333;
       text-align: center;
-      background: var(--bg-sidebar);
     }
 
     /* Main Content */
@@ -159,239 +159,249 @@
       display: flex;
       flex-direction: column;
       min-width: 0;
-      background: var(--bg-dark);
+      background: transparent;
     }
 
     .topbar {
-      height: 70px;
+      height: 80px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 32px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg-sidebar);
+      padding: 0 40px;
+      border-bottom: 1px solid var(--border-dim);
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
       position: sticky;
       top: 0;
       z-index: 40;
     }
 
     .page-title {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       font-weight: 700;
       color: #fff;
-      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 0 15px rgba(255,255,255,0.3);
     }
 
-    .topbar-actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
+    .topbar-actions { display: flex; gap: 16px; align-items: center; }
 
-    .search-wrapper {
-      position: relative;
-      width: 260px;
-    }
+    .search-wrapper { position: relative; width: 280px; }
 
     .search-input {
       width: 100%;
-      background: #0a0a0a;
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-dim);
       color: #fff;
-      padding: 8px 12px 8px 36px;
-      border-radius: 6px;
+      padding: 10px 12px 10px 40px;
+      border-radius: 50px; /* Pill shape */
       font-size: 0.85rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.3s;
       font-family: var(--font-main);
     }
 
-    .search-input:focus { border-color: #555; }
+    .search-input:focus { 
+      border-color: var(--border-bright); 
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      background: #000;
+    }
 
     .search-icon {
       position: absolute;
-      left: 10px;
-      top: 50%;
+      left: 14px; top: 50%;
       transform: translateY(-50%);
-      color: #555;
+      color: #666;
       pointer-events: none;
-      width: 14px; height: 14px;
+      transition: 0.3s;
     }
+    .search-input:focus ~ .search-icon { color: #fff; }
 
     .btn-info {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      height: 36px;
-      padding: 0 14px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: #1a1a1a;
+      height: 40px;
+      padding: 0 20px;
+      border-radius: 50px;
+      border: 1px solid var(--border-dim);
+      background: transparent;
       color: #aaa;
       font-weight: 500;
       font-size: 0.85rem;
-      transition: all 0.2s;
+      transition: all 0.3s;
     }
     .btn-info:hover {
-      background: #252525;
-      border-color: #555;
-      color: #fff;
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+      box-shadow: 0 0 15px rgba(255,255,255,0.5);
     }
 
-    .content-area {
-      padding: 32px;
-      flex: 1;
-    }
+    .content-area { padding: 40px; flex: 1; }
 
-    /* --- Overall List Layout --- */
-    .overall-grid {
-      display: grid;
-      gap: 8px;
-    }
+    /* --- List Layout (Overall) --- */
+    .overall-grid { display: grid; gap: 10px; }
 
     .player-card-row {
       display: grid;
-      grid-template-columns: 50px 1fr auto;
+      grid-template-columns: 60px 1fr auto;
       align-items: center;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 20px;
+      background: rgba(10,10,10,0.6);
+      border: 1px solid var(--border-dim);
+      border-radius: 12px;
+      padding: 12px 24px;
       gap: 20px;
-      transition: all 0.15s;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .player-card-row::before {
+      content:''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+      transform: translateX(-100%); transition: 0.5s;
+    }
+    .player-card-row:hover::before { transform: translateX(100%); }
 
     .player-card-row:hover {
-      transform: translateY(-1px);
-      border-color: #555;
-      background: var(--bg-card-hover);
+      transform: translateY(-2px) scale(1.005);
+      border-color: var(--border-bright);
+      background: #000;
+      box-shadow: var(--glow-box-hover);
     }
 
     .rank-num {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: #555;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #444;
       text-align: center;
+      transition: 0.3s;
     }
-    .rank-num.top-3 { color: #fff; }
+    /* Top 3 Glowing White */
+    .rank-num.top-3 { 
+      color: #fff; 
+      text-shadow: var(--glow-text-intense);
+      font-size: 1.4rem;
+    }
 
-    .player-info {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .player-info { display: flex; align-items: center; gap: 16px; }
 
     .player-head {
-      width: 36px; height: 36px;
-      border-radius: 4px;
-      background: #222;
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      background: #111;
       object-fit: cover;
+      border: 1px solid #333;
+      filter: grayscale(100%);
+      transition: 0.3s;
     }
+    .player-card-row:hover .player-head { filter: grayscale(0%); border-color: #fff; }
 
-    .player-details {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
+    .player-details { display: flex; flex-direction: column; gap: 2px; }
 
     .player-name {
-      font-weight: 600;
-      font-size: 0.95rem;
+      font-weight: 700;
+      font-size: 1rem;
       color: #eee;
+      letter-spacing: 0.5px;
     }
+    .player-card-row:hover .player-name { text-shadow: 0 0 8px rgba(255,255,255,0.6); }
 
     .player-meta {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
-      color: var(--text-muted);
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.7rem; color: #666; font-weight: 500;
     }
     
     .role-badge {
       font-size: 0.6rem;
       text-transform: uppercase;
       font-weight: 700;
-      padding: 1px 4px;
-      border-radius: 3px;
-      background: #333;
-      color: #aaa;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: transparent;
+      color: #888;
+      border: 1px solid #333;
     }
-    .role-badge.tester { background: rgba(220, 38, 38, 0.15); color: #ef4444; }
+    /* Tester Badge - Now Glowing White Box */
+    .role-badge.tester { 
+      background: #fff; 
+      color: #000; 
+      border-color: #fff;
+      box-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
 
-    .player-stats {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
+    .player-stats { display: flex; align-items: center; gap: 30px; }
 
-    .stat-box {
-      text-align: right;
-    }
-    .stat-label { font-size: 0.65rem; color: #555; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-    .stat-value { font-size: 1.05rem; font-weight: 700; color: #fff; }
+    .stat-box { text-align: right; }
+    .stat-label { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    .stat-value { font-size: 1.2rem; font-weight: 700; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
-    .tier-pills {
-      display: flex;
-      gap: 2px;
-    }
+    .tier-pills { display: flex; gap: 4px; }
     .mini-pill {
-      width: 24px; height: 24px;
-      border-radius: 3px;
-      background: #111;
+      width: 26px; height: 26px;
+      border-radius: 4px;
+      background: #050505;
       border: 1px solid #222;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #555;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 700;
+      color: #444;
+      transition: 0.2s;
     }
-    .mini-pill.active { color: #ddd; border-color: #333; background: #222; }
+    .mini-pill.active { 
+      color: #fff; 
+      border-color: #666; 
+      background: #111; 
+      text-shadow: 0 0 5px white;
+    }
 
-    /* --- Tier Columns Layout --- */
+    /* --- Tier Board Layout (Columns) --- */
     .tier-board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
+      gap: 16px;
       align-items: start;
     }
 
     .tier-col {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: rgba(10,10,10,0.5);
+      border: 1px solid var(--border-dim);
+      border-radius: 12px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: 0.3s;
     }
+    .tier-col:hover { border-color: var(--border-bright); box-shadow: var(--glow-box); }
 
-    /* Distinct Tier Header Colors (MCTiers vibe) */
+    /* UNIFIED WHITE HEADERS - Opacity defines hierarchy */
     .tier-header {
-      padding: 10px;
+      padding: 12px;
       text-align: center;
-      font-weight: 800;
-      font-size: 0.85rem;
-      letter-spacing: 0.5px;
-      background: rgba(0,0,0,0.2);
-      border-bottom: 1px solid var(--border);
+      font-weight: 900;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      background: #000;
+      border-bottom: 1px solid var(--border-dim);
+      color: #fff;
     }
-
-    /* Specific Tier Borders/Colors */
-    .tier-col:nth-child(1) .tier-header { border-top: 3px solid #ef4444; color: #ef4444; } /* T1 Red */
-    .tier-col:nth-child(2) .tier-header { border-top: 3px solid #f97316; color: #f97316; } /* T2 Orange */
-    .tier-col:nth-child(3) .tier-header { border-top: 3px solid #eab308; color: #eab308; } /* T3 Yellow */
-    .tier-col:nth-child(4) .tier-header { border-top: 3px solid #22c55e; color: #22c55e; } /* T4 Green */
-    .tier-col:nth-child(5) .tier-header { border-top: 3px solid #3b82f6; color: #3b82f6; } /* T5 Blue */
+    
+    /* Specific styling per tier number to keep structure but mono color */
+    .tier-col:nth-child(1) .tier-header { border-top: 3px solid #fff; text-shadow: 0 0 10px #fff; } 
+    .tier-col:nth-child(2) .tier-header { border-top: 3px solid rgba(255,255,255,0.7); }
+    .tier-col:nth-child(3) .tier-header { border-top: 3px solid rgba(255,255,255,0.5); }
+    .tier-col:nth-child(4) .tier-header { border-top: 3px solid rgba(255,255,255,0.3); }
+    .tier-col:nth-child(5) .tier-header { border-top: 3px solid rgba(255,255,255,0.1); color: #888; }
 
     .tier-list {
-      padding: 6px;
-      max-height: 75vh;
+      padding: 8px;
+      max-height: 70vh;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: #333 transparent;
-      background: #151515;
+      background: rgba(0,0,0,0.3);
     }
     
     .tier-player {
@@ -399,159 +409,181 @@
       align-items: center;
       gap: 10px;
       padding: 8px;
-      border-radius: 4px;
-      transition: background 0.1s;
+      border-radius: 6px;
+      transition: 0.2s;
       cursor: pointer;
-      border-bottom: 1px solid rgba(255,255,255,0.02);
-      margin-bottom: 1px;
+      border: 1px solid transparent;
+      margin-bottom: 4px;
     }
-    .tier-player:last-child { border-bottom: none; }
-    .tier-player:hover { background: #252525; }
+    .tier-player:hover { 
+      background: #000; 
+      border-color: #333; 
+      box-shadow: 0 0 10px rgba(255,255,255,0.1); 
+    }
 
-    .tp-head { width: 20px; height: 20px; border-radius: 3px; object-fit: cover; }
-    .tp-name { font-size: 0.8rem; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #ddd; }
+    .tp-head { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; filter: grayscale(100%); }
+    .tier-player:hover .tp-head { filter: grayscale(0%); }
     
+    .tp-name { font-size: 0.8rem; font-weight: 500; flex: 1; overflow: hidden; text-overflow: ellipsis; color: #ccc; }
+    .tier-player:hover .tp-name { color: #fff; }
+    
+    /* Small Badges in Lists */
     .tp-badge { 
-      font-size: 0.65rem; font-weight: 700; padding: 1px 5px; border-radius: 3px; 
-      background: #222; color: #888; border: 1px solid #333;
+      font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; 
+      border: 1px solid #333; background: #000; color: #666;
     }
 
-    .tp-badge[data-tier^="HT"] { color: #d6bcfa; border-color: rgba(155, 89, 182, 0.4); background: rgba(155, 89, 182, 0.1); }
-    .tp-badge[data-tier^="LT"] { color: #9ae6b4; border-color: rgba(46, 204, 113, 0.4); background: rgba(46, 204, 113, 0.1); }
+    /* HT = High Tier (White Glow), LT = Low Tier (Dim) */
+    .tp-badge[data-tier^="HT"] { 
+      color: #fff; border-color: #fff; box-shadow: 0 0 5px rgba(255,255,255,0.4);
+    }
+    .tp-badge[data-tier^="LT"] { 
+      color: #888; border-color: #444; 
+    }
 
-    /* --- Modals (Enhanced Profile Style) --- */
+    /* --- Modals (Cyber Style) --- */
     .modal-backdrop {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(5px);
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(8px);
       z-index: 100;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      opacity: 0; transition: opacity 0.2s;
     }
-    .modal-backdrop.show { display: flex; animation: fadeIn 0.15s ease-out; }
+    .modal-backdrop.show { display: flex; opacity: 1; }
 
     .modal {
-      background: #1a1a1a;
-      border-radius: 16px;
-      width: 100%; max-width: 420px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-      animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      background: #000;
+      border-radius: 20px;
+      width: 100%; max-width: 440px;
+      box-shadow: 0 0 40px rgba(255,255,255,0.1), inset 0 0 0 1px #333;
+      transform: scale(0.95); transition: 0.3s;
       position: relative;
-      padding: 32px 24px 24px;
-      border: 1px solid #333;
+      padding: 40px 30px 30px;
     }
+    .modal-backdrop.show .modal { transform: scale(1); }
     
     .m-close-absolute {
       position: absolute;
-      top: 12px; right: 12px;
+      top: 16px; right: 16px;
       background: transparent; border: none;
-      color: var(--text-muted); font-size: 1.2rem;
+      color: #666; font-size: 1.5rem;
       cursor: pointer; transition: 0.2s;
       width: 32px; height: 32px;
       display: grid; place-items: center;
       border-radius: 50%;
     }
-    .m-close-absolute:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    .m-close-absolute:hover { color: #fff; text-shadow: 0 0 10px white; }
 
-    .pfp-container {
-      display: flex; justify-content: center; margin-bottom: 16px;
-    }
+    .pfp-container { display: flex; justify-content: center; margin-bottom: 20px; }
     .pfp-img {
-      width: 100px; height: 100px;
-      border-radius: 12px;
-      border: 3px solid #333;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      width: 110px; height: 110px;
+      border-radius: 16px;
+      border: 2px solid #fff;
+      box-shadow: 0 0 25px rgba(255,255,255,0.2);
       object-fit: cover;
       background: #000;
     }
 
-    .badge-row { display: flex; justify-content: center; margin-bottom: 12px; }
+    .badge-row { display: flex; justify-content: center; margin-bottom: 16px; }
     .tester-badge {
-      background: rgba(220, 38, 38, 0.15); color: #ef4444;
-      padding: 4px 12px; border-radius: 4px;
-      font-size: 0.75rem; font-weight: 700;
-      display: flex; align-items: center; gap: 6px;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(220, 38, 38, 0.3);
+      background: #fff; color: #000;
+      padding: 6px 16px; border-radius: 50px;
+      font-size: 0.75rem; font-weight: 800;
+      display: flex; align-items: center; gap: 8px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.6);
     }
     
     .profile-name {
       text-align: center;
-      font-size: 1.8rem;
-      font-weight: 800;
+      font-size: 2rem;
+      font-weight: 900;
       color: #fff;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       letter-spacing: -0.5px;
+      text-shadow: 0 0 20px rgba(255,255,255,0.5);
     }
 
-    .title-row { display: flex; justify-content: center; margin-bottom: 24px; }
+    .title-row { display: flex; justify-content: center; margin-bottom: 30px; }
     .title-pill {
-      background: #252525; 
-      color: #eee;
-      padding: 4px 14px; border-radius: 50px;
-      font-size: 0.8rem; font-weight: 500;
-      display: flex; align-items: center; gap: 8px;
+      background: #0a0a0a; 
+      color: #ccc;
+      padding: 6px 18px; border-radius: 50px;
+      font-size: 0.85rem; font-weight: 500;
       border: 1px solid #333;
     }
 
     .stats-row {
       display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 10px; margin-bottom: 24px;
+      gap: 12px; margin-bottom: 30px;
     }
     .stat-item { 
       text-align: center;
-      background: #222;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 10px 4px;
+      background: #050505;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 12px 6px;
+      transition: 0.2s;
     }
-    .stat-lbl { font-size: 0.65rem; color: #888; font-weight: 600; margin-bottom: 2px; letter-spacing: 0.5px; text-transform: uppercase; }
-    .stat-val { font-size: 1.2rem; font-weight: 700; color: #fff; }
-    .stat-val.gold { color: #fff; }
-    .stat-val.top-3-glow { text-shadow: 0 0 10px rgba(255,255,255,0.4); }
+    .stat-item:hover { border-color: #555; box-shadow: 0 0 10px rgba(255,255,255,0.05); }
+
+    .stat-lbl { font-size: 0.65rem; color: #666; font-weight: 700; margin-bottom: 4px; letter-spacing: 1px; text-transform: uppercase; }
+    .stat-val { font-size: 1.3rem; font-weight: 800; color: #fff; }
+    
+    .stat-val.top-3-glow { 
+      text-shadow: 0 0 15px rgba(255,255,255,0.8); 
+      color: #fff;
+    }
 
     .breakdown-box {
-      background: #111;
-      border-radius: 12px;
-      padding: 16px;
-      border: 1px solid #2a2a2a;
+      background: #050505;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #222;
+      position: relative;
     }
     .bb-title {
       text-align: center;
-      color: #666; font-size: 0.7rem; font-weight: 700;
-      letter-spacing: 1px; margin-bottom: 12px; text-transform: uppercase;
+      color: #555; font-size: 0.7rem; font-weight: 800;
+      letter-spacing: 2px; margin-bottom: 16px; text-transform: uppercase;
     }
-    .bb-grid {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
-    }
-    .bd-item { 
-      display: flex; flex-direction: column; align-items: center; gap: 4px; width: 40px; 
-    }
+    .bb-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    
+    .bd-item { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 44px; }
+    
     .bd-icon { 
-      width: 32px; height: 32px; 
-      background: #222; 
-      border-radius: 6px; 
+      width: 36px; height: 36px; 
+      background: #000; 
+      border-radius: 8px; 
       display: grid; place-items: center; 
       border: 1px solid #333; 
       transition: 0.2s; 
     }
-    .bd-item:hover .bd-icon { border-color: #555; background: #2a2a2a; }
-    .bd-icon img { width: 16px; height: 16px; opacity: 0.8; object-fit: contain; }
+    .bd-icon img { width: 18px; height: 18px; opacity: 0.7; }
+    
     .bd-badge { 
-      font-size: 0.6rem; font-weight: 700; 
-      padding: 2px 0; width: 100%; text-align: center;
-      border-radius: 3px; 
-      background: #1a1a1a; color: #666; 
+      font-size: 0.7rem; font-weight: 800; 
+      padding: 3px 0; width: 100%; text-align: center;
+      border-radius: 4px; 
+      background: #000;
       transition: 0.2s; 
-      border: 1px solid #2a2a2a;
     }
     
-    .bd-badge.ht { color: #d6bcfa; border-color: rgba(155, 89, 182, 0.3); background: rgba(155, 89, 182, 0.1); }
-    .bd-badge.lt { color: #9ae6b4; border-color: rgba(46, 204, 113, 0.3); background: rgba(46, 204, 113, 0.1); }
+    /* Modal Badges: White (HT) vs Dark Gray (LT) */
+    .bd-badge.ht { 
+      color: #fff; border: 1px solid #fff; 
+      box-shadow: 0 0 8px rgba(255,255,255,0.3);
+      background: #fff; color: #000; /* Invert for pop */
+    }
+    .bd-badge.lt { 
+      color: #666; border: 1px solid #333; 
+    }
 
-    .empty-state { padding: 40px; text-align: center; color: #555; font-style: italic; }
+    .empty-state { padding: 40px; text-align: center; color: #444; font-style: italic; letter-spacing: 1px; }
 
     /* Responsive */
     @media (max-width: 1024px) {
@@ -559,20 +591,20 @@
     }
     @media (max-width: 768px) {
       .app-layout { flex-direction: column; }
-      .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--border); }
+      .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--border-dim); }
       .nav-scroll { flex-direction: row; overflow-x: auto; padding: 12px 16px; align-items: center; }
-      .nav-btn { white-space: nowrap; width: auto; font-size: 0.85rem; padding: 8px 12px; }
+      .nav-btn { white-space: nowrap; width: auto; font-size: 0.8rem; padding: 8px 12px; }
       .sidebar-header { padding: 16px 24px; align-items: center; }
-      .brand { font-size: 1.4rem; }
+      .brand { font-size: 1.5rem; }
       .sidebar-footer { display: none; }
       
-      .topbar { padding: 0 16px; height: 60px; }
+      .topbar { padding: 0 20px; height: 70px; }
       .page-title { font-size: 1.2rem; }
       .search-wrapper { width: auto; flex: 1; max-width: 200px; }
-      .content-area { padding: 16px; }
+      .content-area { padding: 20px 16px; }
       
-      .player-card-row { grid-template-columns: 40px 1fr; grid-template-rows: auto auto; gap: 10px; padding: 12px; }
-      .player-stats { grid-column: 1 / -1; justify-content: space-between; padding-top: 10px; border-top: 1px solid #2a2a2a; }
+      .player-card-row { grid-template-columns: 40px 1fr; grid-template-rows: auto auto; gap: 12px; padding: 16px; }
+      .player-stats { grid-column: 1 / -1; justify-content: space-between; padding-top: 12px; border-top: 1px solid #222; width: 100%; }
       .tier-board { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 500px) {
@@ -585,14 +617,13 @@
 <body>
 
   <canvas id="stars"></canvas>
-  <div class="bg-gradient"></div>
 
   <div class="app-layout">
     <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="brand">INVIS X</div>
-        <div class="brand-sub">RANKINGS</div>
+        <div class="brand-sub">MONOCHROME EDITION</div>
       </div>
       
       <nav class="nav-scroll" id="filterTabs">
@@ -636,13 +667,10 @@
             <svg class="search-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search players..." spellcheck="false">
+            <input type="text" id="searchInput" class="search-input" placeholder="SEARCH PLAYERS..." spellcheck="false">
           </div>
           <button id="infoBtn" class="btn-info">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span>Info</span>
+            <span>INFO</span>
           </button>
         </div>
       </header>
@@ -665,7 +693,7 @@
 
       <div id="mTesterRow" class="badge-row hidden">
         <div class="tester-badge">
-          <svg width="12" height="14" fill="currentColor" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM336 160c0 8.8-7.2 16-16 16s-16-7.2-16-16V128C304 110.3 289.7 96 272 96H176C158.3 96 144 110.3 144 128v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V128c0-35.3 28.7-64 64-64h96c35.3 0 64 28.7 64 64v32z"/></svg>
+          <svg width="12" height="14" fill="currentColor" viewBox="0 0 448 512" style="filter: drop-shadow(0 0 2px white);"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM336 160c0 8.8-7.2 16-16 16s-16-7.2-16-16V128C304 110.3 289.7 96 272 96H176C158.3 96 144 110.3 144 128v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V128c0-35.3 28.7-64 64-64h96c35.3 0 64 28.7 64 64v32z"/></svg>
           OFFICIAL TESTER
         </div>
       </div>
@@ -679,7 +707,7 @@
       <div class="stats-row">
         <div class="stat-item">
           <div class="stat-lbl">RANK</div>
-          <div id="mRank" class="stat-val gold">#1</div>
+          <div id="mRank" class="stat-val">#1</div>
         </div>
         <div class="stat-item">
           <div class="stat-lbl">REGION</div>
@@ -692,7 +720,7 @@
       </div>
 
       <div class="breakdown-box">
-        <div class="bb-title">TIERS BREAKDOWN</div>
+        <div class="bb-title">TIER BREAKDOWN</div>
         <div id="mBreakdown" class="bb-grid"></div>
       </div>
     </div>
@@ -700,27 +728,26 @@
 
   <!-- INFO MODAL -->
   <div id="infoBackdrop" class="modal-backdrop">
-    <div class="modal" style="max-width: 400px;">
-      <div style="padding:24px; position:relative;">
+    <div class="modal" style="max-width: 400px; border: 1px solid #fff; box-shadow: 0 0 30px rgba(255,255,255,0.2);">
+      <div style="padding:10px; position:relative;">
         <button id="infoClose" class="m-close-absolute">&times;</button>
         <div style="text-align:center; margin-bottom:24px;">
-           <h2 style="font-weight:700; font-size:1.4rem; color:#fff; letter-spacing:-0.5px;">Titles & Points</h2>
-           <p style="color:#888; font-size:0.85rem;">Requirements</p>
+           <h2 style="font-weight:800; font-size:1.5rem; color:#fff; letter-spacing:-0.5px; text-shadow:0 0 10px white;">TITLES & POINTS</h2>
         </div>
         <div style="display:grid; gap:8px;">
-          <div style="display:flex;justify-content:space-between;padding:12px;background:#252525;border-radius:8px;border:1px solid #333;"><span>Combat Grandmaster</span> <span style="font-weight:700;color:#fff;">400+</span></div>
-          <div style="display:flex;justify-content:space-between;padding:12px;background:#252525;border-radius:8px;border:1px solid #333;"><span>Combat Master</span> <span style="font-weight:700;color:#fff;">250+</span></div>
-          <div style="display:flex;justify-content:space-between;padding:12px;background:#252525;border-radius:8px;border:1px solid #333;"><span>Combat Ace</span> <span style="font-weight:700;color:#fff;">100+</span></div>
-          <div style="display:flex;justify-content:space-between;padding:12px;background:#252525;border-radius:8px;border:1px solid #333;"><span>Combat Specialist</span> <span style="font-weight:700;color:#fff;">50+</span></div>
-          <div style="display:flex;justify-content:space-between;padding:12px;background:#252525;border-radius:8px;border:1px solid #333;"><span>Combat Cadet</span> <span style="font-weight:700;color:#fff;">20+</span></div>
-          <div style="display:flex;justify-content:space-between;padding:12px;background:#252525;border-radius:8px;border:1px solid #333;"><span>Combat Novice</span> <span style="font-weight:700;color:#fff;">10+</span></div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:#050505;border-radius:8px;border:1px solid #333;"><span>Combat Grandmaster</span> <span style="font-weight:700;color:#fff;text-shadow:0 0 5px white;">400+</span></div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:#050505;border-radius:8px;border:1px solid #333;"><span>Combat Master</span> <span style="font-weight:700;color:#ddd;">250+</span></div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:#050505;border-radius:8px;border:1px solid #333;"><span>Combat Ace</span> <span style="font-weight:700;color:#bbb;">100+</span></div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:#050505;border-radius:8px;border:1px solid #333;"><span>Combat Specialist</span> <span style="font-weight:700;color:#999;">50+</span></div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:#050505;border-radius:8px;border:1px solid #333;"><span>Combat Cadet</span> <span style="font-weight:700;color:#777;">20+</span></div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:#050505;border-radius:8px;border:1px solid #333;"><span>Combat Novice</span> <span style="font-weight:700;color:#555;">10+</span></div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // --- Stars Background ---
+    // --- Stars Background (Brighter white) ---
     const starCanvas = document.getElementById("stars");
     const starCtx = starCanvas.getContext("2d");
     
@@ -731,12 +758,12 @@
     window.addEventListener('resize', resizeStars);
     resizeStars();
 
-    const stars = Array(150).fill().map(() => ({
+    const stars = Array(200).fill().map(() => ({
       x: Math.random() * starCanvas.width,
       y: Math.random() * starCanvas.height,
-      r: Math.random() * 1.2,
-      a: Math.random() * 0.5 + 0.1,
-      s: Math.random() * 0.2 + 0.1
+      r: Math.random() * 1.5,
+      a: Math.random() * 0.8 + 0.2, // Higher opacity
+      s: Math.random() * 0.3 + 0.1
     }));
 
     function animateStars() {
@@ -744,8 +771,13 @@
       stars.forEach(st => {
         starCtx.beginPath();
         starCtx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+        // Pure White Glow
+        starCtx.shadowBlur = 4;
+        starCtx.shadowColor = "white";
         starCtx.fillStyle = `rgba(255, 255, 255, ${st.a})`;
         starCtx.fill();
+        starCtx.shadowBlur = 0; // Reset
+        
         st.y -= st.s;
         if (st.y < 0) { st.y = starCanvas.height; st.x = Math.random() * starCanvas.width; }
       });
@@ -753,7 +785,7 @@
     }
     animateStars();
 
-    // --- Data Logic ---
+    // --- Data Logic (Unchanged, just visuals) ---
     let players = [];
     const CATEGORIES = ["sword","axe","crystal","nethpot","uhc","smp","mace"];
     const CAT_ICONS = {
@@ -781,19 +813,14 @@
       { min: 0,   t: "Beginner" }
     ];
 
-    // Helper to get image URL (Uses vzge.me which supports cracked/offline mode via username)
     function getImageUrl(name, type = 'bust') {
       const cleanName = name ? name.trim() : 'MHF_Steve';
-      // vzge.me automatically handles username -> uuid resolution
-      if (type === 'bust') {
-        return `https://vzge.me/bust/${cleanName}`;
-      } else {
-        return `https://vzge.me/face/${cleanName}`;
-      }
+      return type === 'bust' 
+        ? `https://vzge.me/bust/${cleanName}` 
+        : `https://vzge.me/face/${cleanName}`;
     }
 
     async function loadData() {
-      // Try local or github
       const urls = [
         "./players.json",
         "https://raw.githubusercontent.com/nyiyuji016-rgb/invis-x/main/players.json"
@@ -806,7 +833,6 @@
             const json = await res.json();
             let raw = Array.isArray(json) ? json : (json.players || []);
             
-            // Handle Object format
             if (!Array.isArray(raw) && typeof json === 'object') {
                raw = [];
                for(let [k,v] of Object.entries(json)) {
@@ -819,7 +845,6 @@
 
             if (raw.length) {
               players = raw;
-              console.log("Loaded players:", players.length);
               return;
             }
           }
@@ -852,7 +877,6 @@
         }
       });
 
-      // Calculate totals
       for (let p of map.values()) {
         let pts = 0;
         Object.values(p.tiers).forEach(t => pts += getPoints(t));
@@ -860,12 +884,10 @@
         p.title = getTitle(pts);
       }
 
-      // Sort
       const sorted = Array.from(map.values()).sort((a,b) => b.points - a.points || a.name.localeCompare(b.name));
       return { list: sorted, map };
     }
 
-    // --- Rendering ---
     const overallView = document.getElementById("overallView");
     const tierView = document.getElementById("tierView");
     const searchInput = document.getElementById("searchInput");
@@ -875,12 +897,9 @@
 
     function render() {
       const term = searchInput.value.toLowerCase();
-      
-      // Update Page Title
       const niceName = currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1);
       pageTitle.textContent = niceName;
 
-      // Toggle views
       if (currentFilter === "overall") {
         tierView.classList.add("hidden");
         overallView.classList.remove("hidden");
@@ -897,7 +916,7 @@
       const filtered = processedData.list.filter(p => p.name.toLowerCase().includes(term));
       
       if (!filtered.length) {
-        overallView.innerHTML = `<div class="empty-state">No players found.</div>`;
+        overallView.innerHTML = `<div class="empty-state">No agents found in database.</div>`;
         return;
       }
 
@@ -905,7 +924,6 @@
         const el = document.createElement("div");
         el.className = "player-card-row";
         
-        // Mini pills for breakdown
         const breakdownHtml = CATEGORIES.map(c => {
           const t = p.tiers[c];
           return `<div class="mini-pill ${t ? 'active' : ''}" title="${c}">${t || '-'}</div>`;
@@ -914,7 +932,7 @@
         el.innerHTML = `
           <div class="rank-num ${idx < 3 ? 'top-3' : ''}">#${idx + 1}</div>
           <div class="player-info">
-            <img src="${getImageUrl(p.name, 'bust')}" data-player="${p.name}" data-type="bust" class="player-head" loading="lazy" onerror="this.onerror=null; this.src='https://vzge.me/bust/X-Steve'">
+            <img src="${getImageUrl(p.name, 'bust')}" data-player="${p.name}" class="player-head" loading="lazy" onerror="this.src='https://vzge.me/bust/X-Steve'">
             <div class="player-details">
               <div class="player-name">${p.name}</div>
               <div class="player-meta">
@@ -939,15 +957,12 @@
 
     function renderTier(term) {
       tierView.innerHTML = "";
-      // Create columns 1-5
       const cols = [1,2,3,4,5];
       const tierMap = { 1: [], 2: [], 3: [], 4: [], 5: [] };
 
-      // Filter raw players list by current category
       const rawFiltered = players.filter(p => p.cat === currentFilter && p.name.toLowerCase().includes(term));
       
       rawFiltered.forEach(p => {
-        // Parse "LT4" -> 4
         const m = p.tier.match(/(\d)$/);
         if (m) {
           const t = parseInt(m[1]);
@@ -955,10 +970,8 @@
         }
       });
 
-      // Sort within tiers (HT > LT)
       Object.keys(tierMap).forEach(k => {
         tierMap[k].sort((a,b) => {
-           // Sort HT before LT
            const aH = a.tier.startsWith("HT");
            const bH = b.tier.startsWith("HT");
            if (aH && !bH) return -1;
@@ -974,12 +987,12 @@
         
         let html = `<div class="tier-header">TIER ${num}</div><div class="tier-list">`;
         if (items.length === 0) {
-           html += `<div style="padding:12px;text-align:center;font-size:0.8rem;color:#444;">Empty</div>`;
+           html += `<div style="padding:20px;text-align:center;font-size:0.7rem;color:#333;">VOID</div>`;
         } else {
           items.forEach(p => {
             html += `
               <div class="tier-player" onclick="findAndOpen('${p.name}')">
-                <img src="${getImageUrl(p.name, 'face')}" data-player="${p.name}" data-type="face" class="tp-head" loading="lazy" onerror="this.onerror=null; this.src='https://vzge.me/face/X-Steve'">
+                <img src="${getImageUrl(p.name, 'face')}" class="tp-head" loading="lazy" onerror="this.src='https://vzge.me/face/X-Steve'">
                 <div class="tp-name">${p.name}</div>
                 <div class="tp-badge" data-tier="${p.tier}">${p.tier}</div>
               </div>
@@ -999,18 +1012,13 @@
     
     function openModal(data, rank) {
       mHead.src = getImageUrl(data.name, 'bust');
-      mHead.dataset.player = data.name;
-      mHead.dataset.type = 'bust';
-      mHead.onerror = function() { this.onerror=null; this.src='https://vzge.me/bust/X-Steve'; };
+      mHead.onerror = function() { this.src='https://vzge.me/bust/X-Steve'; };
 
       document.getElementById("mName").textContent = data.name;
       
       const testerRow = document.getElementById("mTesterRow");
-      if (data.tester) {
-        testerRow.classList.remove("hidden");
-      } else {
-        testerRow.classList.add("hidden");
-      }
+      if (data.tester) testerRow.classList.remove("hidden");
+      else testerRow.classList.add("hidden");
 
       document.getElementById("mTitle").textContent = data.title;
       
@@ -1031,7 +1039,7 @@
         const div = document.createElement("div");
         div.className = "bd-item";
         div.innerHTML = `
-          <div class="bd-icon" title="${c}"><img src="${CAT_ICONS[c]}" alt="${c}" onerror="this.style.display='none'"></div>
+          <div class="bd-icon" title="${c}"><img src="${CAT_ICONS[c]}" alt="" onerror="this.style.display='none'"></div>
           <div class="bd-badge ${cls}">${t || '-'}</div>
         `;
         bd.appendChild(div);
@@ -1047,13 +1055,11 @@
     function findAndOpen(name) {
       const p = processedData.map.get(name);
       if (p) {
-        // find rank
         const idx = processedData.list.indexOf(p);
         openModal(p, idx + 1);
       }
     }
 
-    // --- Info Modal ---
     const infoBtn = document.getElementById("infoBtn");
     const infoBackdrop = document.getElementById("infoBackdrop");
     const infoClose = document.getElementById("infoClose");
@@ -1062,15 +1068,12 @@
     infoClose.onclick = () => infoBackdrop.classList.remove("show");
     infoBackdrop.onclick = (e) => { if(e.target===infoBackdrop) infoBackdrop.classList.remove("show"); }
 
-    // --- Event Listeners ---
     document.querySelectorAll(".nav-btn").forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll(".nav-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
         btn.setAttribute("aria-pressed", "true");
         currentFilter = btn.dataset.filter;
         render();
-        
-        // Mobile UX: scroll selected into view
         if (window.innerWidth < 768) {
            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
@@ -1079,7 +1082,6 @@
     
     searchInput.oninput = render;
 
-    // --- Init ---
     (async () => {
       await loadData();
       processedData = processData();
