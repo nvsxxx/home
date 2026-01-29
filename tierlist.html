@@ -160,20 +160,18 @@
     .t-badge { font-size: 0.6rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #27272a; color: #555; min-width: 30px; text-align: center; }
     .tb-active { color: #fff; }
 
-    /* --- VIEW: TIER COLUMNS (Gamemode View) --- */
+    /* --- VIEW: TIER COLUMNS --- */
     .tier-board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 16px;
     }
-    
     .tier-col-wrapper {
       background: var(--bg-card);
       border-radius: 8px;
       overflow: hidden;
       min-height: 400px;
     }
-
     .t-header {
       padding: 12px;
       text-align: center;
@@ -201,10 +199,7 @@
       transition: 0.1s;
     }
     .t-player:hover { background: rgba(255,255,255,0.05); border-radius: 4px; }
-    
-    /* Small Skin Icon in Tier Board */
     .t-skin-face { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; background: #000; }
-    
     .t-player span { font-size: 0.85rem; font-weight: 600; color: #ddd; }
     .t-player:hover span { color: #fff; }
 
@@ -229,9 +224,52 @@
 
     /* PLAYER MODAL STYLES */
     .m-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 24px; }
-    .m-skin { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
-    .m-name { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #fff; }
-    .m-tester { font-size: 0.7rem; font-weight: 700; background: #7f1d1d; color: #fca5a5; padding: 2px 8px; border-radius: 4px; margin-top: 4px; letter-spacing: 1px; }
+    
+    /* Profile Frame Logic */
+    .m-skin-container {
+      position: relative;
+      width: 100px; height: 100px;
+      margin-bottom: 12px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+    }
+    
+    .m-skin { 
+      width: 90%; height: 90%; 
+      object-fit: cover; /* Face/Bust centered */
+      border-radius: 50%;
+      background: #0b0d12;
+    }
+
+    /* Rank Frames */
+    .frame-1 {
+      border: 3px solid #fbbf24;
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+    }
+    .frame-2 {
+      border: 3px solid #9ca3af;
+      box-shadow: 0 0 20px rgba(156, 163, 175, 0.4);
+    }
+    .frame-3 {
+      border: 3px solid #b45309;
+      box-shadow: 0 0 20px rgba(180, 83, 9, 0.4);
+    }
+    .frame-n {
+      border: 3px solid #27272a; /* Default border */
+    }
+
+    .m-name { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 4px; }
+    
+    /* Title Pill */
+    .m-title-pill {
+      background: rgba(251, 191, 36, 0.1); 
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fbbf24;
+      font-size: 0.8rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 50px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .m-title-icon { width: 14px; height: 14px; fill: currentColor; }
 
     .m-label { font-size: 0.9rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
 
@@ -258,7 +296,6 @@
     .mt-icon-img { width: 22px; height: 22px; object-fit: contain; }
     .mt-badge { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: #444; }
 
-    /* Modal Colors */
     .lvl-1 .mt-circle { border-color: #713f12; background: rgba(234, 179, 8, 0.05); }
     .lvl-1 .mt-badge { color: #facc15; }
     .lvl-2 .mt-circle { border-color: #1e293b; background: rgba(148, 163, 184, 0.05); }
@@ -306,6 +343,7 @@
   <svg style="display:none;">
     <defs>
       <symbol id="icon-trophy" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM7 8V7h2v3.82c-1.21-.48-2-1.44-2-2.82zm10 0c0 1.38-.79 2.34-2 2.82V7h2v1z"/></symbol>
+      <symbol id="icon-diamond" viewBox="0 0 24 24"><path d="M12 2L2 12l10 10 10-10L12 2z"/></symbol>
     </defs>
   </svg>
 
@@ -377,11 +415,17 @@
     <div class="modal-box">
       <button class="m-close-btn" onclick="document.getElementById('playerModal').classList.remove('show')">&times;</button>
       
-      <!-- Header -->
+      <!-- Header with Frame -->
       <div class="m-header">
-        <img id="mHead" src="" class="m-skin">
+        <div id="mSkinContainer" class="m-skin-container">
+          <img id="mHead" src="" class="m-skin">
+        </div>
         <div id="mName" class="m-name">Player</div>
-        <div id="mTester" class="m-tester hidden">TESTER</div>
+        <!-- Title Pill -->
+        <div id="mTitlePill" class="m-title-pill">
+            <svg class="m-title-icon"><use href="#icon-diamond"></use></svg>
+            <span id="mTitleText">Title</span>
+        </div>
       </div>
 
       <!-- Position -->
@@ -465,7 +509,6 @@
         }
       } catch(e) {}
 
-      // Data Processing
       const map = new Map();
       players.forEach(p => {
         if(!CATEGORIES.includes(p.cat)) return;
@@ -562,7 +605,6 @@
             ${tiersHtml}
           </div>
         `;
-        // FIXED: Click opens modal
         el.onclick = () => openPlayerModal(p);
         listContainer.appendChild(el);
       });
@@ -619,14 +661,28 @@
 
     function openPlayerModal(p) {
       const img = document.getElementById('mHead');
+      const container = document.getElementById('mSkinContainer');
+      
+      // Update Image
       img.src = `https://vzge.me/bust/${p.name}`;
       img.onerror = function() { this.src = FALLBACK_BUST; };
       
+      // Update Name & Title
       document.getElementById('mName').textContent = p.name;
-      const testerBadge = document.getElementById('mTester');
-      if(p.tester) testerBadge.classList.remove('hidden'); else testerBadge.classList.add('hidden');
+      document.getElementById('mTitleText').textContent = p.title;
 
+      // Update Frame Logic (Top 1,2,3 Sync)
       const rank = processedList.indexOf(p) + 1;
+      
+      // Reset classes
+      container.className = 'm-skin-container';
+      
+      // Apply Frame
+      if(rank === 1) container.classList.add('frame-1');
+      else if(rank === 2) container.classList.add('frame-2');
+      else if(rank === 3) container.classList.add('frame-3');
+      else container.classList.add('frame-n');
+
       document.getElementById('mRankNum').textContent = rank + ".";
       document.getElementById('mPoints').textContent = `(${p.total} points)`;
 
