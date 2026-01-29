@@ -20,26 +20,21 @@
       --bg-nav: #13151b;
       --bg-card: #161921;
       --bg-card-hover: #1c2029;
-      --bg-modal: #0f1116; /* Darker modal bg */
+      --bg-modal: #0f1116; 
       
       --text-main: #ffffff;
       --text-sub: #9ca3af;
 
-      /* RANK COLORS (For main list) */
+      /* RANK COLORS */
       --rank-1: #fbbf24; 
       --rank-2: #9ca3af; 
       --rank-3: #b45309; 
       --rank-n: #27272a; 
 
-      /* BADGE COLORS (Matching Screenshot) */
-      /* Level 1 (HT1/LT1) = Gold/Yellow */
-      --c-1: #fbbf24; 
-      /* Level 2 (HT2/LT2) = Blue/Grey */
-      --c-2: #94a3b8; 
-      /* Level 3 (HT3/LT3) = Orange/Brown */
-      --c-3: #f97316; 
-      /* Level 4/5 = Green/Generic */
-      --c-4: #22c55e;
+      /* BADGE COLORS */
+      --c-1: #fbbf24; /* Gold */
+      --c-2: #94a3b8; /* Blue/Grey */
+      --c-3: #f97316; /* Orange */
       
       --font-display: 'Poppins', sans-serif;
       --font-body: 'Inter', sans-serif;
@@ -56,6 +51,12 @@
       overflow-x: hidden;
     }
 
+    /* --- ICONS (SVG Styling) --- */
+    .icon-svg {
+      width: 20px; height: 20px;
+      fill: currentColor;
+    }
+
     /* --- NAVBAR --- */
     .navbar {
       background: var(--bg-nav);
@@ -65,21 +66,24 @@
       padding: 0 40px; position: sticky; top: 0; z-index: 100;
     }
 
-    .nav-tabs { display: flex; height: 100%; gap: 4px; overflow-x: auto; }
+    .nav-tabs { display: flex; height: 100%; gap: 8px; overflow-x: auto; }
     
     .nav-tab {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       height: 100%; padding: 0 16px; min-width: 80px;
       color: #6b7280; font-weight: 600; font-size: 0.8rem;
       border-bottom: 3px solid transparent; transition: 0.2s; cursor: pointer; background: transparent; border: none;
+      gap: 4px;
     }
-    .nav-tab img { width: 22px; height: 22px; filter: grayscale(100%) opacity(0.5); margin-bottom: 4px; transition: 0.2s; }
     
     .nav-tab:hover, .nav-tab.active { color: #fff; }
-    .nav-tab:hover img, .nav-tab.active img { filter: grayscale(0) opacity(1); }
     .nav-tab.active { border-bottom-color: #fff; }
+    
+    /* SVG Color transition in Nav */
+    .nav-tab svg { fill: #6b7280; transition: 0.2s; width: 22px; height: 22px; }
+    .nav-tab:hover svg, .nav-tab.active svg { fill: #fff; }
 
-    /* --- LAYOUT --- */
+    /* --- MAIN LAYOUT --- */
     .container { max-width: 1300px; margin: 0 auto; padding: 30px 20px; width: 100%; }
 
     .controls { display: flex; justify-content: flex-end; margin-bottom: 20px; }
@@ -100,7 +104,7 @@
     .th-center { text-align: center; }
     .th-right { text-align: right; padding-right: 20px; }
 
-    /* --- PLAYER CARD (Main List) --- */
+    /* --- PLAYER CARD --- */
     .card {
       display: grid;
       grid-template-columns: 80px 280px 100px 1fr;
@@ -114,6 +118,7 @@
     }
     .card:hover { transform: translateY(-2px); background: var(--bg-card-hover); z-index: 10; }
 
+    /* Rank Slant */
     .c-rank { position: relative; height: 100%; width: 100%; }
     .rank-bg {
       position: absolute; top: 0; left: 0; bottom: 0; width: 120%;
@@ -126,10 +131,12 @@
       font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; font-style: italic;
       padding-right: 20px; color: #fff;
     }
+    /* Rank Colors */
     .r1 .rank-bg { background: var(--rank-1); } .r1 .rank-val { color: #000; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
     .r2 .rank-bg { background: var(--rank-2); } .r2 .rank-val { color: #000; }
     .r3 .rank-bg { background: var(--rank-3); } .r3 .rank-val { color: #000; }
 
+    /* Player Info */
     .c-info { position: relative; z-index: 5; display: flex; align-items: center; margin-left: -15px; }
     .skin-bust { width: 56px; height: 56px; object-fit: contain; filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.6)); margin-right: 12px; }
     .meta { display: flex; flex-direction: column; justify-content: center; }
@@ -137,20 +144,34 @@
     .p-title { font-size: 0.75rem; color: #9ca3af; display: flex; align-items: center; gap: 5px; }
     .diamond { color: #fbbf24; font-size: 0.7rem; }
 
+    /* Region */
     .c-region { display: flex; align-items: center; justify-content: center; z-index: 2; }
     .badge-reg { font-weight: 800; font-size: 0.9rem; padding: 4px 8px; border-radius: 4px; background: #333; color: #888; }
     .reg-NA { background: #7f1d1d; color: #fca5a5; }
     .reg-EU { background: #14532d; color: #86efac; }
     .reg-ASIA { background: #1e3a8a; color: #93c5fd; }
 
+    /* Tiers (Main List) */
     .c-tiers { display: flex; align-items: center; justify-content: flex-end; padding-right: 20px; gap: 14px; z-index: 2; }
     .t-col { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-    .t-icon { width: 18px; height: 18px; opacity: 0.4; filter: grayscale(1); }
-    .t-icon.active { opacity: 1; filter: grayscale(0); }
-    .t-badge { font-size: 0.6rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #27272a; color: #555; min-width: 30px; text-align: center; }
-    .tb-active { color: #fff; }
+    
+    /* SVGs in list */
+    .t-svg-icon { width: 18px; height: 18px; fill: #444; }
+    .t-active .t-svg-icon { fill: #fff; } /* Icon turns white if active */
+    
+    /* Specific Icon Colors for visual flair in list */
+    .t-active[data-cat="sword"] .t-svg-icon { fill: #60a5fa; }
+    .t-active[data-cat="axe"] .t-svg-icon { fill: #60a5fa; }
+    .t-active[data-cat="crystal"] .t-svg-icon { fill: #c084fc; }
+    .t-active[data-cat="nethpot"] .t-svg-icon { fill: #f472b6; }
+    .t-active[data-cat="uhc"] .t-svg-icon { fill: #f87171; }
+    .t-active[data-cat="smp"] .t-svg-icon { fill: #4ade80; }
+    .t-active[data-cat="mace"] .t-svg-icon { fill: #94a3b8; }
 
-    /* --- NEW MODAL STYLES (MATCHING SCREENSHOT) --- */
+    .t-badge { font-size: 0.6rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; background: #27272a; color: #555; min-width: 30px; text-align: center; }
+    .tb-active { color: #fff; } /* Just makes text white, background handled via modal classes usually, keeping minimal here */
+
+    /* --- MODAL (Exact match) --- */
     .modal-wrap {
       position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200;
       display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
@@ -164,161 +185,130 @@
       border: 1px solid #1f222b;
       width: 100%; max-width: 500px;
       position: relative;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
     }
 
     .m-close-btn { position: absolute; top: 12px; right: 12px; color: #555; font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
     .m-close-btn:hover { color: #fff; }
 
-    .m-header {
-      display: flex; flex-direction: column; align-items: center; margin-bottom: 24px;
+    /* Header */
+    .m-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 24px; }
+    .m-skin { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
+    .m-name { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #fff; }
+    .m-tester { font-size: 0.7rem; font-weight: 700; background: #7f1d1d; color: #fca5a5; padding: 2px 8px; border-radius: 4px; margin-top: 4px; letter-spacing: 1px; }
+
+    /* Section Label */
+    .m-label { font-size: 0.9rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+
+    /* Position Box */
+    .m-pos-box {
+      background: #13151c; border: 1px solid #27272a; border-radius: 8px;
+      padding: 12px 20px; display: flex; align-items: center; margin-bottom: 24px;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
     }
-    .m-skin {
-      width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px;
-      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
-    }
-    .m-name {
-      font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #fff;
-    }
-    .m-tester {
-      font-size: 0.7rem; font-weight: 700; background: #7f1d1d; color: #fca5a5; 
-      padding: 2px 8px; border-radius: 4px; margin-top: 4px; letter-spacing: 1px;
+    .m-pos-rank { font-family: var(--font-display); font-size: 2rem; font-weight: 900; font-style: italic; color: #fff; margin-right: 12px; }
+    
+    .m-trophy { width: 24px; height: 24px; fill: #fbbf24; margin-right: 8px; }
+    
+    .m-pos-text { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #fff; margin-right: 8px; }
+    .m-pos-pts { font-size: 1rem; color: #6b7280; font-weight: 500; }
+
+    /* Tiers Box */
+    .m-tiers-box {
+      background: #13151c; border: 1px solid #27272a; border-radius: 8px;
+      padding: 16px; display: flex; flex-wrap: wrap; gap: 14px;
     }
 
-    /* SECTION 1: POSITION */
-    .m-section-label {
-      font-size: 0.85rem; color: #6b7280; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;
-    }
+    .mt-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
     
-    .m-rank-card {
-      background: #13151c; /* Darker box */
-      border: 1px solid #222;
-      border-radius: 8px;
-      padding: 12px 20px;
-      display: flex; align-items: center;
-      margin-bottom: 24px;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+    /* Circle Icon Container */
+    .mt-circle {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #0b0d12; display: grid; place-items: center;
+      border: 2px solid #27272a; position: relative;
     }
-    
-    .m-rank-num {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      font-weight: 900;
-      font-style: italic;
-      color: #fff;
-      margin-right: 12px;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    }
-    
-    .m-trophy { width: 20px; height: 20px; margin-right: 8px; }
-    
-    .m-rank-text {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #fff;
-      margin-right: 8px;
-    }
-    
-    .m-rank-pts {
-      font-size: 1rem;
-      color: #6b7280;
-      font-weight: 500;
-    }
+    .mt-svg { width: 20px; height: 20px; fill: #444; }
 
-    /* SECTION 2: TIERS */
-    .m-tiers-card {
-      background: #13151c;
-      border: 1px solid #222;
-      border-radius: 8px;
-      padding: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+    /* Text Badge below circle */
+    .mt-badge { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: #444; }
 
-    .m-tier-item {
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-    }
-    
-    .m-tier-circle {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: #0b0d12;
-      display: grid; place-items: center;
-      border: 2px solid #333;
-    }
-    .m-tier-icon { width: 18px; height: 18px; opacity: 0.8; }
-    
-    .m-tier-text {
-      font-family: var(--font-display);
-      font-size: 0.85rem;
-      font-weight: 800;
-    }
+    /* -- Modal Colors (Matches Screenshot) -- */
+    /* Level 1 (HT1/LT1) -> Gold/Yellow */
+    .lvl-1 .mt-circle { border-color: #713f12; background: rgba(234, 179, 8, 0.05); }
+    .lvl-1 .mt-svg { fill: #facc15; }
+    .lvl-1 .mt-badge { color: #facc15; }
 
-    /* Coloring Logic based on screenshot */
-    /* Level 1 (Gold) */
-    .lvl-1 .m-tier-circle { border-color: rgba(251, 191, 36, 0.3); }
-    .lvl-1 .m-tier-text { color: var(--c-1); }
-    
-    /* Level 2 (Blue/Grey) */
-    .lvl-2 .m-tier-circle { border-color: rgba(148, 163, 184, 0.3); }
-    .lvl-2 .m-tier-text { color: var(--c-2); }
+    /* Level 2 (HT2/LT2) -> Blue/Grey */
+    .lvl-2 .mt-circle { border-color: #1e293b; background: rgba(148, 163, 184, 0.05); }
+    .lvl-2 .mt-svg { fill: #94a3b8; }
+    .lvl-2 .mt-badge { color: #94a3b8; }
 
-    /* Level 3 (Orange/Brown) */
-    .lvl-3 .m-tier-circle { border-color: rgba(249, 115, 22, 0.3); }
-    .lvl-3 .m-tier-text { color: var(--c-3); }
-    
-    /* Empty/None */
-    .lvl-n .m-tier-circle { border-color: #222; opacity: 0.5; }
-    .lvl-n .m-tier-icon { opacity: 0.2; filter: grayscale(1); }
-    .lvl-n .m-tier-text { display: none; }
+    /* Level 3 (HT3/LT3) -> Orange/Brown */
+    .lvl-3 .mt-circle { border-color: #431407; background: rgba(249, 115, 22, 0.05); }
+    .lvl-3 .mt-svg { fill: #fb923c; }
+    .lvl-3 .mt-badge { color: #fb923c; }
 
+    /* Empty */
+    .lvl-n .mt-circle { opacity: 0.4; }
+    .lvl-n .mt-badge { display: none; }
 
     /* Responsive */
     @media (max-width: 1024px) {
       .thead, .c-region, .c-tiers { display: none; }
       .card { grid-template-columns: 60px 1fr; height: auto; padding-right: 15px; }
       .rank-bg { width: 100%; clip-path: none; border-radius: 8px 0 0 8px; }
-      .rank-val { padding-right: 0; font-size: 1.4rem; }
       .c-info { margin-left: 10px; padding: 10px 0; }
     }
   </style>
 </head>
 <body>
 
+  <!-- SVG DEFINITIONS (Hidden) -->
+  <svg style="display:none;">
+    <defs>
+      <symbol id="icon-overall" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v2a6 6 0 0 1-6 6H9a6 6 0 0 1-6-6v-2H2a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3zm14 2H5v3h14V5zm-8 10a4 4 0 0 0 4-4v-2H9v2a4 4 0 0 0 4 4z"/></symbol>
+      <symbol id="icon-sword" viewBox="0 0 24 24"><path d="M14.5 4l-5 5 2.5 2.5 5-5-2.5-2.5zM3 17.5L6.5 21l6.5-6.5-3.5-3.5L3 17.5zM17 2l2 2-2 2 1 1-2 2-1-1-2 2 3.5 3.5-1.5 1.5-3.5-3.5L8 16l-4 4-2-2 4-4-4.5-4.5 3.5-3.5 1.5-1.5 3.5 3.5-2 2 1 1 2-2-1-1 2-2z"/></symbol> <!-- Stylized Sword -->
+      <symbol id="icon-axe" viewBox="0 0 24 24"><path d="M3 3h8v8H3zM3 13h8v8H3z"/></symbol> <!-- Abstract Axe/Block -->
+      <symbol id="icon-crystal" viewBox="0 0 24 24"><path d="M12 2l6 4v7l-6 4-6-4V6l6-4z"/></symbol> <!-- Hexagon -->
+      <symbol id="icon-nethpot" viewBox="0 0 24 24"><path d="M12 2l-2 4H7v4h10V6h-3l-2-4zM7 11h10v9a5 5 0 0 1-10 0v-9z"/></symbol> <!-- Potion -->
+      <symbol id="icon-uhc" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol> <!-- Heart -->
+      <symbol id="icon-smp" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></symbol> <!-- Pearl/Eye -->
+      <symbol id="icon-mace" viewBox="0 0 24 24"><path d="M4 20l5-5 5 5-5 5-5-5zM15 4l5 5-5 5-5-5 5-5z"/></symbol> <!-- Abstract Hammer/Mace -->
+    </defs>
+  </svg>
+
   <nav class="navbar">
     <div class="nav-tabs" id="navTabs">
       <button class="nav-tab active" data-filter="overall">
-        <img src="https://cdn-icons-png.flaticon.com/512/10697/10697368.png" alt="Overall">
+        <svg class="icon-svg"><use href="#icon-overall"></use></svg>
         <span>Overall</span>
       </button>
       <button class="nav-tab" data-filter="sword">
-        <img src="https://cdn-icons-png.flaticon.com/512/9637/9637213.png" alt="Sword">
+        <svg class="icon-svg"><use href="#icon-sword"></use></svg>
         <span>Sword</span>
       </button>
       <button class="nav-tab" data-filter="axe">
-        <img src="https://cdn-icons-png.flaticon.com/512/8144/8144456.png" alt="Axe">
+        <svg class="icon-svg"><use href="#icon-axe"></use></svg>
         <span>Axe</span>
       </button>
       <button class="nav-tab" data-filter="crystal">
-        <img src="https://cdn-icons-png.flaticon.com/512/2622/2622557.png" alt="Crystal">
+        <svg class="icon-svg"><use href="#icon-crystal"></use></svg>
         <span>Crystal</span>
       </button>
       <button class="nav-tab" data-filter="nethpot">
-        <img src="https://cdn-icons-png.flaticon.com/512/867/867909.png" alt="Pot">
+        <svg class="icon-svg"><use href="#icon-nethpot"></use></svg>
         <span>Pot</span>
       </button>
       <button class="nav-tab" data-filter="uhc">
-        <img src="https://cdn-icons-png.flaticon.com/512/833/833475.png" alt="UHC">
+        <svg class="icon-svg"><use href="#icon-uhc"></use></svg>
         <span>UHC</span>
       </button>
       <button class="nav-tab" data-filter="smp">
-        <img src="https://cdn-icons-png.flaticon.com/512/3033/3033143.png" alt="SMP">
+        <svg class="icon-svg"><use href="#icon-smp"></use></svg>
         <span>SMP</span>
       </button>
       <button class="nav-tab" data-filter="mace">
-        <img src="https://cdn-icons-png.flaticon.com/512/9349/9349884.png" alt="Mace">
+        <svg class="icon-svg"><use href="#icon-mace"></use></svg>
         <span>Mace</span>
       </button>
     </div>
@@ -337,55 +327,44 @@
     </div>
 
     <div id="listContainer">
-      <!-- JS injects rows here -->
+      <!-- Generated via JS -->
     </div>
   </div>
 
-  <!-- MODAL (Redesigned) -->
+  <!-- PLAYER MODAL -->
   <div id="playerModal" class="modal-wrap">
     <div class="modal-box">
       <button class="m-close-btn" onclick="document.getElementById('playerModal').classList.remove('show')">&times;</button>
       
-      <!-- Header: Skin & Name -->
+      <!-- 1. Header -->
       <div class="m-header">
         <img id="mHead" src="" class="m-skin">
         <div id="mName" class="m-name">Player</div>
         <div id="mTester" class="m-tester hidden">TESTER</div>
       </div>
 
-      <!-- SECTION: POSITION -->
-      <div class="m-section-label">POSITION</div>
-      <div class="m-rank-card">
-        <div id="mRankNum" class="m-rank-num">1.</div>
-        <img src="https://cdn-icons-png.flaticon.com/512/5906/5906109.png" class="m-trophy" alt="🏆">
-        <div class="m-rank-text">OVERALL</div>
-        <div id="mPoints" class="m-rank-pts">(0 points)</div>
+      <!-- 2. Position Section -->
+      <div class="m-label">POSITION</div>
+      <div class="m-pos-box">
+        <div id="mRankNum" class="m-pos-rank">1.</div>
+        <svg class="m-trophy"><use href="#icon-overall"></use></svg>
+        <div class="m-pos-text">OVERALL</div>
+        <div id="mPoints" class="m-pos-pts">(0 points)</div>
       </div>
 
-      <!-- SECTION: TIERS -->
-      <div class="m-section-label">TIERS</div>
-      <div id="mTiersGrid" class="m-tiers-card">
-        <!-- Icons injected via JS -->
+      <!-- 3. Tiers Section -->
+      <div class="m-label">TIERS</div>
+      <div id="mTiersGrid" class="m-tiers-box">
+        <!-- JS Injects Icons Here -->
       </div>
-
     </div>
   </div>
 
   <script>
     // --- Config ---
     const CATEGORIES = ["sword","axe","crystal","nethpot","uhc","smp","mace"];
-    const ICONS = {
-      sword: "https://cdn-icons-png.flaticon.com/512/9637/9637213.png",
-      axe: "https://cdn-icons-png.flaticon.com/512/8144/8144456.png",
-      crystal: "https://cdn-icons-png.flaticon.com/512/2622/2622557.png",
-      nethpot: "https://cdn-icons-png.flaticon.com/512/867/867909.png",
-      uhc: "https://cdn-icons-png.flaticon.com/512/833/833475.png",
-      smp: "https://cdn-icons-png.flaticon.com/512/3033/3033143.png",
-      mace: "https://cdn-icons-png.flaticon.com/512/9349/9349884.png"
-    };
-    const FALLBACK_SKIN = "https://vzge.me/bust/X-Steve";
-
     const POINTS = { "HT1": 60, "LT1": 30, "HT2": 30, "LT2": 15, "HT3": 15, "LT3": 14, "HT4": 8, "LT4": 6, "HT5": 4, "LT5": 1 };
+    const FALLBACK_SKIN = "https://vzge.me/bust/X-Steve";
 
     let players = [];
     let processedList = [];
@@ -400,23 +379,17 @@
       return "Novice";
     }
 
-    // Helper for main list badges
-    function getBadgeClass(tier) {
-      if(!tier) return "";
-      return "tb-active"; 
-    }
-
-    // Helper for Modal Colors (Matches screenshot style)
+    // Modal Styling Logic
     function getLevelClass(tier) {
       if(!tier) return "lvl-n";
-      if(tier.includes('1')) return "lvl-1"; // Gold
-      if(tier.includes('2')) return "lvl-2"; // Blue/Grey
-      if(tier.includes('3')) return "lvl-3"; // Orange/Brown
-      return "lvl-1"; // Default
+      if(tier.includes('1')) return "lvl-1"; 
+      if(tier.includes('2')) return "lvl-2"; 
+      if(tier.includes('3')) return "lvl-3"; 
+      return "lvl-1"; 
     }
 
     async function init() {
-      // 1. Load
+      // 1. Data Load
       try {
         const req = await fetch('./players.json');
         if(req.ok) {
@@ -434,24 +407,19 @@
         }
       } catch(e) {}
 
-      // 2. Fallback Data
       if(!players.length) {
         players = [
           {name:"Marlowww", cat:"uhc", tier:"HT1", region:"NA"},
           {name:"Marlowww", cat:"sword", tier:"LT1", region:"NA"},
-          {name:"Marlowww", cat:"axe", tier:"LT1", region:"NA"},
-          {name:"Marlowww", cat:"crystal", tier:"HT1", region:"NA"},
           {name:"Marlowww", cat:"nethpot", tier:"HT1", region:"NA"},
           {name:"ItzRealMe", cat:"sword", tier:"HT3", region:"NA"},
           {name:"ItzRealMe", cat:"crystal", tier:"HT1", region:"NA"},
-          {name:"ItzRealMe", cat:"nethpot", tier:"HT1", region:"NA"},
           {name:"coldified", cat:"uhc", tier:"LT1", region:"EU"},
-          {name:"coldified", cat:"axe", tier:"LT1", region:"EU"},
-          {name:"coldified", cat:"sword", tier:"HT2", region:"EU"}
+          {name:"BlvckWlf", cat:"axe", tier:"HT2", region:"ASIA"}
         ];
       }
 
-      // 3. Group & Sort
+      // 2. Group
       const map = new Map();
       players.forEach(p => {
         if(!CATEGORIES.includes(p.cat)) return;
@@ -494,7 +462,6 @@
       }
 
       displayData.forEach((p, index) => {
-        // Find actual rank in overall list
         const actualRank = processedList.indexOf(p) + 1;
         
         let rankClass = "rn";
@@ -504,13 +471,13 @@
 
         const regClass = `reg-${p.region}`;
 
-        // Build main list tiers (Simple view)
+        // Main List Tiers
         const tiersHtml = CATEGORIES.map(cat => {
           const t = p.tiers[cat];
           const hasTier = !!t;
           return `
-            <div class="t-col">
-              <img src="${ICONS[cat]}" class="t-icon ${hasTier?'active':''}">
+            <div class="t-col ${hasTier?'t-active':''}" data-cat="${cat}">
+              <svg class="t-svg-icon"><use href="#icon-${cat}"></use></svg>
               <div class="t-badge ${hasTier?'tb-active':''}">${t || '-'}</div>
             </div>
           `;
@@ -553,17 +520,13 @@
       img.onerror = function() { this.src = FALLBACK_SKIN; };
       
       document.getElementById('mName').textContent = p.name;
-      
       const testerBadge = document.getElementById('mTester');
-      if(p.tester) testerBadge.classList.remove('hidden');
-      else testerBadge.classList.add('hidden');
+      if(p.tester) testerBadge.classList.remove('hidden'); else testerBadge.classList.add('hidden');
 
-      // Rank Section
       const rank = processedList.indexOf(p) + 1;
       document.getElementById('mRankNum').textContent = rank + ".";
       document.getElementById('mPoints').textContent = `(${p.total} points)`;
 
-      // Tiers Grid
       const grid = document.getElementById('mTiersGrid');
       grid.innerHTML = "";
       
@@ -572,12 +535,12 @@
         const lvlClass = getLevelClass(t);
         
         const div = document.createElement("div");
-        div.className = `m-tier-item ${lvlClass}`;
+        div.className = `mt-item ${lvlClass}`;
         div.innerHTML = `
-          <div class="m-tier-circle">
-            <img src="${ICONS[cat]}" class="m-tier-icon">
+          <div class="mt-circle">
+            <svg class="mt-svg"><use href="#icon-${cat}"></use></svg>
           </div>
-          <div class="m-tier-text">${t || ''}</div>
+          <div class="mt-badge">${t || ''}</div>
         `;
         grid.appendChild(div);
       });
@@ -585,7 +548,6 @@
       document.getElementById('playerModal').classList.add('show');
     }
 
-    // Events
     document.querySelectorAll('.nav-tab').forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
@@ -594,11 +556,9 @@
         render();
       }
     });
-
     document.getElementById("searchInput").oninput = render;
 
     init();
-
   </script>
 </body>
 </html>
