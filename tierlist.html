@@ -185,7 +185,6 @@
     }
     .t-header svg { width: 18px; height: 18px; fill: currentColor; }
     
-    /* Header Colors per Tier */
     .th-1 { background: rgba(234, 179, 8, 0.15); color: #fbbf24; border-top: 3px solid #fbbf24; }
     .th-2 { background: rgba(156, 163, 175, 0.15); color: #d1d5db; border-top: 3px solid #d1d5db; }
     .th-3 { background: rgba(180, 83, 9, 0.15); color: #d97706; border-top: 3px solid #d97706; }
@@ -202,11 +201,14 @@
       transition: 0.1s;
     }
     .t-player:hover { background: rgba(255,255,255,0.05); border-radius: 4px; }
-    .t-player img { width: 24px; height: 24px; border-radius: 4px; }
+    
+    /* Small Skin Icon in Tier Board */
+    .t-skin-face { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; background: #000; }
+    
     .t-player span { font-size: 0.85rem; font-weight: 600; color: #ddd; }
     .t-player:hover span { color: #fff; }
 
-    /* --- MODAL (Titles & Player) --- */
+    /* --- MODALS --- */
     .modal-wrap {
       position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200;
       display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
@@ -218,12 +220,54 @@
       padding: 24px; 
       border-radius: 12px; 
       border: 1px solid #1f222b;
-      width: 100%; max-width: 450px;
+      width: 100%; max-width: 500px;
       position: relative;
       box-shadow: 0 10px 40px rgba(0,0,0,0.8);
     }
     .m-close-btn { position: absolute; top: 12px; right: 12px; color: #555; font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
     .m-close-btn:hover { color: #fff; }
+
+    /* PLAYER MODAL STYLES */
+    .m-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 24px; }
+    .m-skin { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
+    .m-name { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #fff; }
+    .m-tester { font-size: 0.7rem; font-weight: 700; background: #7f1d1d; color: #fca5a5; padding: 2px 8px; border-radius: 4px; margin-top: 4px; letter-spacing: 1px; }
+
+    .m-label { font-size: 0.9rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+
+    .m-pos-box {
+      background: #13151c; border: 1px solid #27272a; border-radius: 8px;
+      padding: 12px 20px; display: flex; align-items: center; margin-bottom: 24px;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+    }
+    .m-pos-rank { font-family: var(--font-display); font-size: 2rem; font-weight: 900; font-style: italic; color: #fff; margin-right: 12px; }
+    .m-trophy-icon { width: 24px; height: 24px; margin-right: 8px; object-fit: contain; }
+    .m-pos-text { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #fff; margin-right: 8px; }
+    .m-pos-pts { font-size: 1rem; color: #6b7280; font-weight: 500; }
+
+    .m-tiers-box {
+      background: #13151c; border: 1px solid #27272a; border-radius: 8px;
+      padding: 16px; display: flex; flex-wrap: wrap; gap: 14px;
+    }
+    .mt-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .mt-circle {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #0b0d12; display: grid; place-items: center;
+      border: 2px solid #27272a; position: relative;
+    }
+    .mt-icon-img { width: 22px; height: 22px; object-fit: contain; }
+    .mt-badge { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: #444; }
+
+    /* Modal Colors */
+    .lvl-1 .mt-circle { border-color: #713f12; background: rgba(234, 179, 8, 0.05); }
+    .lvl-1 .mt-badge { color: #facc15; }
+    .lvl-2 .mt-circle { border-color: #1e293b; background: rgba(148, 163, 184, 0.05); }
+    .lvl-2 .mt-badge { color: #94a3b8; }
+    .lvl-3 .mt-circle { border-color: #431407; background: rgba(249, 115, 22, 0.05); }
+    .lvl-3 .mt-badge { color: #fb923c; }
+    .lvl-n .mt-circle { opacity: 0.4; }
+    .lvl-n .mt-icon-img { opacity: 0.3; filter: grayscale(100%); }
+    .lvl-n .mt-badge { display: none; }
 
     /* INFO MODAL SPECIFIC */
     .info-header { 
@@ -232,14 +276,11 @@
       display: flex; justify-content: space-between;
     }
     .info-sub { font-size: 0.8rem; color: #fff; margin-bottom: 16px; }
-    .title-row {
-      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;
-    }
+    .title-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
     .rank-icon { width: 18px; height: 18px; margin-top: 2px; }
     .rank-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; }
     .rank-desc { font-size: 0.8rem; color: #888; }
     
-    /* Text Colors for Titles */
     .tc-gm { color: #fbbf24; }
     .tc-m { color: #fbbf24; }
     .tc-ace { color: #f472b6; }
@@ -248,30 +289,23 @@
     .tc-novice { color: #60a5fa; }
     .tc-rookie { color: #9ca3af; }
 
-    /* --- HELPER CLASSES --- */
     .hidden { display: none !important; }
     
-    /* Responsive */
     @media (max-width: 1024px) {
       .thead, .c-region, .c-tiers { display: none; }
       .card { grid-template-columns: 60px 1fr; height: auto; padding-right: 15px; }
       .rank-bg { width: 100%; clip-path: none; border-radius: 8px 0 0 8px; }
       .tier-board { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width: 600px) {
-      .tier-board { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 600px) { .tier-board { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
-  <!-- SVG Icons for Trophy/Rank -->
+  <!-- SVG Icons for Trophy in Tier Board -->
   <svg style="display:none;">
     <defs>
       <symbol id="icon-trophy" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM7 8V7h2v3.82c-1.21-.48-2-1.44-2-2.82zm10 0c0 1.38-.79 2.34-2 2.82V7h2v1z"/></symbol>
-      <symbol id="icon-diamond" viewBox="0 0 24 24"><path d="M12 2L2 12l10 10 10-10L12 2z"/></symbol>
-      <symbol id="icon-star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
-      <symbol id="icon-circle-dot" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></symbol>
     </defs>
   </svg>
 
@@ -332,102 +366,61 @@
       <div id="listContainer"></div>
     </div>
 
-    <!-- Tier Board View (Hidden by default) -->
+    <!-- Tier Board View -->
     <div id="tierBoardView" class="hidden">
       <div class="tier-board" id="tierBoard"></div>
     </div>
   </div>
 
-  <!-- INFO MODAL (Titles) -->
+  <!-- PLAYER MODAL -->
+  <div id="playerModal" class="modal-wrap">
+    <div class="modal-box">
+      <button class="m-close-btn" onclick="document.getElementById('playerModal').classList.remove('show')">&times;</button>
+      
+      <!-- Header -->
+      <div class="m-header">
+        <img id="mHead" src="" class="m-skin">
+        <div id="mName" class="m-name">Player</div>
+        <div id="mTester" class="m-tester hidden">TESTER</div>
+      </div>
+
+      <!-- Position -->
+      <div class="m-label">POSITION</div>
+      <div class="m-pos-box">
+        <div id="mRankNum" class="m-pos-rank">1.</div>
+        <img src="overall.png" class="m-trophy-icon">
+        <div class="m-pos-text">OVERALL</div>
+        <div id="mPoints" class="m-pos-pts">(0 points)</div>
+      </div>
+
+      <!-- Tiers -->
+      <div class="m-label">TIERS</div>
+      <div id="mTiersGrid" class="m-tiers-box"></div>
+    </div>
+  </div>
+
+  <!-- INFO MODAL -->
   <div id="infoModal" class="modal-wrap">
     <div class="modal-box">
       <button class="m-close-btn" onclick="document.getElementById('infoModal').classList.remove('show')">&times;</button>
-      
-      <div class="info-header">
-        <span>Titles</span>
-      </div>
+      <div class="info-header"><span>Titles</span></div>
       <div class="info-sub">How to obtain <span style="text-decoration:underline;">Achievement Titles</span></div>
-
-      <!-- Grandmaster -->
-      <div class="title-row">
-        <svg class="rank-icon tc-gm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg> <!-- Diamond -->
-        <div>
-          <div class="rank-name tc-gm">Combat Grandmaster</div>
-          <div class="rank-desc">Obtained 400+ total points.</div>
-        </div>
-      </div>
-
-      <!-- Master -->
-      <div class="title-row">
-        <svg class="rank-icon tc-m" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
-        <div>
-          <div class="rank-name tc-m">Combat Master</div>
-          <div class="rank-desc">Obtained 250+ total points.</div>
-        </div>
-      </div>
-
-      <!-- Ace -->
-      <div class="title-row">
-        <svg class="rank-icon tc-ace" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
-        <div>
-          <div class="rank-name tc-ace">Combat Ace</div>
-          <div class="rank-desc">Obtained 100+ total points.</div>
-        </div>
-      </div>
-
-      <!-- Specialist -->
-      <div class="title-row">
-        <svg class="rank-icon tc-spec" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
-        <div>
-          <div class="rank-name tc-spec">Combat Specialist</div>
-          <div class="rank-desc">Obtained 50+ total points.</div>
-        </div>
-      </div>
-
-      <!-- Cadet -->
-      <div class="title-row">
-        <svg class="rank-icon tc-cadet" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-        <div>
-          <div class="rank-name tc-cadet">Combat Cadet</div>
-          <div class="rank-desc">Obtained 20+ total points.</div>
-        </div>
-      </div>
-
-       <!-- Novice -->
-       <div class="title-row">
-        <svg class="rank-icon tc-novice" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-        <div>
-          <div class="rank-name tc-novice">Combat Novice</div>
-          <div class="rank-desc">Obtained 10+ total points.</div>
-        </div>
-      </div>
-
-       <!-- Rookie -->
-       <div class="title-row">
-        <svg class="rank-icon tc-rookie" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-        <div>
-          <div class="rank-name tc-rookie">Rookie</div>
-          <div class="rank-desc">Starting rank for players.</div>
-        </div>
-      </div>
+      
+      <div class="title-row"><svg class="rank-icon tc-gm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg><div><div class="rank-name tc-gm">Combat Grandmaster</div><div class="rank-desc">Obtained 400+ total points.</div></div></div>
+      <div class="title-row"><svg class="rank-icon tc-m" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg><div><div class="rank-name tc-m">Combat Master</div><div class="rank-desc">Obtained 250+ total points.</div></div></div>
+      <div class="title-row"><svg class="rank-icon tc-ace" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg><div><div class="rank-name tc-ace">Combat Ace</div><div class="rank-desc">Obtained 100+ total points.</div></div></div>
+      <div class="title-row"><svg class="rank-icon tc-spec" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg><div><div class="rank-name tc-spec">Combat Specialist</div><div class="rank-desc">Obtained 50+ total points.</div></div></div>
+      <div class="title-row"><svg class="rank-icon tc-cadet" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg><div><div class="rank-name tc-cadet">Combat Cadet</div><div class="rank-desc">Obtained 20+ total points.</div></div></div>
+      <div class="title-row"><svg class="rank-icon tc-novice" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg><div><div class="rank-name tc-novice">Combat Novice</div><div class="rank-desc">Obtained 10+ total points.</div></div></div>
+      <div class="title-row"><svg class="rank-icon tc-rookie" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-11c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg><div><div class="rank-name tc-rookie">Rookie</div><div class="rank-desc">Starting rank for players.</div></div></div>
     </div>
   </div>
 
   <script>
-    // --- Config ---
     const CATEGORIES = ["sword","axe","crystal","nethpot","uhc","smp","mace"];
-    // MAPPING DIRECTLY TO YOUR UPLOADED FILES
-    const ICONS = {
-      sword: "sword.png",
-      axe: "axe.png",
-      crystal: "crystal.png",
-      nethpot: "nethpot.png",
-      uhc: "uhc.png",
-      smp: "smp.png",
-      mace: "mace.png"
-    };
-    
-    const FALLBACK_SKIN = "https://vzge.me/bust/X-Steve";
+    const ICONS = { sword: "sword.png", axe: "axe.png", crystal: "crystal.png", nethpot: "nethpot.png", uhc: "uhc.png", smp: "smp.png", mace: "mace.png" };
+    const FALLBACK_BUST = "https://vzge.me/bust/X-Steve";
+    const FALLBACK_FACE = "https://vzge.me/face/X-Steve";
     const POINTS = { "HT1": 60, "LT1": 30, "HT2": 30, "LT2": 15, "HT3": 15, "LT3": 14, "HT4": 8, "LT4": 6, "HT5": 4, "LT5": 1 };
 
     let players = [];
@@ -446,8 +439,15 @@
       return "Rookie";
     }
 
+    function getLevelClass(tier) {
+      if(!tier) return "lvl-n";
+      if(tier.includes('1')) return "lvl-1"; 
+      if(tier.includes('2')) return "lvl-2"; 
+      if(tier.includes('3')) return "lvl-3"; 
+      return "lvl-1"; 
+    }
+
     async function init() {
-      // 1. Data Load
       try {
         const req = await fetch('./players.json');
         if(req.ok) {
@@ -465,7 +465,7 @@
         }
       } catch(e) {}
 
-      // 2. Group
+      // Data Processing
       const map = new Map();
       players.forEach(p => {
         if(!CATEGORIES.includes(p.cat)) return;
@@ -493,9 +493,7 @@
     function render() {
       const overallView = document.getElementById("overallView");
       const tierBoardView = document.getElementById("tierBoardView");
-      const searchInput = document.getElementById("searchInput");
       
-      // Toggle Views based on Filter
       if(currentFilter === "overall") {
         overallView.classList.remove("hidden");
         tierBoardView.classList.add("hidden");
@@ -512,7 +510,6 @@
       const filterTerm = document.getElementById("searchInput").value.toLowerCase();
       listContainer.innerHTML = "";
 
-      // Only search filter applies here since logic handles view
       const displayData = processedList.filter(p => p.name.toLowerCase().includes(filterTerm));
 
       if(!displayData.length) {
@@ -530,7 +527,6 @@
 
         const regClass = `reg-${p.region}`;
 
-        // Main List Tiers
         const tiersHtml = CATEGORIES.map(cat => {
           const t = p.tiers[cat];
           const hasTier = !!t;
@@ -550,9 +546,7 @@
             <div class="rank-val">${actualRank}.</div>
           </div>
           <div class="c-info">
-            <img src="https://vzge.me/bust/${p.name}" class="skin-bust" 
-                 onerror="this.onerror=null; this.src='${FALLBACK_SKIN}';" 
-                 loading="lazy">
+            <img src="https://vzge.me/bust/${p.name}" class="skin-bust" onerror="this.src='${FALLBACK_BUST}';" loading="lazy">
             <div class="meta">
               <div class="p-name">${p.name}</div>
               <div class="p-title">
@@ -568,6 +562,8 @@
             ${tiersHtml}
           </div>
         `;
+        // FIXED: Click opens modal
+        el.onclick = () => openPlayerModal(p);
         listContainer.appendChild(el);
       });
     }
@@ -579,20 +575,14 @@
 
       const cols = [1,2,3,4,5];
       const tierData = {1:[], 2:[], 3:[], 4:[], 5:[]};
-
-      // Get all raw entries for this category
       const rawEntries = players.filter(p => p.cat === currentFilter);
       
-      // Sort into buckets
       rawEntries.forEach(p => {
         if(!p.name.toLowerCase().includes(filterTerm)) return;
-        const tierNum = p.tier.replace(/[^0-9]/g, ''); // Extract '1' from 'HT1'
-        if(tierData[tierNum]) {
-            tierData[tierNum].push(p);
-        }
+        const tierNum = p.tier.replace(/[^0-9]/g, ''); 
+        if(tierData[tierNum]) tierData[tierNum].push(p);
       });
 
-      // Sort within buckets (HT first, then alphabetic)
       Object.keys(tierData).forEach(k => {
         tierData[k].sort((a,b) => {
             const aHT = a.tier.startsWith('HT');
@@ -606,15 +596,11 @@
       cols.forEach(num => {
         const colDiv = document.createElement("div");
         colDiv.className = "tier-col-wrapper";
-        
-        let headerIcon = "";
-        if(num === 2 || num === 3) {
-            headerIcon = `<svg><use href="#icon-trophy"></use></svg>`;
-        }
+        let headerIcon = (num === 2 || num === 3) ? `<svg><use href="#icon-trophy"></use></svg>` : "";
         
         const listHtml = tierData[num].map(p => `
-            <div class="t-player">
-                <img src="https://vzge.me/face/${p.name}" onerror="this.src='${FALLBACK_SKIN}'">
+            <div class="t-player" onclick="findAndOpen('${p.name}')">
+                <img src="https://vzge.me/face/${p.name}" class="t-skin-face" onerror="this.src='${FALLBACK_FACE}'">
                 <span>${p.name}</span>
             </div>
         `).join('');
@@ -629,6 +615,45 @@
         `;
         board.appendChild(colDiv);
       });
+    }
+
+    function openPlayerModal(p) {
+      const img = document.getElementById('mHead');
+      img.src = `https://vzge.me/bust/${p.name}`;
+      img.onerror = function() { this.src = FALLBACK_BUST; };
+      
+      document.getElementById('mName').textContent = p.name;
+      const testerBadge = document.getElementById('mTester');
+      if(p.tester) testerBadge.classList.remove('hidden'); else testerBadge.classList.add('hidden');
+
+      const rank = processedList.indexOf(p) + 1;
+      document.getElementById('mRankNum').textContent = rank + ".";
+      document.getElementById('mPoints').textContent = `(${p.total} points)`;
+
+      const grid = document.getElementById('mTiersGrid');
+      grid.innerHTML = "";
+      
+      CATEGORIES.forEach(cat => {
+        const t = p.tiers[cat];
+        const lvlClass = getLevelClass(t);
+        
+        const div = document.createElement("div");
+        div.className = `mt-item ${lvlClass}`;
+        div.innerHTML = `
+          <div class="mt-circle">
+            <img src="${ICONS[cat]}" class="mt-icon-img">
+          </div>
+          <div class="mt-badge">${t || ''}</div>
+        `;
+        grid.appendChild(div);
+      });
+
+      document.getElementById('playerModal').classList.add('show');
+    }
+
+    function findAndOpen(name) {
+      const p = processedList.find(x => x.name === name);
+      if(p) openPlayerModal(p);
     }
 
     document.querySelectorAll('.nav-tab').forEach(btn => {
