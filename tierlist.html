@@ -154,7 +154,6 @@
     .player-head { width: 38px; height: 38px; border-radius: 6px; background: #222; object-fit: cover; }
     .player-details { display: flex; flex-direction: column; gap: 2px; }
     
-    /* UPDATED: Player name now uses flex to sit next to badge */
     .player-name { 
       font-weight: 600; 
       font-size: 0.95rem; 
@@ -164,7 +163,12 @@
       gap: 8px; 
     }
     
-    .player-meta { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-sub); }
+    .player-meta { display: flex; align-items: center; gap: 10px; font-size: 0.75rem; color: var(--text-sub); }
+    
+    /* Rank Title with Icon */
+    .rank-title-box { display: flex; align-items: center; gap: 4px; font-weight: 600; }
+    .rank-icon-svg { width: 14px; height: 14px; }
+
     .role-badge { font-size: 0.6rem; text-transform: uppercase; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #1f1f1f; color: #888; border: 1px solid #333; }
     .role-badge.tester { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
 
@@ -199,19 +203,14 @@
       background: #141414; border-bottom: 1px solid var(--border-main); position: relative;
     }
     
-    /* Top Accent Line based on Child Index */
     .tier-col:nth-child(1) { border-top: 3px solid var(--t1); }
     .tier-col:nth-child(1) .tier-header { color: var(--t1); background: linear-gradient(180deg, rgba(239,68,68,0.1), transparent); }
-
     .tier-col:nth-child(2) { border-top: 3px solid var(--t2); }
     .tier-col:nth-child(2) .tier-header { color: var(--t2); background: linear-gradient(180deg, rgba(249,115,22,0.1), transparent); }
-
     .tier-col:nth-child(3) { border-top: 3px solid var(--t3); }
     .tier-col:nth-child(3) .tier-header { color: var(--t3); background: linear-gradient(180deg, rgba(234,179,8,0.1), transparent); }
-
     .tier-col:nth-child(4) { border-top: 3px solid var(--t4); }
     .tier-col:nth-child(4) .tier-header { color: var(--t4); background: linear-gradient(180deg, rgba(34,197,94,0.1), transparent); }
-
     .tier-col:nth-child(5) { border-top: 3px solid var(--t5); }
     .tier-col:nth-child(5) .tier-header { color: var(--t5); background: linear-gradient(180deg, rgba(59,130,246,0.1), transparent); }
 
@@ -225,13 +224,11 @@
     .tp-head { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; }
     .tp-name { font-size: 0.8rem; font-weight: 500; flex: 1; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* Colored Badges */
     .tp-badge {
       font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;
       background: #111; border: 1px solid #333; color: #888;
     }
 
-    /* Attribute Selectors for Colors */
     [data-tier*="1"] { color: var(--t1); border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.1); }
     [data-tier*="2"] { color: var(--t2); border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.1); }
     [data-tier*="3"] { color: var(--t3); border-color: rgba(234,179,8,0.4); background: rgba(234,179,8,0.1); }
@@ -272,6 +269,7 @@
     .title-pill {
       background: #1a1a1a; color: #ccc; padding: 4px 12px; border-radius: 50px;
       font-size: 0.75rem; font-weight: 600; border: 1px solid #333;
+      display: flex; align-items: center; gap: 6px;
     }
 
     .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
@@ -281,7 +279,6 @@
     .stat-lbl { font-size: 0.65rem; color: #666; font-weight: 700; margin-bottom: 2px; text-transform: uppercase; }
     .stat-val { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #fff; }
     
-    /* MODAL RANK GLOW EFFECT */
     .stat-val.glow {
       text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
       color: #fff;
@@ -298,6 +295,10 @@
     .bd-icon img { width: 16px; height: 16px; opacity: 0.8; }
     .bd-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 0; width: 100%; text-align: center; border-radius: 4px; }
     
+    /* Info Modal Styles */
+    .info-row { display:flex;justify-content:space-between;padding:12px;background:#141414;border-radius:8px;border:1px solid #222; align-items: center; }
+    .info-left { display: flex; align-items: center; gap: 8px; color: #ccc; font-weight: 500; }
+
     /* Responsive */
     @media (max-width: 1024px) { .tier-board { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) {
@@ -396,8 +397,12 @@
 
       <div id="mName" class="profile-name">Player</div>
 
+      <!-- Updated Title Row for Modal -->
       <div class="title-row">
-        <div id="mTitle" class="title-pill">Title</div>
+        <div id="mTitle" class="title-pill">
+           <!-- Icon injected via JS -->
+           <span>Title</span>
+        </div>
       </div>
 
       <div class="stats-row">
@@ -422,20 +427,15 @@
     </div>
   </div>
 
-  <!-- INFO MODAL -->
+  <!-- INFO MODAL (Legend) -->
   <div id="infoBackdrop" class="modal-backdrop">
     <div class="modal" style="max-width: 400px;">
       <button id="infoClose" class="m-close-absolute">&times;</button>
       <div style="text-align:center; margin-bottom:24px;">
          <h2 style="font-family:var(--font-display); font-weight:800; font-size:1.4rem; color:#fff;">Titles & Points</h2>
       </div>
-      <div style="display:grid; gap:8px; font-size:0.9rem;">
-        <div style="display:flex;justify-content:space-between;padding:12px;background:#141414;border-radius:8px;border:1px solid #222;"><span>Grandmaster</span> <span style="font-weight:700;color:var(--t1);">400+</span></div>
-        <div style="display:flex;justify-content:space-between;padding:12px;background:#141414;border-radius:8px;border:1px solid #222;"><span>Master</span> <span style="font-weight:700;color:var(--t2);">250+</span></div>
-        <div style="display:flex;justify-content:space-between;padding:12px;background:#141414;border-radius:8px;border:1px solid #222;"><span>Ace</span> <span style="font-weight:700;color:var(--t3);">100+</span></div>
-        <div style="display:flex;justify-content:space-between;padding:12px;background:#141414;border-radius:8px;border:1px solid #222;"><span>Specialist</span> <span style="font-weight:700;color:var(--t4);">50+</span></div>
-        <div style="display:flex;justify-content:space-between;padding:12px;background:#141414;border-radius:8px;border:1px solid #222;"><span>Cadet</span> <span style="font-weight:700;color:var(--t5);">20+</span></div>
-        <div style="display:flex;justify-content:space-between;padding:12px;background:#141414;border-radius:8px;border:1px solid #222;"><span>Novice</span> <span style="font-weight:700;color:#666;">10+</span></div>
+      <div id="infoList" style="display:grid; gap:8px; font-size:0.9rem;">
+        <!-- Injected via JS -->
       </div>
     </div>
   </div>
@@ -450,7 +450,6 @@
     };
     const DEFAULT_PLAYERS = [];
 
-    // Points calculation
     const POINTS_MAP = {
       "HT1": 60, "LT1": 30,
       "HT2": 30, "LT2": 15,
@@ -469,6 +468,51 @@
       { min: 0,   t: "Beginner" }
     ];
 
+    // Helper to get Icon SVG and Color based on Title
+    // Colors match the screenshot vibe: GM(Gold), Master(Orange), Ace(Red), Specialist(Purple), Cadet(Blue), Novice(LightBlue), Rookie(Grey)
+    function getRankConfig(title) {
+        let color = '#9ca3af'; // default grey
+        let shape = 'M12 2l10 10-10 10L2 12Z'; // diamond
+        let fill = 'currentColor';
+        
+        // Simple SVG Path mapping
+        const diamond = 'M12 2l10 10-10 10L2 12Z'; 
+        // A diamond with a hole or inner detail could be simulated with stroke/fill
+        
+        switch (title) {
+            case 'Grandmaster':
+                color = '#facc15'; // Gold Yellow
+                break;
+            case 'Master':
+                color = '#fbbf24'; // Orange Gold
+                break;
+            case 'Ace':
+                color = '#f87171'; // Red/Pink
+                break;
+            case 'Specialist':
+                color = '#c084fc'; // Purple
+                break;
+            case 'Cadet':
+                color = '#818cf8'; // Indigo/Blue
+                break;
+            case 'Novice':
+                color = '#60a5fa'; // Light Blue
+                break;
+            default:
+                color = '#6b7280'; // Grey
+        }
+
+        // SVG string
+        // We use a simple diamond shape with a stroke to match the "Combat Master" icon style
+        return {
+            color: color,
+            svg: `<svg viewBox="0 0 24 24" class="rank-icon-svg" style="color:${color}; fill:${color}; overflow:visible;">
+                    <path d="${diamond}" stroke="rgba(0,0,0,0.5)" stroke-width="1"></path>
+                    <path d="M12 6l6 6-6 6-6-6Z" fill="rgba(255,255,255,0.4)"></path>
+                  </svg>`
+        };
+    }
+
     function getImageUrl(name, type = 'bust') {
       const cleanName = name ? name.trim() : 'MHF_Steve';
       return type === 'bust' 
@@ -477,18 +521,13 @@
     }
 
     async function loadData() {
-      const urls = [
-        "./players.json",
-        "https://raw.githubusercontent.com/nyiyuji016-rgb/invis-x/main/players.json"
-      ];
-      
+      const urls = ["./players.json", "https://raw.githubusercontent.com/nyiyuji016-rgb/invis-x/main/players.json"];
       for (let url of urls) {
         try {
           const res = await fetch(url);
           if (res.ok) {
             const json = await res.json();
             let raw = Array.isArray(json) ? json : (json.players || []);
-            // Handle Object format if needed
             if (!Array.isArray(raw) && typeof json === 'object') {
                raw = [];
                for(let [k,v] of Object.entries(json)) {
@@ -566,13 +605,14 @@
         const el = document.createElement("div");
         el.className = "player-card-row";
         
-        // Render pills with data attribute for color
         const breakdownHtml = CATEGORIES.map(c => {
           const t = p.tiers[c] || "";
           return `<div class="mini-pill" data-tier="${t}" title="${c}">${t}</div>`;
         }).join('');
 
-        // UPDATED HTML: Moved tester badge inside player-name div
+        // Get Rank Icon Data
+        const rankConfig = getRankConfig(p.title);
+
         el.innerHTML = `
           <div class="rank-num ${idx < 3 ? 'top-3' : ''}">#${idx + 1}</div>
           <div class="player-info">
@@ -584,7 +624,11 @@
               </div>
               <div class="player-meta">
                 <span class="role-badge">${p.region}</span>
-                <span>${p.title}</span>
+                <!-- Rank Title with Icon -->
+                <div class="rank-title-box" style="color:${rankConfig.color}">
+                   ${rankConfig.svg}
+                   <span>${p.title}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -661,16 +705,18 @@
 
       document.getElementById("mName").textContent = data.name;
       document.getElementById("mTesterRow").classList.toggle("hidden", !data.tester);
-      document.getElementById("mTitle").textContent = data.title;
       
-      // Update Rank with Glow Logic
+      // Update Title Pill with Icon
+      const mTitle = document.getElementById("mTitle");
+      const rankConfig = getRankConfig(data.title);
+      mTitle.innerHTML = `${rankConfig.svg} <span>${data.title}</span>`;
+      mTitle.style.color = rankConfig.color === '#6b7280' ? '#ccc' : rankConfig.color; // Keep grey legible
+      mTitle.style.borderColor = rankConfig.color === '#6b7280' ? '#333' : rankConfig.color;
+      mTitle.style.background = `rgba(0,0,0,0.5)`;
+      
       const rankEl = document.getElementById("mRank");
       rankEl.textContent = rank ? `#${rank}` : '-';
-      if (rank && rank <= 3) {
-        rankEl.classList.add("glow");
-      } else {
-        rankEl.classList.remove("glow");
-      }
+      rankEl.classList.toggle("glow", rank && rank <= 3);
 
       document.getElementById("mPoints").textContent = data.points;
       document.getElementById("mRegion").textContent = data.region || '-';
@@ -702,15 +748,35 @@
       }
     }
 
-    // Info Modal
+    // Info Modal Populating
     const infoBtn = document.getElementById("infoBtn");
     const infoBackdrop = document.getElementById("infoBackdrop");
     const infoClose = document.getElementById("infoClose");
+    const infoList = document.getElementById("infoList");
+
+    // Populate Info Modal with correct Icons
+    function populateInfo() {
+        infoList.innerHTML = "";
+        TITLES.forEach(t => {
+            const conf = getRankConfig(t.t);
+            const div = document.createElement("div");
+            div.className = "info-row";
+            div.innerHTML = `
+                <div class="info-left">
+                   ${conf.svg}
+                   <span style="color:${conf.color === '#6b7280' ? '#999' : conf.color}">${t.t}</span>
+                </div>
+                <div style="font-weight:700; color:#555;">${t.min}+</div>
+            `;
+            infoList.appendChild(div);
+        });
+    }
+    populateInfo();
+
     infoBtn.onclick = () => infoBackdrop.classList.add("show");
     infoClose.onclick = () => infoBackdrop.classList.remove("show");
     infoBackdrop.onclick = (e) => { if(e.target===infoBackdrop) infoBackdrop.classList.remove("show"); }
 
-    // Navigation
     document.querySelectorAll(".nav-btn").forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll(".nav-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
