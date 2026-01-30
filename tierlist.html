@@ -141,14 +141,53 @@
       display: grid; grid-template-columns: 50px 1fr auto; align-items: center;
       background: var(--bg-card); border: 1px solid var(--border-main); border-radius: 8px;
       padding: 10px 20px; gap: 16px; transition: 0.2s; cursor: pointer;
+      position: relative; overflow: hidden;
     }
     .player-card-row:hover {
       transform: translateY(-2px); border-color: #444; background: var(--bg-card-hover);
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
 
+    /* --- GLOW EFFECTS FOR TOP 1 2 3 --- */
+
+    /* Gold / #1 */
+    .player-card-row.rank-1 {
+      border-color: rgba(234, 179, 8, 0.6);
+      background: linear-gradient(90deg, rgba(234, 179, 8, 0.15) 0%, rgba(15, 15, 15, 1) 60%);
+      box-shadow: 0 0 25px rgba(234, 179, 8, 0.15);
+    }
+    .player-card-row.rank-1 .rank-num {
+      color: #facc15;
+      text-shadow: 0 0 15px rgba(250, 204, 21, 0.8);
+      font-size: 1.5rem;
+    }
+
+    /* Silver / #2 */
+    .player-card-row.rank-2 {
+      border-color: rgba(148, 163, 184, 0.6);
+      background: linear-gradient(90deg, rgba(148, 163, 184, 0.15) 0%, rgba(15, 15, 15, 1) 60%);
+      box-shadow: 0 0 20px rgba(148, 163, 184, 0.12);
+    }
+    .player-card-row.rank-2 .rank-num {
+      color: #cbd5e1;
+      text-shadow: 0 0 12px rgba(203, 213, 225, 0.6);
+      font-size: 1.35rem;
+    }
+
+    /* Bronze / #3 */
+    .player-card-row.rank-3 {
+      border-color: rgba(249, 115, 22, 0.6);
+      background: linear-gradient(90deg, rgba(249, 115, 22, 0.15) 0%, rgba(15, 15, 15, 1) 60%);
+      box-shadow: 0 0 20px rgba(249, 115, 22, 0.12);
+    }
+    .player-card-row.rank-3 .rank-num {
+      color: #fdba74;
+      text-shadow: 0 0 12px rgba(253, 186, 116, 0.6);
+      font-size: 1.35rem;
+    }
+
+    /* Normal Rank Num */
     .rank-num { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: #444; text-align: center; }
-    .rank-num.top-3 { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.4); font-size: 1.25rem; }
 
     .player-info { display: flex; align-items: center; gap: 16px; }
     .player-head { width: 38px; height: 38px; border-radius: 6px; background: #222; object-fit: cover; }
@@ -555,7 +594,14 @@
 
       filtered.forEach((p, idx) => {
         const el = document.createElement("div");
-        el.className = "player-card-row";
+        
+        // --- ADDED GLOW LOGIC ---
+        let rankClass = "";
+        if (idx === 0) rankClass = "rank-1"; // Gold
+        else if (idx === 1) rankClass = "rank-2"; // Silver
+        else if (idx === 2) rankClass = "rank-3"; // Bronze
+        
+        el.className = `player-card-row ${rankClass}`;
         
         // Render pills with data attribute for color
         const breakdownHtml = CATEGORIES.map(c => {
@@ -564,7 +610,7 @@
         }).join('');
 
         el.innerHTML = `
-          <div class="rank-num ${idx < 3 ? 'top-3' : ''}">#${idx + 1}</div>
+          <div class="rank-num">#${idx + 1}</div>
           <div class="player-info">
             <img src="${getImageUrl(p.name, 'bust')}" class="player-head" loading="lazy" onerror="this.src='https://vzge.me/bust/X-Steve'">
             <div class="player-details">
