@@ -153,7 +153,16 @@
     .player-info { display: flex; align-items: center; gap: 16px; }
     .player-head { width: 38px; height: 38px; border-radius: 6px; background: #222; object-fit: cover; }
     .player-details { display: flex; flex-direction: column; gap: 2px; }
-    .player-name { font-weight: 600; font-size: 0.95rem; color: #eee; }
+    
+    /* UPDATED: Player name now uses flex to sit next to badge */
+    .player-name { 
+      font-weight: 600; 
+      font-size: 0.95rem; 
+      color: #eee; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+    }
     
     .player-meta { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-sub); }
     .role-badge { font-size: 0.6rem; text-transform: uppercase; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #1f1f1f; color: #888; border: 1px solid #333; }
@@ -563,14 +572,17 @@
           return `<div class="mini-pill" data-tier="${t}" title="${c}">${t}</div>`;
         }).join('');
 
+        // UPDATED HTML: Moved tester badge inside player-name div
         el.innerHTML = `
           <div class="rank-num ${idx < 3 ? 'top-3' : ''}">#${idx + 1}</div>
           <div class="player-info">
             <img src="${getImageUrl(p.name, 'bust')}" class="player-head" loading="lazy" onerror="this.src='https://vzge.me/bust/X-Steve'">
             <div class="player-details">
-              <div class="player-name">${p.name}</div>
-              <div class="player-meta">
+              <div class="player-name">
+                ${p.name}
                 ${p.tester ? '<span class="role-badge tester">TESTER</span>' : ''}
+              </div>
+              <div class="player-meta">
                 <span class="role-badge">${p.region}</span>
                 <span>${p.title}</span>
               </div>
