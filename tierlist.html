@@ -259,8 +259,6 @@
     }
     .m-title-icon { width: 14px; height: 14px; fill: currentColor; }
 
-    .m-label { font-size: 0.9rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
-
     .m-pos-box {
       background: #13151c; border: 1px solid #27272a; border-radius: 8px;
       padding: 12px 20px; display: flex; align-items: center; margin-bottom: 24px;
@@ -271,27 +269,113 @@
     .m-pos-text { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #fff; margin-right: 8px; }
     .m-pos-pts { font-size: 1rem; color: #6b7280; font-weight: 500; }
 
-    .m-tiers-box {
-      background: #13151c; border: 1px solid #27272a; border-radius: 8px;
-      padding: 16px; display: flex; flex-wrap: wrap; gap: 14px;
+    /* --- UPDATED MODAL TIERS (Reference Image Style) --- */
+    .m-label { 
+      font-size: 0.8rem; 
+      color: #52525b; 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      margin-bottom: 10px; 
+      letter-spacing: 1px; 
+      text-align: center;
     }
-    .mt-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    .mt-circle {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: #0b0d12; display: grid; place-items: center;
-      border: 2px solid #27272a; position: relative;
-    }
-    .mt-icon-img { width: 22px; height: 22px; object-fit: contain; }
-    .mt-badge { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: #444; }
 
-    .lvl-1 .mt-circle { border-color: #713f12; background: rgba(234, 179, 8, 0.05); }
-    .lvl-1 .mt-badge { color: #facc15; }
-    .lvl-2 .mt-circle { border-color: #1e293b; background: rgba(148, 163, 184, 0.05); }
-    .lvl-2 .mt-badge { color: #94a3b8; }
-    .lvl-3 .mt-circle { border-color: #431407; background: rgba(249, 115, 22, 0.05); }
-    .lvl-3 .mt-badge { color: #fb923c; }
-    .lvl-n .mt-circle { opacity: 0.4; }
-    .lvl-n .mt-icon-img { opacity: 0.3; filter: grayscale(100%); }
+    .m-tiers-box {
+      background: #09090b; /* Very dark background */
+      border: 1px solid #27272a; 
+      border-radius: 16px;
+      padding: 24px 16px; 
+      display: flex; 
+      flex-wrap: wrap; 
+      justify-content: center; /* Center the items */
+      gap: 16px; /* Space between medals */
+    }
+
+    .mt-item { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      position: relative;
+      width: 50px;
+    }
+
+    /* The Circle Icon */
+    .mt-circle {
+      width: 48px; 
+      height: 48px; 
+      border-radius: 50%;
+      background: #18181b; 
+      display: grid; 
+      place-items: center;
+      border: 2px solid #3f3f46; /* Default border */
+      z-index: 1;
+      transition: transform 0.2s;
+    }
+    
+    .mt-item:hover .mt-circle {
+        transform: translateY(-3px);
+    }
+
+    .mt-icon-img { 
+      width: 24px; 
+      height: 24px; 
+      object-fit: contain; 
+    }
+
+    /* The Pill Badge (HT1/LT1) */
+    .mt-badge { 
+      font-family: var(--font-display); 
+      font-size: 0.75rem; 
+      font-weight: 800; 
+      
+      margin-top: -12px; /* Pull up over the circle */
+      z-index: 2;
+      
+      padding: 2px 10px; 
+      border-radius: 12px; 
+      min-width: 42px;
+      text-align: center;
+      
+      background: #27272a; 
+      color: #71717a;
+      border: 1px solid #09090b; /* Small outline to separate from circle */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+
+    /* --- TIER 1 COLORS (Gold) --- */
+    .lvl-1 .mt-circle { 
+      border-color: #fbbf24; 
+      background: radial-gradient(circle, rgba(251,191,36,0.1) 0%, rgba(0,0,0,0) 70%);
+      box-shadow: 0 0 15px rgba(251, 191, 36, 0.15);
+    }
+    .lvl-1 .mt-badge { 
+      background: #422006; /* Dark Brown/Gold bg */
+      color: #fbbf24; /* Gold Text */
+      border-color: #fbbf24; 
+    }
+
+    /* --- TIER 2 COLORS (Silver) --- */
+    .lvl-2 .mt-circle { 
+      border-color: #e2e8f0; 
+    }
+    .lvl-2 .mt-badge { 
+      background: #1e293b; 
+      color: #e2e8f0; 
+      border-color: #475569;
+    }
+
+    /* --- TIER 3 COLORS (Bronze) --- */
+    .lvl-3 .mt-circle { 
+      border-color: #d97706; 
+    }
+    .lvl-3 .mt-badge { 
+      background: #451a03; 
+      color: #fb923c; 
+      border-color: #d97706;
+    }
+
+    /* --- EMPTY/NA TIERS --- */
+    .lvl-n { opacity: 0.3; filter: grayscale(100%); }
     .lvl-n .mt-badge { display: none; }
 
     /* INFO MODAL SPECIFIC */
@@ -425,7 +509,7 @@
         <div id="mPoints" class="m-pos-pts">(0 points)</div>
       </div>
 
-      <!-- Tiers -->
+      <!-- Tiers (Updated Design) -->
       <div class="m-label">TIERS</div>
       <div id="mTiersGrid" class="m-tiers-box"></div>
     </div>
@@ -674,17 +758,14 @@
       pillText.textContent = p.title;
 
       const rank = processedList.indexOf(p) + 1;
-      const rankColor = getRankColor(p.title); // Get color based on title
+      const rankColor = getRankColor(p.title); 
       
-      // Reset classes
       container.className = 'm-skin-container';
       
-      // Update Pill Color to match Rank Title
       pill.style.color = rankColor;
       pill.style.borderColor = rankColor;
-      pill.style.backgroundColor = `${rankColor}20`; // 20 = low opacity hex
+      pill.style.backgroundColor = `${rankColor}20`; 
 
-      // Top 3 Frame Glow Logic
       if(rank === 1) container.classList.add('frame-1'); 
       else if(rank === 2) container.classList.add('frame-2'); 
       else if(rank === 3) container.classList.add('frame-3'); 
@@ -696,17 +777,19 @@
       const grid = document.getElementById('mTiersGrid');
       grid.innerHTML = "";
       
+      // -- UPDATED MODAL GENERATION LOGIC --
       CATEGORIES.forEach(cat => {
         const t = p.tiers[cat];
         const lvlClass = getLevelClass(t);
         
         const div = document.createElement("div");
         div.className = `mt-item ${lvlClass}`;
+        
         div.innerHTML = `
-          <div class="mt-circle">
+          <div class="mt-circle" title="${cat.toUpperCase()}">
             <img src="${ICONS[cat]}" class="mt-icon-img">
           </div>
-          <div class="mt-badge">${t || ''}</div>
+          <div class="mt-badge">${t || '-'}</div>
         `;
         grid.appendChild(div);
       });
