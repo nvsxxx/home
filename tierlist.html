@@ -149,7 +149,6 @@
     }
 
     /* --- LIST GLOW EFFECTS FOR TOP 1 2 3 --- */
-    /* Gold / #1 */
     .player-card-row.rank-1 {
       border-color: rgba(234, 179, 8, 0.6);
       background: linear-gradient(90deg, rgba(234, 179, 8, 0.15) 0%, rgba(15, 15, 15, 1) 60%);
@@ -161,7 +160,6 @@
       font-size: 1.5rem;
     }
 
-    /* Silver / #2 */
     .player-card-row.rank-2 {
       border-color: rgba(148, 163, 184, 0.6);
       background: linear-gradient(90deg, rgba(148, 163, 184, 0.15) 0%, rgba(15, 15, 15, 1) 60%);
@@ -173,7 +171,6 @@
       font-size: 1.35rem;
     }
 
-    /* Bronze / #3 */
     .player-card-row.rank-3 {
       border-color: rgba(249, 115, 22, 0.6);
       background: linear-gradient(90deg, rgba(249, 115, 22, 0.15) 0%, rgba(15, 15, 15, 1) 60%);
@@ -201,7 +198,6 @@
     .stat-label { font-size: 0.65rem; color: #555; text-transform: uppercase; font-weight: 700; }
     .stat-value { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: #fff; }
 
-    /* Breakdown Pills in List */
     .tier-pills { display: flex; gap: 3px; }
     .mini-pill {
       width: 24px; height: 24px; border-radius: 4px;
@@ -209,22 +205,12 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 0.6rem; font-weight: 700; color: #444;
     }
-    
     .mini-pill:not(:empty) { color: #fff; background: #222; border-color: #444; }
 
-    /* --- TIER BOARD (COLUMNS) --- */
+    /* --- TIER BOARD --- */
     .tier-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; align-items: start; }
-
-    .tier-col {
-      background: #0f0f0f; border: 1px solid var(--border-main); border-radius: 10px; overflow: hidden;
-      display: flex; flex-direction: column;
-    }
-
-    .tier-header {
-      padding: 12px; text-align: center; font-family: var(--font-display);
-      font-weight: 800; font-size: 0.9rem; letter-spacing: 0.05em;
-      background: #141414; border-bottom: 1px solid var(--border-main); position: relative;
-    }
+    .tier-col { background: #0f0f0f; border: 1px solid var(--border-main); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+    .tier-header { padding: 12px; text-align: center; font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; letter-spacing: 0.05em; background: #141414; border-bottom: 1px solid var(--border-main); position: relative; }
     
     .tier-col:nth-child(1) { border-top: 3px solid var(--t1); }
     .tier-col:nth-child(1) .tier-header { color: var(--t1); background: linear-gradient(180deg, rgba(239,68,68,0.1), transparent); }
@@ -238,18 +224,11 @@
     .tier-col:nth-child(5) .tier-header { color: var(--t5); background: linear-gradient(180deg, rgba(59,130,246,0.1), transparent); }
 
     .tier-list { padding: 8px; max-height: 75vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #333 transparent; }
-
-    .tier-player {
-      display: flex; align-items: center; gap: 10px; padding: 8px;
-      border-radius: 6px; cursor: pointer; transition: 0.1s; border-bottom: 1px solid rgba(255,255,255,0.02);
-    }
+    .tier-player { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 6px; cursor: pointer; transition: 0.1s; border-bottom: 1px solid rgba(255,255,255,0.02); }
     .tier-player:hover { background: #1f1f1f; }
     .tp-head { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; }
     .tp-name { font-size: 0.8rem; font-weight: 500; flex: 1; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tp-badge {
-      font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;
-      background: #111; border: 1px solid #333; color: #888;
-    }
+    .tp-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #111; border: 1px solid #333; color: #888; }
 
     [data-tier*="1"] { color: var(--t1); border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.1); }
     [data-tier*="2"] { color: var(--t2); border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.1); }
@@ -266,60 +245,34 @@
     .modal-backdrop.show { display: flex; opacity: 1; }
 
     .modal {
-      background: #0f0f0f; border-radius: 16px; width: 100%; max-width: 420px;
+      background: #0f0f0f; border-radius: 16px; width: 100%; max-width: 440px;
       border: 1px solid var(--border-highlight); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
       padding: 32px 24px 24px; position: relative; transform: translateY(10px); transition: 0.3s;
     }
     .modal-backdrop.show .modal { transform: translateY(0); }
 
     /* MODAL RANK STYLES (Sync with Overall) */
-    .modal.rank-1 {
-      border-color: rgba(234, 179, 8, 0.6);
-      box-shadow: 0 0 50px rgba(234, 179, 8, 0.15);
-      background: linear-gradient(160deg, #12120b, #0a0a0a);
-    }
-    .pfp-img.rank-1 {
-      border-color: #facc15;
-      box-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
-    }
-    .stat-val.rank-1 { color: #facc15; text-shadow: 0 0 15px rgba(250, 204, 21, 0.7); }
-
-    .modal.rank-2 {
-      border-color: rgba(148, 163, 184, 0.6);
-      box-shadow: 0 0 50px rgba(148, 163, 184, 0.1);
-      background: linear-gradient(160deg, #0f1115, #0a0a0a);
-    }
-    .pfp-img.rank-2 {
-      border-color: #cbd5e1;
-      box-shadow: 0 0 20px rgba(148, 163, 184, 0.4);
-    }
-    .stat-val.rank-2 { color: #cbd5e1; text-shadow: 0 0 15px rgba(203, 213, 225, 0.7); }
-
-    .modal.rank-3 {
-      border-color: rgba(249, 115, 22, 0.6);
-      box-shadow: 0 0 50px rgba(249, 115, 22, 0.1);
-      background: linear-gradient(160deg, #140c08, #0a0a0a);
-    }
-    .pfp-img.rank-3 {
-      border-color: #fdba74;
-      box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
-    }
-    .stat-val.rank-3 { color: #fdba74; text-shadow: 0 0 15px rgba(253, 186, 116, 0.7); }
+    .modal.rank-1 { border-color: rgba(234, 179, 8, 0.6); box-shadow: 0 0 50px rgba(234, 179, 8, 0.15); background: linear-gradient(160deg, #12120b, #0a0a0a); }
+    .pfp-img.rank-1 { border-color: #facc15; box-shadow: 0 0 20px rgba(234, 179, 8, 0.5); }
+    
+    .modal.rank-2 { border-color: rgba(148, 163, 184, 0.6); box-shadow: 0 0 50px rgba(148, 163, 184, 0.1); background: linear-gradient(160deg, #0f1115, #0a0a0a); }
+    .pfp-img.rank-2 { border-color: #cbd5e1; box-shadow: 0 0 20px rgba(148, 163, 184, 0.4); }
+    
+    .modal.rank-3 { border-color: rgba(249, 115, 22, 0.6); box-shadow: 0 0 50px rgba(249, 115, 22, 0.1); background: linear-gradient(160deg, #140c08, #0a0a0a); }
+    .pfp-img.rank-3 { border-color: #fdba74; box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
     
     .m-close-absolute {
       position: absolute; top: 12px; right: 12px;
       background: transparent; border: none; color: #555; font-size: 1.5rem;
-      cursor: pointer; transition: 0.2s;
+      cursor: pointer; transition: 0.2s; z-index: 10;
     }
     .m-close-absolute:hover { color: #fff; }
 
     .pfp-container { display: flex; justify-content: center; margin-bottom: 16px; position: relative; }
-    
     .pfp-img {
       width: 96px; height: 96px; border-radius: 16px; 
-      border: 2px solid #333; /* Standard border */
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4); background: #111; object-fit: cover;
-      transition: all 0.2s ease;
+      border: 2px solid #333; box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
+      background: #111; object-fit: cover; transition: all 0.2s ease;
     }
     
     .profile-name { text-align: center; font-family: var(--font-display); font-size: 1.75rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
@@ -330,65 +283,95 @@
       font-size: 0.75rem; font-weight: 600; border: 1px solid #333;
     }
 
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
-    .stat-item {
-      text-align: center; background: #141414; border: 1px solid #222; border-radius: 8px; padding: 12px 6px;
+    /* --- NEW MODAL STRUCTURE (IMAGE BASED) --- */
+    .modal-section-label {
+      font-size: 0.75rem; color: #666; font-weight: 700; 
+      letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase;
     }
-    .stat-lbl { font-size: 0.65rem; color: #666; font-weight: 700; margin-bottom: 2px; text-transform: uppercase; }
-    .stat-val { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #fff; }
+
+    /* Position Bar */
+    .position-bar {
+      display: flex; height: 52px;
+      background: #0d1117; /* Dark blueish slate */
+      border: 1px solid #333; border-radius: 8px;
+      overflow: hidden; align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .pos-rank-stub {
+      height: 100%; width: 70px;
+      background: #555; /* Default fallback */
+      clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding-right: 12px; /* Offset for slanted text */
+    }
     
-    /* --- NEW MODAL BREAKDOWN STYLES --- */
-    .breakdown-box { background: #0a0a0a; border-radius: 12px; padding: 16px; border: 1px solid #222; }
-    .bb-title { text-align: center; color: #555; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 16px; text-transform: uppercase; }
-    .bb-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-    
+    /* Rank Backgrounds */
+    .pos-rank-stub.rank-1 { background: linear-gradient(135deg, #facc15, #ca8a04); }
+    .pos-rank-stub.rank-2 { background: linear-gradient(135deg, #cbd5e1, #94a3b8); }
+    .pos-rank-stub.rank-3 { background: linear-gradient(135deg, #fdba74, #ea580c); }
+    .pos-rank-stub.rank-norm { background: linear-gradient(135deg, #64748b, #475569); }
+
+    .pos-rank-text {
+      font-family: var(--font-display);
+      font-size: 1.8rem; font-weight: 800; font-style: italic;
+      color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+
+    .pos-info {
+      flex: 1; display: flex; align-items: center; 
+      padding-left: 8px; gap: 8px; color: #fff;
+    }
+    .trophy-icon { font-size: 1.2rem; }
+    .pos-label { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; letter-spacing: 0.5px; }
+    .pos-points { color: #888; font-size: 0.9rem; font-weight: 500; font-family: var(--font-body); }
+
+
+    /* Tiers Box */
+    .tiers-box {
+      background: #0d1117;
+      border: 1px solid #333; border-radius: 12px;
+      padding: 16px; display: flex; justify-content: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+
     .bd-item { 
       display: flex; flex-direction: column; align-items: center; 
       width: 50px; /* Width for spacing */
     }
     
-    /* Circle Icon Container */
+    /* Circle Icon */
     .bd-icon {
       width: 44px; height: 44px; 
-      border-radius: 50%; /* Make it circular */
-      background: #050505; 
+      border-radius: 50%; background: #050505; 
       display: grid; place-items: center; 
-      border: 2px solid #333; /* Default border */
-      z-index: 10;
-      margin-bottom: -10px; /* Pull the badge up to touch it */
-      transition: 0.2s;
+      border: 2px solid #333; z-index: 10;
+      margin-bottom: -10px; transition: 0.2s;
     }
     .bd-icon img { width: 22px; height: 22px; opacity: 0.9; object-fit: contain; }
 
-    /* Pill Badge Below */
+    /* Pill Badge */
     .bd-badge { 
       font-family: var(--font-display);
       font-size: 0.65rem; font-weight: 800; 
-      padding: 4px 10px; 
-      border-radius: 50px; /* Pill shape */
+      padding: 4px 10px; border-radius: 50px; 
       width: 100%; text-align: center; 
       background: #111; border: 1px solid #333; color: #555;
-      padding-top: 10px; /* Space for the overlap */
-      min-width: 46px;
+      padding-top: 10px; min-width: 46px;
     }
 
-    /* Color Logic for Icons & Badges in Breakdown */
-    /* Targeting the Icon Circle */
     .bd-icon[data-tier*="1"] { border-color: var(--t1); box-shadow: 0 0 10px rgba(239,68,68,0.2); }
     .bd-icon[data-tier*="2"] { border-color: var(--t2); box-shadow: 0 0 10px rgba(249,115,22,0.2); }
     .bd-icon[data-tier*="3"] { border-color: var(--t3); box-shadow: 0 0 10px rgba(234,179,8,0.2); }
     .bd-icon[data-tier*="4"] { border-color: var(--t4); box-shadow: 0 0 10px rgba(34,197,94,0.2); }
     .bd-icon[data-tier*="5"] { border-color: var(--t5); box-shadow: 0 0 10px rgba(59,130,246,0.2); }
 
-    /* Targeting the Pill Badge (uses existing global selectors, reinforced here) */
     .bd-badge[data-tier*="1"] { color: var(--t1); border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.1); }
     .bd-badge[data-tier*="2"] { color: var(--t2); border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.1); }
     .bd-badge[data-tier*="3"] { color: var(--t3); border-color: rgba(234,179,8,0.4); background: rgba(234,179,8,0.1); }
     .bd-badge[data-tier*="4"] { color: var(--t4); border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.1); }
     .bd-badge[data-tier*="5"] { color: var(--t5); border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.1); }
     
-    /* Responsive */
-    @media (max-width: 1024px) { .tier-board { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) {
       .app-layout { flex-direction: column; }
       .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-main); }
@@ -476,7 +459,6 @@
       <button id="mClose" class="m-close-absolute">&times;</button>
       
       <div class="pfp-container">
-        <!-- PFP IMG -->
         <img id="mHead" src="" class="pfp-img" alt="">
       </div>
 
@@ -490,25 +472,25 @@
         <div id="mTitle" class="title-pill">Title</div>
       </div>
 
-      <div class="stats-row">
-        <div class="stat-item">
-          <div class="stat-lbl">Rank</div>
-          <div id="mRank" class="stat-val">#1</div>
+      <!-- NEW POSITION SECTION -->
+      <div class="modal-section-label">POSITION</div>
+      <div class="position-bar">
+        <!-- Rank Stub -->
+        <div id="mRankStub" class="pos-rank-stub">
+          <span id="mRankText" class="pos-rank-text">1.</span>
         </div>
-        <div class="stat-item">
-          <div class="stat-lbl">Region</div>
-          <div id="mRegion" class="stat-val">ASIA</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-lbl">Points</div>
-          <div id="mPoints" class="stat-val">58</div>
+        <!-- Info -->
+        <div class="pos-info">
+          <span class="trophy-icon">🏆</span>
+          <span class="pos-label">OVERALL</span>
+          <span id="mPointsText" class="pos-points">(0 points)</span>
         </div>
       </div>
 
-      <div class="breakdown-box">
-        <div class="bb-title">Tiers Breakdown</div>
-        <div id="mBreakdown" class="bb-grid"></div>
-      </div>
+      <!-- NEW TIERS SECTION -->
+      <div class="modal-section-label" style="margin-top:20px;">TIERS</div>
+      <div id="mBreakdown" class="tiers-box"></div>
+
     </div>
   </div>
 
@@ -570,7 +552,6 @@
         "./players.json",
         "https://raw.githubusercontent.com/nyiyuji016-rgb/invis-x/main/players.json"
       ];
-      
       for (let url of urls) {
         try {
           const res = await fetch(url);
@@ -747,24 +728,28 @@
     function openModal(data, rank) {
       const modalContainer = document.getElementById("modalContainer");
       const mHead = document.getElementById("mHead");
-      const mRankText = document.getElementById("mRank");
+      const mRankStub = document.getElementById("mRankStub");
 
+      // Reset Styles
       modalContainer.classList.remove("rank-1", "rank-2", "rank-3");
       mHead.classList.remove("rank-1", "rank-2", "rank-3");
-      mRankText.classList.remove("rank-1", "rank-2", "rank-3");
+      mRankStub.className = "pos-rank-stub"; // reset base class
 
+      // Apply Colors
       if (rank === 1) {
         modalContainer.classList.add("rank-1");
         mHead.classList.add("rank-1");
-        mRankText.classList.add("rank-1");
+        mRankStub.classList.add("rank-1");
       } else if (rank === 2) {
         modalContainer.classList.add("rank-2");
         mHead.classList.add("rank-2");
-        mRankText.classList.add("rank-2");
+        mRankStub.classList.add("rank-2");
       } else if (rank === 3) {
         modalContainer.classList.add("rank-3");
         mHead.classList.add("rank-3");
-        mRankText.classList.add("rank-3");
+        mRankStub.classList.add("rank-3");
+      } else {
+        mRankStub.classList.add("rank-norm");
       }
 
       mHead.src = getImageUrl(data.name, 'bust');
@@ -773,19 +758,18 @@
       document.getElementById("mName").textContent = data.name;
       document.getElementById("mTesterRow").classList.toggle("hidden", !data.tester);
       document.getElementById("mTitle").textContent = data.title;
-      mRankText.textContent = rank ? `#${rank}` : '-';
-
-      document.getElementById("mPoints").textContent = data.points;
-      document.getElementById("mRegion").textContent = data.region || '-';
       
+      // Update Position Bar
+      document.getElementById("mRankText").textContent = rank ? `${rank}.` : '-';
+      document.getElementById("mPointsText").textContent = `(${data.points} points)`;
+      
+      // Update Tiers
       const bd = document.getElementById("mBreakdown");
       bd.innerHTML = "";
       CATEGORIES.forEach(c => {
         const t = data.tiers[c] || "";
         const div = document.createElement("div");
         div.className = "bd-item";
-        
-        // ADDED data-tier to icon div for circle color
         div.innerHTML = `
           <div class="bd-icon" data-tier="${t}" title="${c}">
             <img src="${CAT_ICONS[c]}" alt="" onerror="this.style.display='none'">
