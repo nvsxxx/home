@@ -11,7 +11,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:ital,wght@0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -134,59 +134,89 @@
 
     .content-area { padding: 32px; flex: 1; }
 
-    /* --- OVERALL LIST --- */
-    .overall-grid { display: grid; gap: 8px; }
+    /* --- OVERALL LIST (NEW DESIGN) --- */
+    .overall-grid { display: flex; flex-direction: column; gap: 12px; }
 
     .player-card-row {
-      display: grid; grid-template-columns: 50px 1fr auto; align-items: center;
-      background: var(--bg-card); border: 1px solid var(--border-main); border-radius: 8px;
-      padding: 10px 20px; gap: 16px; transition: 0.2s; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg-card); border: 1px solid var(--border-main); border-radius: 12px;
+      padding: 12px 24px; transition: 0.2s; cursor: pointer; min-height: 80px;
     }
     .player-card-row:hover {
       transform: translateY(-2px); border-color: #444; background: var(--bg-card-hover);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
     }
 
-    .rank-num { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: #444; text-align: center; }
-    .rank-num.top-3 { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.4); font-size: 1.25rem; }
-
-    .player-info { display: flex; align-items: center; gap: 16px; }
-    .player-head { width: 38px; height: 38px; border-radius: 6px; background: #222; object-fit: cover; }
-    .player-details { display: flex; flex-direction: column; gap: 2px; }
+    /* Left Section: Rank + Avatar + Info */
+    .pc-left { display: flex; align-items: center; gap: 20px; flex: 1; min-width: 0; }
     
-    .player-name { 
-      font-weight: 600; 
-      font-size: 0.95rem; 
-      color: #eee; 
-      display: flex; 
-      align-items: center; 
-      gap: 8px; 
+    .rank-num {
+      font-family: var(--font-display); font-weight: 800; font-style: italic;
+      font-size: 1.6rem; color: #fff; width: 40px; text-align: center;
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
     }
     
-    .player-meta { display: flex; align-items: center; gap: 10px; font-size: 0.75rem; color: var(--text-sub); }
-    
-    /* Rank Title with Icon */
-    .rank-title-box { display: flex; align-items: center; gap: 4px; font-weight: 600; }
-    .rank-icon-svg { width: 14px; height: 14px; }
+    .player-head { 
+      width: 48px; height: 48px; border-radius: 8px; 
+      background: #1a1a1a; object-fit: cover; border: 1px solid #333;
+    }
 
-    .role-badge { font-size: 0.6rem; text-transform: uppercase; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #1f1f1f; color: #888; border: 1px solid #333; }
+    .pc-info { display: flex; flex-direction: column; justify-content: center; }
+    
+    .pc-name-row { display: flex; align-items: center; gap: 8px; }
+    .pc-name { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: #fff; letter-spacing: 0.02em; }
+    
+    .pc-subtext {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.85rem; color: #777; margin-top: 2px; font-weight: 500;
+    }
+    .rank-icon-svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    .role-badge { 
+      font-size: 0.6rem; text-transform: uppercase; font-weight: 700; 
+      padding: 2px 6px; border-radius: 4px; border: 1px solid #333; 
+    }
     .role-badge.tester { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
 
-    .player-stats { display: flex; align-items: center; gap: 24px; }
-    .stat-box { text-align: right; }
-    .stat-label { font-size: 0.65rem; color: #555; text-transform: uppercase; font-weight: 700; }
-    .stat-value { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: #fff; }
+    /* Right Section: Region + Categories */
+    .pc-right { display: flex; align-items: center; gap: 32px; }
 
-    /* Breakdown Pills in List */
-    .tier-pills { display: flex; gap: 3px; }
-    .mini-pill {
-      width: 24px; height: 24px; border-radius: 4px;
-      background: #111; border: 1px solid #222;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.6rem; font-weight: 700; color: #444;
+    .region-badge {
+      font-family: var(--font-display); font-weight: 800; font-size: 0.9rem;
+      background: rgba(34, 197, 94, 0.15); color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 6px 10px; border-radius: 6px;
+      text-transform: uppercase; letter-spacing: 0.05em;
     }
+
+    .stats-row { display: flex; align-items: center; gap: 10px; }
     
-    .mini-pill:not(:empty) { color: #fff; background: #222; border-color: #444; }
+    .stat-col {
+      display: flex; flex-direction: column; align-items: center; gap: 6px; width: 36px;
+    }
+
+    .cat-icon-circle {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #111; border: 1px solid #2a2a2a;
+      display: grid; place-items: center;
+    }
+    .cat-icon-circle img { width: 14px; height: 14px; opacity: 0.8; }
+
+    .tier-pill {
+      font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+      padding: 2px 0; width: 100%; text-align: center; border-radius: 10px;
+      color: #555; background: #0a0a0a; border: 1px solid #222;
+      font-family: var(--font-body);
+    }
+
+    /* Tier Colors for Badge Text/Border */
+    /* High Tiers get brighter colors */
+    .tier-pill[data-tier*="1"] { color: #facc15; border-color: rgba(250, 204, 21, 0.3); background: rgba(250, 204, 21, 0.05); } /* Yellow/Gold */
+    .tier-pill[data-tier*="2"] { color: #e5e7eb; border-color: rgba(229, 231, 235, 0.3); background: rgba(229, 231, 235, 0.05); } /* Silver/Grey */
+    .tier-pill[data-tier*="3"] { color: #fb923c; border-color: rgba(251, 146, 60, 0.3); background: rgba(251, 146, 60, 0.05); } /* Orange/Bronze */
+    .tier-pill[data-tier*="4"] { color: #4ade80; border-color: rgba(74, 222, 128, 0.3); background: rgba(74, 222, 128, 0.05); } /* Green */
+    .tier-pill[data-tier*="5"] { color: #60a5fa; border-color: rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.05); } /* Blue */
+    .tier-pill:empty { opacity: 0; }
 
     /* --- TIER BOARD (COLUMNS) --- */
     .tier-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; align-items: start; }
@@ -272,7 +302,7 @@
       display: flex; align-items: center; gap: 6px;
     }
 
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+    .stats-row-modal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
     .stat-item {
       text-align: center; background: #141414; border: 1px solid #222; border-radius: 8px; padding: 12px 6px;
     }
@@ -300,7 +330,10 @@
     .info-left { display: flex; align-items: center; gap: 8px; color: #ccc; font-weight: 500; }
 
     /* Responsive */
-    @media (max-width: 1024px) { .tier-board { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 1024px) { 
+      .tier-board { grid-template-columns: repeat(3, 1fr); }
+      .pc-right { gap: 16px; }
+    }
     @media (max-width: 768px) {
       .app-layout { flex-direction: column; }
       .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-main); }
@@ -311,6 +344,11 @@
       .search-wrapper { flex: 1; max-width: 200px; }
       .content-area { padding: 16px; }
       .tier-board { grid-template-columns: repeat(2, 1fr); }
+      
+      /* Mobile Card adjustments */
+      .player-card-row { flex-direction: column; align-items: stretch; gap: 16px; padding: 16px; }
+      .pc-right { justify-content: space-between; width: 100%; }
+      .stats-row { overflow-x: auto; padding-bottom: 4px; flex: 1; justify-content: flex-end; }
     }
     @media (max-width: 500px) { .tier-board { grid-template-columns: 1fr; } }
     .hidden { display: none !important; }
@@ -405,7 +443,7 @@
         </div>
       </div>
 
-      <div class="stats-row">
+      <div class="stats-row-modal">
         <div class="stat-item">
           <div class="stat-lbl">Rank</div>
           <div id="mRank" class="stat-val">#1</div>
@@ -469,41 +507,20 @@
     ];
 
     // Helper to get Icon SVG and Color based on Title
-    // Colors match the screenshot vibe: GM(Gold), Master(Orange), Ace(Red), Specialist(Purple), Cadet(Blue), Novice(LightBlue), Rookie(Grey)
     function getRankConfig(title) {
         let color = '#9ca3af'; // default grey
-        let shape = 'M12 2l10 10-10 10L2 12Z'; // diamond
-        let fill = 'currentColor';
-        
-        // Simple SVG Path mapping
         const diamond = 'M12 2l10 10-10 10L2 12Z'; 
-        // A diamond with a hole or inner detail could be simulated with stroke/fill
         
         switch (title) {
-            case 'Grandmaster':
-                color = '#facc15'; // Gold Yellow
-                break;
-            case 'Master':
-                color = '#fbbf24'; // Orange Gold
-                break;
-            case 'Ace':
-                color = '#f87171'; // Red/Pink
-                break;
-            case 'Specialist':
-                color = '#c084fc'; // Purple
-                break;
-            case 'Cadet':
-                color = '#818cf8'; // Indigo/Blue
-                break;
-            case 'Novice':
-                color = '#60a5fa'; // Light Blue
-                break;
-            default:
-                color = '#6b7280'; // Grey
+            case 'Grandmaster': color = '#facc15'; break; // Gold
+            case 'Master': color = '#fbbf24'; break; // Orange Gold
+            case 'Ace': color = '#f87171'; break; // Red/Pink
+            case 'Specialist': color = '#c084fc'; break; // Purple
+            case 'Cadet': color = '#818cf8'; break; // Indigo
+            case 'Novice': color = '#60a5fa'; break; // Light Blue
+            default: color = '#6b7280'; // Grey
         }
 
-        // SVG string
-        // We use a simple diamond shape with a stroke to match the "Combat Master" icon style
         return {
             color: color,
             svg: `<svg viewBox="0 0 24 24" class="rank-icon-svg" style="color:${color}; fill:${color}; overflow:visible;">
@@ -605,38 +622,42 @@
         const el = document.createElement("div");
         el.className = "player-card-row";
         
-        const breakdownHtml = CATEGORIES.map(c => {
+        // Generate Vertical Stat Stacks (Icon Top, Badge Bottom)
+        const statsHtml = CATEGORIES.map(c => {
           const t = p.tiers[c] || "";
-          return `<div class="mini-pill" data-tier="${t}" title="${c}">${t}</div>`;
+          return `
+            <div class="stat-col">
+                <div class="cat-icon-circle" title="${c}">
+                   <img src="${CAT_ICONS[c]}" alt="" onerror="this.style.opacity='0.2'">
+                </div>
+                <div class="tier-pill" data-tier="${t}">${t}</div>
+            </div>
+          `;
         }).join('');
 
         // Get Rank Icon Data
         const rankConfig = getRankConfig(p.title);
 
         el.innerHTML = `
-          <div class="rank-num ${idx < 3 ? 'top-3' : ''}">#${idx + 1}</div>
-          <div class="player-info">
+          <div class="pc-left">
+            <div class="rank-num">${idx + 1}.</div>
             <img src="${getImageUrl(p.name, 'bust')}" class="player-head" loading="lazy" onerror="this.src='https://vzge.me/bust/X-Steve'">
-            <div class="player-details">
-              <div class="player-name">
-                ${p.name}
+            <div class="pc-info">
+              <div class="pc-name-row">
+                <div class="pc-name">${p.name}</div>
                 ${p.tester ? '<span class="role-badge tester">TESTER</span>' : ''}
               </div>
-              <div class="player-meta">
-                <span class="role-badge">${p.region}</span>
-                <!-- Rank Title with Icon -->
-                <div class="rank-title-box" style="color:${rankConfig.color}">
-                   ${rankConfig.svg}
-                   <span>${p.title}</span>
-                </div>
+              <div class="pc-subtext" style="color:${rankConfig.color}">
+                ${rankConfig.svg}
+                <span>${p.title} (${p.points} points)</span>
               </div>
             </div>
           </div>
-          <div class="player-stats">
-             <div class="tier-pills hidden md:flex">${breakdownHtml}</div>
-             <div class="stat-box">
-               <div class="stat-label">Points</div>
-               <div class="stat-value">${p.points}</div>
+          
+          <div class="pc-right">
+             <div class="region-badge">${p.region}</div>
+             <div class="stats-row">
+                ${statsHtml}
              </div>
           </div>
         `;
@@ -706,11 +727,10 @@
       document.getElementById("mName").textContent = data.name;
       document.getElementById("mTesterRow").classList.toggle("hidden", !data.tester);
       
-      // Update Title Pill with Icon
       const mTitle = document.getElementById("mTitle");
       const rankConfig = getRankConfig(data.title);
       mTitle.innerHTML = `${rankConfig.svg} <span>${data.title}</span>`;
-      mTitle.style.color = rankConfig.color === '#6b7280' ? '#ccc' : rankConfig.color; // Keep grey legible
+      mTitle.style.color = rankConfig.color === '#6b7280' ? '#ccc' : rankConfig.color;
       mTitle.style.borderColor = rankConfig.color === '#6b7280' ? '#333' : rankConfig.color;
       mTitle.style.background = `rgba(0,0,0,0.5)`;
       
@@ -748,13 +768,11 @@
       }
     }
 
-    // Info Modal Populating
     const infoBtn = document.getElementById("infoBtn");
     const infoBackdrop = document.getElementById("infoBackdrop");
     const infoClose = document.getElementById("infoClose");
     const infoList = document.getElementById("infoList");
 
-    // Populate Info Modal with correct Icons
     function populateInfo() {
         infoList.innerHTML = "";
         TITLES.forEach(t => {
